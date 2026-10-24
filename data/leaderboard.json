@@ -9,8 +9,20 @@
       "variant": "full",
       "score": 100,
       "maximum": 100,
-      "seconds": 19.10,
+      "seconds": 19.1,
       "receivedAt": "2026-10-24T18:23:15.665Z",
+      "selfReported": true
+    },
+    {
+      "id": "7e51cdd5-0c1f-4135-92a3-86dbfc64aea2",
+      "callsign": "Face",
+      "crew": "SASS",
+      "module": "radar-icons",
+      "variant": "ship",
+      "score": 10,
+      "maximum": 10,
+      "seconds": 26.15,
+      "receivedAt": "2026-10-24T18:41:01.592Z",
       "selfReported": true
     }
   ]
