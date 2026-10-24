@@ -111,7 +111,7 @@
       return;
     }
     try{
-      const r=await fetch(cfg.endpoint.replace(/\\/+$/,"")+"/health",{cache:"no-store"});
+      const r=await fetch(cfg.endpoint.replace(/\/+$/,"")+"/health",{cache:"no-store"});
       if(!r.ok)throw new Error("Service unavailable");
       const info=await r.json();
       serviceReady=info.status==="ok" && info.writesEnabled===true;
