@@ -1,0 +1,8 @@
+name = "ucna-leaderboard"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+# Required Worker secrets (set using Dashboard > Worker > Settings > Variables/Secrets):
+# GITHUB_TOKEN: GitHub fine-grained PAT; only this repo, Contents read/write.
+# TURNSTILE_SECRET: Cloudflare Turnstile secret (private).
