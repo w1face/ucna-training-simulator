@@ -21,8 +21,10 @@
   const scoreKeys = new Set(categories);
   const dataElem=$("publicRows"), select=$("publicCategory"), recent=$("publicLocalResult");
   const msg=$("publicStatus"), publish=$("publicSubmit"), alias=$("publicCallsign"), consent=$("publicConsent");
+  const crewField=$("publicCrew"), crewHelp=$("publicCrewHelp");
   const challenge=$("ucnaTurnstile");
-  let entries=[],busy=false,serviceReady=false;
+  const crewPattern=/^[\p{L}\p{N}][\p{L}\p{N} ._'&/-]{0,39}$/u;
+  let entries=[],busy=false,serviceReady=false,supportsCrew=false;
   const prepared=typeof cfg.endpoint==="string" && /^https:\/\/[^/]+/.test(cfg.endpoint)
     && typeof cfg.turnstileSiteKey==="string" && cfg.turnstileSiteKey.length>10;
   const status=(s)=>{msg.textContent=s};
@@ -67,7 +69,17 @@
     updateEnabled();
   }
   function updateEnabled(){
-    publish.disabled=busy||!serviceReady||!consent.checked||!recent.value||!
+    const name=crewField.value.trim();
+    const crewValid=!name||crewPattern.test(name);
+    if(!crewValid){
+      crewHelp.textContent="Use up to 40 letters, numbers, spaces or basic punctuation.";
+    }else if(name&&!supportsCrew){
+      crewHelp.textContent="Crew publishing needs a Cloudflare Worker update. Leave this field blank to publish without a crew until then.";
+    }else{
+      crewHelp.textContent="If provided, your crew or ship will be public alongside your callsign.";
+    }
+    publish.disabled=busy||!serviceReady||!consent.checked||!recent.value||!crewValid||
+      (Boolean(name)&&!supportsCrew)||!
       /^[A-Za-z0-9][A-Za-z0-9 _.-]{1,23}$/.test(alias.value.trim());
   }
   function compare(a,b){
@@ -79,17 +91,18 @@
     const sorted=entries.filter(e=>e.module+"|"+e.variant===key).sort(compare);
     const best=new Map();
     for(const e of sorted){
-      const who=String(e.callsign||"").toLowerCase();
+      // Same callsign aboard different crews has an independent best result.
+      const who=String(e.callsign||"").trim().toLowerCase()+"|"+String(e.crew||"").trim().toLowerCase();
       if(!best.has(who))best.set(who,e);
     }
     const leaders=[...best.values()].slice(0,15);
     if(!leaders.length){
-      const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=4;
+      const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=5;
       td.textContent="No public results in this category yet.";tr.append(td);dataElem.append(tr);return;
     }
     for(let i=0;i<leaders.length;i++){
       const e=leaders[i],tr=document.createElement("tr");
-      const fields=[String(i+1),e.callsign,Math.round(e.score/e.maximum*100)+"%",e.seconds.toFixed(2)+"s"];
+      const fields=[String(i+1),e.callsign,e.crew||"—",Math.round(e.score/e.maximum*100)+"%",e.seconds.toFixed(2)+"s"];
       for(const val of fields){const td=document.createElement("td");td.textContent=val;tr.append(td)}
       dataElem.append(tr);
     }
@@ -105,7 +118,7 @@
     }catch{status("Unable to load the public scoreboard. Local records are unaffected.");}
   }
   async function checkService(){
-    serviceReady=false;updateEnabled();
+    serviceReady=false;supportsCrew=false;updateEnabled();
     if(!prepared){
       status("Public publishing is not yet enabled. Private training and record export work normally.");
       return;
@@ -115,6 +128,7 @@
       if(!r.ok)throw new Error("Service unavailable");
       const info=await r.json();
       serviceReady=info.status==="ok" && info.writesEnabled===true;
+      supportsCrew=Array.isArray(info.features) && info.features.includes("crew");
       if(serviceReady)status("Public publishing is ready. Select an attempt and consent to publish.");
       else status("Public publishing is being configured. Private training remains available.");
     }catch{
@@ -142,7 +156,7 @@
       });
       const data=await r.json();
       if(!r.ok)throw Error(data.error||"Submission failed");
-      status("Published under callsign "+payload.callsign+". GitHub Pages may take a short time to refresh.");
+      status("Published under callsign "+payload.callsign+(payload.crew?" · Crew: "+payload.crew:"")+". GitHub Pages may take a short time to refresh.");
       consent.checked=false;await refresh();
     }catch(e){status("Not published: "+e.message)}
     finally{busy=false;updateEnabled();if(window.turnstile)window.turnstile.remove(challenge.dataset.widgetId)}
@@ -150,8 +164,9 @@
   async function publishSelected(){
     if(!serviceReady||busy)return;
     const score=scoreFrom(records()[Number(recent.value)]||{});
-    const callsign=alias.value.trim();
-    if(!score||!consent.checked||!(/^[A-Za-z0-9][A-Za-z0-9 _.-]{1,23}$/.test(callsign))){
+    const callsign=alias.value.trim(),crew=crewField.value.trim();
+    if(!score||!consent.checked||!(/^[A-Za-z0-9][A-Za-z0-9 _.-]{1,23}$/.test(callsign))||
+      (crew&&!crewPattern.test(crew))||(crew&&!supportsCrew)){
       status("Choose a completed result, a public callsign and confirm consent.");return;
     }
     busy=true;updateEnabled();status("Complete the human verification to publish.");
@@ -160,7 +175,7 @@
       challenge.replaceChildren();
       const widgetId=window.turnstile.render(challenge,{
         sitekey:cfg.turnstileSiteKey,action:"ucna-public-score",
-        callback:token=>submitWithToken(token,{...score,callsign}),
+        callback:token=>submitWithToken(token,{...score,callsign,crew}),
         "error-callback":()=>{status("Verification unavailable. Try again.");busy=false;updateEnabled()},
         "expired-callback":()=>{status("Verification expired. Try again.");busy=false;updateEnabled()}
       });
@@ -175,6 +190,7 @@
   publish.addEventListener("click",publishSelected);
   consent.addEventListener("change",updateEnabled);
   alias.addEventListener("input",updateEnabled);
+  crewField.addEventListener("input",updateEnabled);
   recent.addEventListener("change",updateEnabled);
   $("publicRefresh").addEventListener("click",refresh);
   window.addEventListener("ucna-records-changed",localSelection);
