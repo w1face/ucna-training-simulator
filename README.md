@@ -12,19 +12,19 @@ A browser-based and offline-capable Academy for the Bridge Command / EmptyEpsilo
 - Radar Signature Analysis
 - Hacking & System Disruption
 
-## Public records (v1.5)
+## Public records (v1.6)
 The homepage now includes a **voluntary public leaderboard**. Local scores are never uploaded automatically.
 
-Public submission is currently **disabled until the Cloudflare Worker and Turnstile credentials are configured**. Follow [the administrator setup guide](LEADERBOARD_SETUP.md). Credentials must be stored as secrets in Cloudflare, never in this repository.
+Public score publishing uses a configured Cloudflare Worker with Turnstile. The v1.6 site also supports an **optional public crew / ship affiliation**. To enable crew publishing, the Cloudflare Worker must be redeployed with the new source. Follow [the existing-Worker upgrade and administrator guide](LEADERBOARD_SETUP.md). Credentials must remain secrets in Cloudflare, never in this repository.
 
-Public entries are self-reported, sorted separately by training exercise. Callsigns and results are visible to all, including GitHub's version history.
+Public entries are self-reported, sorted separately by training exercise. Callsigns, optional crew names, and results are visible to all, including GitHub's version history. Existing entries without a crew remain intact.
 
 ## Architecture
 - `index.html` — public online Academy launcher
 - `trainers/` — four modular exercise HTMLs
 - `assets/icons/` — monochrome Academy navigation icons
 - `assets/leaderboard.js` — opt-in leaderboard user interface
-- `assets/leaderboard-config.js` — public Worker URL and Turnstile **sitekey**, blank until enabled
+- `assets/leaderboard-config.js` — public Worker URL and Turnstile **sitekey**, with no private credentials
 - `worker/src/index.js` — Cloudflare Worker server, with server-side Turnstile verification
 - `data/leaderboard.json` — current published, non-authoritative scores
 - `downloads/` — self-contained offline Academy
