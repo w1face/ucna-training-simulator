@@ -1,3 +1,22 @@
+## Updating an existing UCNA Worker for the optional Crew field (v1.6)
+
+If public scores are already working, **you do not need new secrets or a new Worker**.
+
+1. Open **Cloudflare Dashboard → Workers & Pages → ucna-leaderboard → Edit code**.
+2. Replace the existing Worker source with the updated [`worker/src/index.js`](worker/src/index.js) file from this repository.
+3. Click **Deploy**.
+4. Open [the Worker health check](https://ucna-leaderboard.w1face.workers.dev/health). Successful deployment returns:
+   ```json
+   {"status":"ok","writesEnabled":true,"features":["crew"]}
+   ```
+5. Refresh [the Academy homepage](https://w1face.github.io/ucna-training-simulator/) (Ctrl+F5). The public score form will offer an optional **Crew / ship** field alongside the public callsign.
+
+Crew names are publicly visible and committed into Git history, just like callsigns. Officers who don't have a crew can leave it blank. Existing published entries are unchanged and display **—** in the Crew column. To add crew affiliation to a previously published result, the officer can select and republish their original local attempt (if it still exists in that browser), using the crew field.
+
+Until the Worker is redeployed, the website deliberately blocks **crew-labelled submissions only** to avoid silently discarding affiliation. Publishing without a crew continues to work.
+
+---
+
 # Enable the UCNA Public Leaderboard
 
 UCNA v1.5 includes optional public scores, with local training records still private by default. The site reads public results from `data/leaderboard.json` on GitHub Pages. A Cloudflare Worker writes new results **only after explicit opt-in and Turnstile verification**. Scores are self-reported and are not authoritative qualifications.
