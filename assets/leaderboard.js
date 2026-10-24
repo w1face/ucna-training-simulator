@@ -22,7 +22,7 @@
   const dataElem=$("publicRows"), select=$("publicCategory"), recent=$("publicLocalResult");
   const msg=$("publicStatus"), publish=$("publicSubmit"), alias=$("publicCallsign"), consent=$("publicConsent");
   const challenge=$("ucnaTurnstile");
-  let entries=[],busy=false;
+  let entries=[],busy=false,serviceReady=false;
   const prepared=typeof cfg.endpoint==="string" && /^https:\/\/[^/]+/.test(cfg.endpoint)
     && typeof cfg.turnstileSiteKey==="string" && cfg.turnstileSiteKey.length>10;
   const status=(s)=>{msg.textContent=s};
@@ -67,7 +67,7 @@
     updateEnabled();
   }
   function updateEnabled(){
-    publish.disabled=busy||!prepared||!consent.checked||!recent.value||!
+    publish.disabled=busy||!serviceReady||!consent.checked||!recent.value||!
       /^[A-Za-z0-9][A-Za-z0-9 _.-]{1,23}$/.test(alias.value.trim());
   }
   function compare(a,b){
@@ -104,6 +104,24 @@
       $("publicLastSync").textContent="Public entries: "+entries.length;
     }catch{status("Unable to load the public scoreboard. Local records are unaffected.");}
   }
+  async function checkService(){
+    serviceReady=false;updateEnabled();
+    if(!prepared){
+      status("Public publishing is not yet enabled. Private training and record export work normally.");
+      return;
+    }
+    try{
+      const r=await fetch(cfg.endpoint.replace(/\\/+$/,"")+"/health",{cache:"no-store"});
+      if(!r.ok)throw new Error("Service unavailable");
+      const info=await r.json();
+      serviceReady=info.status==="ok" && info.writesEnabled===true;
+      if(serviceReady)status("Public publishing is ready. Select an attempt and consent to publish.");
+      else status("Public publishing is being configured. Private training remains available.");
+    }catch{
+      status("Public publishing is temporarily unavailable. Local records are unaffected.");
+    }
+    updateEnabled();
+  }
   let scriptLoading=null;
   function loadTurnstile(){
     if(window.turnstile)return Promise.resolve();
@@ -130,7 +148,7 @@
     finally{busy=false;updateEnabled();if(window.turnstile)window.turnstile.remove(challenge.dataset.widgetId)}
   }
   async function publishSelected(){
-    if(!prepared||busy)return;
+    if(!serviceReady||busy)return;
     const score=scoreFrom(records()[Number(recent.value)]||{});
     const callsign=alias.value.trim();
     if(!score||!consent.checked||!(/^[A-Za-z0-9][A-Za-z0-9 _.-]{1,23}$/.test(callsign))){
@@ -161,7 +179,5 @@
   $("publicRefresh").addEventListener("click",refresh);
   window.addEventListener("ucna-records-changed",localSelection);
   window.addEventListener("storage",e=>{if(e.key===STORAGE)localSelection()});
-  if(prepared)status("Scores stay private until you select an attempt and explicitly publish it.");
-  else status("Public publishing is not yet enabled. Private training and record export work normally.");
-  localSelection();refresh();
+  localSelection();refresh();checkService();
 })();
