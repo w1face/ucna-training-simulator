@@ -1,4 +1,16 @@
 {
   "version": 1,
-  "entries": []
+  "entries": [
+    {
+      "id": "3afc20c0-be40-49e9-ae09-6f1618b9d6f0",
+      "callsign": "Face",
+      "module": "scanning",
+      "variant": "full",
+      "score": 100,
+      "maximum": 100,
+      "seconds": 26.44,
+      "receivedAt": "2026-10-24T18:23:15.665Z",
+      "selfReported": true
+    }
+  ]
 }
