@@ -13,6 +13,10 @@ function validEntry(v){
   if(!v || typeof v!=="object" || Array.isArray(v))return null;
   const callsign=String(v.callsign||"").trim();
   if(!/^[A-Za-z0-9][A-Za-z0-9 _.-]{1,23}$/.test(callsign) || /https?:|www[.]/i.test(callsign))return null;
+  // Optional public crew/ship affiliation; empty string means unaffiliated.
+  const crew=String(v.crew??"").trim();
+  if(crew.length>40 || (crew && !/^[\p{L}\p{N}][\p{L}\p{N} ._'&/-]{0,39}$/u.test(crew))
+     || /https?:|www[.]/i.test(crew))return null;
   const module=String(v.module||"");
   if(!MODULES.includes(module))return null;
   const variant=String(v.variant||"");
@@ -22,7 +26,7 @@ function validEntry(v){
   if(module==="radar-signatures" && (!["basic","combined"].includes(variant) || maximum!==2 || score<0 || score>2))return null;
   if(module==="scanning" && (!["initial","full"].includes(variant) || maximum!==100 || score!==100))return null;
   if(module==="hacking" && (!["Basic","Secure","Hardened","Fortified"].includes(variant) || maximum!==100 || score!==100))return null;
-  return {callsign,module,variant,score,maximum,seconds:Math.round(seconds*100)/100};
+  return {callsign,crew,module,variant,score,maximum,seconds:Math.round(seconds*100)/100};
 }
 async function githubFile(env){
   const r=await fetch(GH+"?ref=main",{headers:{"accept":ACCEPT,"authorization":"Bearer "+env.GITHUB_TOKEN,
@@ -75,7 +79,7 @@ export default {
       "access-control-allow-origin":ORIGIN,"access-control-allow-methods":"GET, POST, OPTIONS",
       "access-control-allow-headers":"Content-Type","access-control-max-age":"7200","vary":"Origin"
     }});
-    if(request.method==="GET" && url.pathname==="/health")return json({status:"ok",writesEnabled:!!env.GITHUB_TOKEN&&!!env.TURNSTILE_SECRET});
+    if(request.method==="GET" && url.pathname==="/health")return json({status:"ok",writesEnabled:!!env.GITHUB_TOKEN&&!!env.TURNSTILE_SECRET,features:["crew"]});
     if(request.method==="GET" && url.pathname==="/scores"){
       try{
         if(!env.GITHUB_TOKEN)return fail("Scoreboard not configured",503);
@@ -92,7 +96,7 @@ export default {
     catch{return fail("Invalid JSON",400)}
     if(req.consent!==true)return fail("Explicit public opt-in required",400);
     const proposed=validEntry(req);
-    if(!proposed)return fail("Invalid score or callsign",400);
+    if(!proposed)return fail("Invalid score, callsign or crew",400);
     let valid=false;
     try{valid=await verifyTurnstile(req.token,env,request.headers.get("cf-connecting-ip"))}catch{}
     if(!valid)return fail("Human verification failed or expired",403);
