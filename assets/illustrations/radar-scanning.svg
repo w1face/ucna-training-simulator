@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 310" role="img" aria-label="Radar scanning and waveform alignment">
+<defs>
+<linearGradient id="bg" x2="1" y2="1"><stop stop-color="#061522"/><stop offset="1" stop-color="#0d2a41"/></linearGradient>
+<linearGradient id="lit" x2="1"><stop stop-color="#65b8f2" stop-opacity=".12"/><stop offset=".5" stop-color="#9dd9ff" stop-opacity=".40"/><stop offset="1" stop-color="#65b8f2" stop-opacity=".04"/></linearGradient>
+<pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#63bdf0" stroke-opacity=".11" stroke-width="1"/></pattern>
+<filter id="glow"><feGaussianBlur stdDeviation="3.5"/></filter>
+</defs>
+<rect width="640" height="310" rx="17" fill="url(#bg)"/>
+<rect x="10" y="10" width="620" height="290" rx="13" fill="url(#grid)" stroke="#458bb8" stroke-width="2"/>
+<path d="M10 58V25L25 10H85 M630 58V25L615 10H555 M10 252V285L25 300H85 M630 252V285L615 300H555" stroke="#90caff" stroke-width="3" fill="none" opacity=".9"/>
+<g fill="none" stroke="#90caff" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(163 150)">
+<circle r="119" stroke-width="2.3" opacity=".75"/><circle r="89" stroke-width="1.4" opacity=".48"/><circle r="59" stroke-width="1.4" opacity=".4"/><circle r="29" stroke-width="1.4" opacity=".5"/>
+<path d="M-126 0H126 M0 -126V126" opacity=".35"/>
+<path d="M0 0 L101 -66 A119 119 0 0 1 114 -35 Z" fill="#64bcf5" fill-opacity=".19" stroke="none"/>
+<path d="M0 0L111 -43" stroke-width="2.5"/><circle r="5" fill="#b0e2ff" stroke="none"/>
+<circle cx="-55" cy="-23" r="5" fill="#a4dfff" stroke="none"/><circle cx="35" cy="69" r="6" fill="#a4dfff" stroke="none"/>
+<path d="M-17 73h-16v17 M-17 90h16" opacity=".9" stroke-width="3"/>
+</g>
+<path d="M324 31V270" opacity=".42"/>
+<g stroke-width="2.2">
+<rect x="342" y="35" width="269" height="63" rx="5" opacity=".5"/><rect x="342" y="109" width="269" height="63" rx="5" opacity=".5"/>
+<path d="M353 70 Q367 34 383 70 T414 70 T445 70 T476 70 T507 70 T538 70 T570 70 T601 70" stroke-width="2.8"/>
+<path d="M353 145 l6 -4 6 9 5 -17 7 25 8 -27 5 11 7 -5 6 9 7 -13 7 10 7 -8 7 13 8 -11 6 8 6 -11 6 7 8 -13 7 16 7 -5 7 7 8 -6 7 9 8 -5 7 6 8 -15 8 12 7 -8 8 6 7 -8 7 4 8 -11" stroke-width="1.8" opacity=".9"/>
+</g>
+<g stroke-width="3.0">
+<path d="M370 200V261 M418 200V261 M466 200V261 M514 200V261 M562 200V261" opacity=".55"/>
+<rect x="360" y="214" width="20" height="16" rx="2" fill="#7ccaf7" fill-opacity=".56"/>
+<rect x="408" y="239" width="20" height="16" rx="2" fill="#7ccaf7" fill-opacity=".56"/>
+<rect x="456" y="207" width="20" height="16" rx="2" fill="#7ccaf7" fill-opacity=".56"/>
+<rect x="504" y="229" width="20" height="16" rx="2" fill="#7ccaf7" fill-opacity=".56"/>
+<rect x="552" y="218" width="20" height="16" rx="2" fill="#7ccaf7" fill-opacity=".56"/>
+</g></g>
+<path d="M34 282H118 M522 282H606" stroke="#90caff" opacity=".30" stroke-width="2"/>
+</svg>
