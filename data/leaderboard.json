@@ -24,6 +24,18 @@
       "seconds": 26.15,
       "receivedAt": "2026-10-24T18:41:01.592Z",
       "selfReported": true
+    },
+    {
+      "id": "23e10b3b-3f9f-4a37-b6e9-22ca591515d6",
+      "callsign": "Face",
+      "crew": "SASS",
+      "module": "radar-icons",
+      "variant": "ship",
+      "score": 10,
+      "maximum": 10,
+      "seconds": 26.15,
+      "receivedAt": "2026-10-24T18:41:08.834Z",
+      "selfReported": true
     }
   ]
 }
