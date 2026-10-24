@@ -101,7 +101,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 .cards { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
 .card {
   position: relative; overflow: hidden;
-  display: grid; grid-template-columns: 86px 1fr; gap: 16px;
+  display: grid; grid-template-columns: 96px 1fr; gap: 17px;
   min-height: 205px;
   padding: 20px;
   border: 1px solid var(--line);
@@ -114,14 +114,19 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
   background: var(--accent, var(--cyan));
 }
 .moduleIcon {
-  height: 86px; width: 86px;
-  border: 1px solid color-mix(in srgb, var(--accent, var(--cyan)) 68%, #173047);
-  background: rgba(0,0,0,.14);
+  width: 96px; min-height: 105px;
+  border: 1px solid #365c7d;
+  background: linear-gradient(155deg, #102b43, #081724);
   border-radius: 12px;
-  display: grid; place-items: center;
-  color: var(--accent, var(--cyan));
-  font-size: 30px; font-weight: 900; letter-spacing: .05em;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; padding: 7px 8px;
+  box-shadow: inset 0 0 0 1px rgba(144,202,255,.05);
 }
+.moduleIcon img { width: 68px; height: 68px; display: block; object-fit: contain; }
+.moduleCode { font: 800 10px/1.25 ui-monospace, Consolas, monospace; color: #9cbad0; letter-spacing: .18em; }
+.utilityHeading { display: inline-flex; align-items: center; gap: 10px; }
+.utilityHeading img { width: 26px; height: 26px; display: inline-block; }
+.utilityBtnIcon { width: 18px; height: 18px; vertical-align: -4px; margin-right: 7px; }
 .cardbody { min-width: 0; display: flex; flex-direction: column; }
 .kicker { color: var(--accent, var(--cyan)); text-transform: uppercase; letter-spacing: .14em; font-size: 11px; font-weight: 800; }
 .card h3 { margin: 5px 0 6px; font-size: 21px; }
@@ -174,8 +179,10 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 @media (max-width: 560px) {
   .shell { padding: 12px; }
   .profile { grid-template-columns: 1fr; }
-  .card { grid-template-columns: 64px 1fr; padding: 15px; }
-  .moduleIcon { width: 64px; height: 64px; font-size: 22px; }
+  .card { grid-template-columns: 70px 1fr; padding: 15px; }
+  .moduleIcon { width: 70px; min-height: 82px; padding: 5px; }
+  .moduleIcon img { width: 53px; height: 53px; }
+  .moduleCode { font-size: 9px; }
   .launchRow { align-items: stretch; flex-direction: column; }
   .launchBtn { width: 100%; }
   .playerOfficer { display:none; }
@@ -216,7 +223,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     </div>
     <div class="statusbox">
       <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.1</div>
+      <div class="statusline" id="suiteVersion">Academy release 1.2</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -242,14 +249,14 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
   </section>
   <section class="cards" id="trainerCards" aria-label="Training assignments"></section>
   <section aria-label="Offline edition" style="margin:24px 0;padding:18px 22px;border:1px solid #39516b;border-radius:12px;background:rgba(19,34,53,.85)">
-    <h2 style="margin:0 0 8px;font-size:1.15rem">Training away from the network?</h2>
+    <h2 class="utilityHeading" style="margin:0 0 8px;font-size:1.15rem"><img src="assets/icons/download.svg" alt="" />Training away from the network?</h2>
     <p style="margin:0 0 12px;color:#b9c9dd">Save the complete Academy as a single HTML file for offline training. The online and offline editions store results separately; use the training record backup to transfer them.</p>
-    <a href="downloads/UCNA_Training_Simulator_v1.1_Offline.html" download="UCNA_Training_Simulator_v1.1.html" style="display:inline-block;background:#2364a1;color:white;border-radius:8px;padding:10px 16px;font-weight:700;text-decoration:none">↓ Download Offline Academy (v1.1)</a>
+    <a href="downloads/UCNA_Training_Simulator_v1.2_Offline.html" download="UCNA_Training_Simulator_v1.2.html" style="display:inline-block;background:#2364a1;color:white;border-radius:8px;padding:10px 16px;font-weight:700;text-decoration:none"><img class="utilityBtnIcon" src="assets/icons/download.svg" alt="" />Download Offline Academy (v1.2)</a>
   </section>
 
   <section class="recordPanel" aria-labelledby="recordHeading">
     <div class="recordHeader">
-      <div><div class="eyebrow">UCN ACADEMY / RECORDS</div><h2 id="recordHeading">Training Records</h2>
+      <div><div class="eyebrow">UCN ACADEMY / RECORDS</div><h2 id="recordHeading" class="utilityHeading"><img src="assets/icons/records.svg" alt="" />Training Records</h2>
         <p>Completed assessments across all four disciplines. Review your progress or secure a copy of your training record.</p></div>
       <div class="recordActions">
         <button type="button" id="exportCsv">Export CSV</button>
@@ -279,7 +286,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 
 <section class="player" id="player" aria-label="Trainer player">
   <div class="playerbar">
-    <button class="backBtn" id="closeTrainer" type="button">← Academy</button>
+    <button class="backBtn" id="closeTrainer" type="button"><img class="utilityBtnIcon" src="assets/icons/home.svg" alt="" />Academy</button>
     <div class="playerTitle">
       <strong id="playerTitle">Training Module</strong>
       <span id="playerSubtitle">UCN Academy</span>
@@ -313,13 +320,14 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.1';
+const SUITE_VERSION = '1.2';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
   {
     id: 'scanning',
     code: 'SCN',
+    icon: 'assets/icons/radar-scanning.svg',
     title: 'Scanning Training Programme',
     kicker: 'Science / Radar',
     description: 'Waveform reading, scan positioning, slider control and multi-stage scanning practice.',
@@ -330,6 +338,7 @@ const TRAINERS = [
   {
     id: 'radar-icons',
     code: 'RID',
+    icon: 'assets/icons/radar-recognition.svg',
     title: 'Radar Icon Recognition',
     kicker: 'Radar',
     description: 'Rapid recognition of tactical display contacts, IFF states and visual radar symbology.',
@@ -340,6 +349,7 @@ const TRAINERS = [
   {
     id: 'radar-signatures',
     code: 'RSG',
+    icon: 'assets/icons/radar-signatures.svg',
     title: 'Radar Signature Analysis',
     kicker: 'Radar / Analysis',
     description: 'Interpret raw radar signatures and infer ship activity from signal behaviour.',
@@ -350,6 +360,7 @@ const TRAINERS = [
   {
     id: 'hacking',
     code: 'HCK',
+    icon: 'assets/icons/navigation-hacking.svg',
     title: 'Hacking & System Disruption',
     kicker: 'Science / Electronic Warfare',
     description: 'Practise hacking-grid decisions while tracking system disruption and recovery effects.',
@@ -410,7 +421,7 @@ function updatePlayerOfficer(profile = getProfile()) {
 function renderCards() {
   els.cards.innerHTML = TRAINERS.map(t => `
     <article class="card" style="--accent:${t.accent}">
-      <div class="moduleIcon" aria-hidden="true">${t.code}</div>
+      <div class="moduleIcon" aria-hidden="true"><img src="${t.icon}" alt="" /><span class="moduleCode">${t.code}</span></div>
       <div class="cardbody">
         <div class="kicker">${t.kicker}</div>
         <h3>${t.title}</h3>
