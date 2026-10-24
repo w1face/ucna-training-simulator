@@ -4,6 +4,7 @@
     {
       "id": "3afc20c0-be40-49e9-ae09-6f1618b9d6f0",
       "callsign": "Face",
+      "crew": "SASS",
       "module": "scanning",
       "variant": "full",
       "score": 100,
