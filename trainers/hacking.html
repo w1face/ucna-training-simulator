@@ -1,0 +1,426 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08111c"><title>UCN Academy — Hacking and System Disruption Trainer v1.8</title>
+<style>
+:root{color-scheme:dark;--bg:#070d16;--gridbg:#090f18;--panel:#111a2a;--panel2:#0d1626;--edge:#7b838f;--soft:#2f3844;--text:#f2f2f2;--muted:#aeb5bd;--accent:#e8e8e8;--activebg:#efefef;--activefg:#101418;--good:#7ce1c2;--danger:#f58c93;--cyan:#71d0df}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#182339 0%,#091220 55%,#050b13 100%);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Arial,sans-serif}main{max-width:1280px;margin:auto;padding:18px 18px 42px}.eyebrow{color:#76d3e1;letter-spacing:2px;font:700 11px/1.3 ui-monospace,monospace}.intro h1{margin:6px 0 4px;font-size:clamp(24px,4vw,36px)}.intro p{margin:0;color:var(--muted);max-width:920px}.toolbar,.academy,.results{margin-top:14px;background:#101c2e;border:1px solid #355167;border-radius:14px;overflow:hidden}.toolbar .pad,.academy .pad,.results .pad{padding:14px 16px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}select,button{font:inherit;color:var(--text);border:1px solid #51697f;border-radius:10px;background:#173046;min-height:43px;padding:10px 14px}button{font-weight:700;cursor:pointer;touch-action:manipulation}button:hover:not(:disabled){filter:brightness(1.1)}button:disabled{opacity:.38;cursor:not-allowed}.primary{background:#1b726a;border-color:#4ac4b2}.secondary{background:#13283d}.status{font:700 11px/1 ui-monospace,monospace;color:#83ede6;border:1px solid #2d7588;background:#0c2c41;border-radius:24px;padding:8px 11px}.tiny{font-size:12px;color:var(--muted)}.hintbtn.on{background:#e9f9ff;color:#10202d;border-color:#8ed4e7}
+.mainconsole{display:grid;grid-template-columns:minmax(520px,1.6fr) minmax(280px,.95fr);gap:14px;align-items:start;margin-top:14px}.hacking-panel,.target-panel{background:rgba(14,21,33,.96);border:2px solid rgba(148,155,166,.72);border-radius:28px;padding:16px 18px 18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}.console-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.readouts{width:100%;text-align:center}.bigreadout{font-family:"Arial Narrow","Roboto Condensed","Segoe UI Condensed",sans-serif;font-stretch:condensed;text-transform:uppercase;letter-spacing:.5px;font-size:clamp(21px,2.25vw,31px);line-height:1.15;margin:0 0 4px;white-space:nowrap}.bigreadout span{font-variant-numeric:tabular-nums}.subreadout{font-family:"Arial Narrow","Roboto Condensed","Segoe UI Condensed",sans-serif;font-stretch:condensed;text-transform:uppercase;letter-spacing:.5px;font-size:clamp(21px,2.2vw,31px);line-height:1.15;margin:0}.hackplay{display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:12px;align-items:stretch}.board{display:grid;gap:6px;width:100%;user-select:none;touch-action:manipulation;aspect-ratio:1}.cell{display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;width:100%;height:100%;padding:0;border-radius:999px;border:2px solid #66696f;background:#090b10;color:#fff;font:500 clamp(12px,1.7vw,26px) "Arial Narrow", "Roboto Condensed", Arial, sans-serif;aspect-ratio:1}.cell:disabled{opacity:1;cursor:default}.cell.safe{background:#fff;border-color:#72747a;color:#161616}.cell.mine{background:#44232b;border-color:#f08d95;color:#ffd4d8}.cell.n1,.cell.n2,.cell.n3,.cell.n4,.cell.n5,.cell.n6,.cell.n7,.cell.n8{color:#161616}
+/* Instructor overlays, shown only with Training Hints enabled. */
+.cell.hint-safe{border-color:#66eff5;box-shadow:inset 0 0 0 2px #66eff5,0 0 11px 2px #38dcea9f;background:#0c313f;color:#eaffff}
+.cell.hint-mine{border-color:#ff8c92;box-shadow:inset 0 0 0 2px #ff8c92,0 0 11px 2px #e4778099;background:#41232a;color:#ffebee}
+.cell.hint-source{outline:3px solid #f2d278;outline-offset:2px;z-index:1}
+.cell.hint-related-purple{outline:3px solid #b189ff;outline-offset:2px;z-index:1}
+.cell.hint-focus{outline:3px solid #7ef0a9;outline-offset:2px;z-index:2}
+.hint-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hint-controls select{min-width:111px}.hint-coach{margin:0 0 13px;padding:12px 14px;border:1px solid #4b7d90;background:#102a37;border-radius:13px}.hint-coach-title{display:flex;justify-content:space-between;gap:8px;color:#aadce8;letter-spacing:.1em;font:700 11px ui-monospace,monospace}.hint-coach p{margin:9px 0 12px;color:#e0f2f8;font-size:13px;line-height:1.5}.hint-coach button{min-height:43px}.hint-controls label{white-space:nowrap}.hint-controls select{max-width:190px}.hintbtn.on{background:#d6f4f6;border-color:#78dadd;color:#091b26}.hint-legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:10px 0;font-size:12px;color:#c8d9e2}.hint-dot{display:inline-block;width:12px;height:12px;border:2px solid #fff;border-radius:50%;vertical-align:-2px;margin-right:4px}.hint-dot.safe{border-color:#66eff5;background:#0c313f}.hint-dot.mine{border-color:#ff8c92;background:#41232a}.hint-dot.clue{border-color:#f2d278;background:#524324}.hint-dot.related{border-color:#b189ff;background:#34204e}.hint-dot.focus{border-color:#7ef0a9;background:#183626}.hint-explanation{padding:11px 13px;margin-top:9px;border:1px solid #637784;border-radius:8px;color:#e7f3fa;background:#0c2434;font-size:13px}.hint-explanation strong{color:#fae09c}.hint-explanation[hidden]{display:none!important}.hint-popup{position:fixed;z-index:50;max-width:min(380px,calc(100vw - 24px));padding:12px 14px;border:1px solid #688092;border-radius:10px;background:#0b2232;color:#eef8ff;box-shadow:0 16px 36px rgba(0,0,0,.45);font-size:13px;line-height:1.45}.hint-popup strong{color:#fae09c}.hint-popup[hidden]{display:none!important}.hint-coach[hidden],.hint-legend[hidden]{display:none!important}.hint-popup .hint-heading{font-weight:800;font-size:15px;margin-bottom:7px;color:#cce4f2}.hint-popup .hint-reason{margin:0 0 9px}.hint-popup .hint-key{border-top:1px solid #355369;padding-top:7px;font-size:12px;color:#bed4e1;line-height:1.5}.hint-popup .hint-key b{color:#fae09c}.hint-explanation .hint-heading{font-weight:800}.hint-explanation .hint-reason{margin:6px 0}.hint-explanation .hint-key{color:#bed4e1;font-size:12px}.cell.hint-safe,.cell.hint-mine{-webkit-touch-callout:none;user-select:none}.hint-popup{overflow-wrap:anywhere}
+.meterwell{display:flex;align-items:flex-end;justify-content:center}.vertical-track{position:relative;width:68px;height:100%;min-height:360px;background:#090b10;border-left:3px solid rgba(197,200,205,.83);border-right:3px solid rgba(197,200,205,.83);border-radius:2px;padding:4px 6px}.vertical-fill{position:absolute;left:7px;right:7px;bottom:0;height:0;background:#62656d;border:0;transition:none}.vertical-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.console-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}.console-buttons button{min-height:68px;border-radius:999px;background:#020915;border:3px solid rgba(154,161,171,.7);font-family:"Arial Narrow","Roboto Condensed","Segoe UI Condensed",sans-serif;font-stretch:condensed;font-size:clamp(20px,2vw,30px);letter-spacing:.5px;text-transform:uppercase;color:#f4f4f4}.console-buttons button:disabled{opacity:.42;color:#a0a7b0}.console-buttons .apply.ready{background:#efefef;color:#14191f}.console-buttons .danger{color:#f2f2f2}.console-buttons .secondary-action{color:#f2f2f2}
+.target-panel h2{margin:4px 0 14px;text-align:center;font-family:"Arial Narrow","Roboto Condensed","Segoe UI Condensed",sans-serif;font-stretch:condensed;text-transform:uppercase;letter-spacing:.7px;font-size:clamp(24px,2.2vw,36px);font-weight:700}.target-list{display:grid;gap:12px}.target-btn{display:block;width:100%;min-height:66px;padding:10px 18px;border-radius:999px;border:3px solid rgba(154,161,171,.7);background:#020915;color:#f4f4f4;font-family:"Arial Narrow","Roboto Condensed","Segoe UI Condensed",sans-serif;font-stretch:condensed;text-transform:uppercase;letter-spacing:.4px;font-size:clamp(18px,1.75vw,28px);line-height:1.05}.target-btn.active{background:var(--activebg);color:var(--activefg)}.target-btn:disabled{opacity:1;cursor:default}.target-btn.smalltext{font-size:clamp(16px,1.55vw,25px)}
+.academy h2,.results h2{margin:0;font-size:20px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#30546d;border-top:1px solid #30546d}.metric{background:#0a1d2d;padding:12px 7px;text-align:center}.metric strong{display:block;font:750 clamp(17px,2vw,25px) ui-monospace,monospace;color:var(--good)}.metric span{display:block;font-size:11px;color:var(--muted)}.academy-grid{display:grid;grid-template-columns:1.25fr .95fr;gap:14px;padding:14px 16px 16px;background:#0b1626;border-top:1px solid #2e475a}.targetline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;color:#b5d0e1;font-size:12px;margin-top:10px}.targetline b{color:var(--good)}.targetbar{height:12px;border-radius:7px;border:1px solid #335a70;background:#06131d;overflow:hidden}.targetbar>div{height:100%;width:0;background:linear-gradient(90deg,#217ca1,#71d0df);transition:width .12s}.uplink{padding:10px 12px;border-radius:9px;background:#0d3642;border:1px solid #3c8087;margin-top:12px}.trend{height:166px;background:#041624;border:1px solid #34576d;border-radius:9px;overflow:hidden;margin-top:10px}.trend canvas{display:block;width:100%;height:100%}.bars{display:grid;gap:12px;margin-top:8px}.track{height:11px;border:1px solid #385d71;border-radius:999px;background:#07131d;overflow:hidden}.track > div{height:100%;width:0;background:linear-gradient(90deg,#164f6c,#73d7c8);transition:width .12s}.message{margin-top:12px;padding:12px;border-radius:10px;background:#0d2234;border:1px solid #33546a}.small-note{font-size:12px;color:var(--muted);margin:10px 0 0}.resultstable{overflow:auto;border-top:1px solid #30546d}.results table{width:100%;border-collapse:collapse}.results th,.results td{padding:10px 12px;border-top:1px solid #243a4d;text-align:left;font-size:13px}.results th{color:#bcd0dc;font-size:12px;background:#0f2132}.foot{padding:16px 18px;color:var(--muted);font-size:12px;line-height:1.6}.foot details{margin-top:10px}.foot summary{cursor:pointer;color:#dde8ee}
+@media (max-width:1050px){.mainconsole{grid-template-columns:1fr}.target-panel{order:2}.hacking-panel{order:1}.academy-grid{grid-template-columns:1fr}.bigreadout,.subreadout{white-space:normal}}
+@media (max-width:700px){main{padding:14px 10px 28px}.mainconsole{gap:10px}.hacking-panel,.target-panel{padding:12px}.hackplay{grid-template-columns:minmax(0,1fr) 58px;gap:8px}.vertical-track{width:52px;min-height:250px}.board{gap:6px}.cell{border-width:2px}.console-buttons{gap:8px}.console-buttons button{min-height:58px;font-size:clamp(16px,6vw,24px);border-width:2px}.target-list{gap:8px}.target-btn{min-height:56px;border-width:2px;font-size:clamp(15px,5vw,23px)}.metrics{grid-template-columns:repeat(2,1fr)}.bigreadout,.subreadout{font-size:clamp(19px,7vw,28px)}}
+
+/* Academy two-stage navigation: selector and live console */
+.ucn-screen[hidden]{display:none!important}
+.ucn-navigation{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.ucn-selection{max-width:820px;margin:24px auto 0}
+.ucn-selection .toolbar{margin-top:22px}
+.ucn-selection .toolbar .pad{padding:24px}
+.ucn-selection .toolbar .row{align-items:flex-start;flex-direction:column;gap:18px}
+.ucn-selection .toolbar .controls{width:100%;align-items:flex-start;gap:14px}
+.ucn-selection .toolbar .controls>select{min-width:185px}
+.ucn-selection .toolbar .hint-controls{width:100%;border-top:1px solid #355167;padding-top:14px}
+.ucn-selection .toolbar #begin{font-size:17px;padding:13px 28px;min-height:52px}
+.ucn-selection .toolbar #newTarget{display:none}
+.ucn-navigation button{background:#13283d;min-height:44px}
+@media(max-width:700px){.ucn-selection{margin-top:12px}.ucn-navigation button{flex:1}}
+.ucn-live-hints{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 14px;padding:12px 16px;background:#101c2e;border:1px solid #355167;border-radius:12px}
+.ucn-live-hints .hint-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ucn-live-hints select{min-height:42px}
+</style></head><body><main>
+<header class="intro"><div class="eyebrow">UCN ACADEMY / NAVIGATION / CYBER WARFARE</div><h1>Defence Grid Trainer</h1><p>Bridge Command hacking practice. The console mirrors the in-game defence grid; choose whether to receive no hints, gentle hints when stuck, or full colour-coded assistance.</p></header>
+<section class="toolbar"><div class="pad row"><div><strong>Cyber defence level</strong><div class="tiny" id="tierDetail">8 × 8 grid · 10 defence routines</div></div><div class="controls"><select id="tier" aria-label="Cyber defence level"><option value="0">Basic</option><option value="1" selected>Secure</option><option value="2">Hardened</option><option value="3">Fortified</option></select><button id="begin" class="primary">Start breach</button><button id="newTarget" class="secondary" type="button">Reset target</button><div class="hint-controls"><label class="tiny" for="hintMode">Training support</label><select id="hintMode" aria-label="Training support"><option value="none" selected>No hints</option><option value="guided">Hints on demand</option><option value="full">Full hints</option></select><select id="hintLevel" aria-label="Hint logic level"><option value="basic">Basic patterns</option><option value="advanced" selected>Advanced patterns</option></select></div><span class="status" id="status">STANDBY</span></div></div></section>
+<section class="mainconsole">
+  <div class="hacking-panel">
+    <div class="console-top"><div class="readouts"><p class="bigreadout" id="hackedHeader">HACKED BEAM WEAPONS: <span>0%</span></p><p class="subreadout"><span id="hackStatusText">HACKING IN PROGRESS:</span> <span id="displayHeader">36%</span></p></div></div>
+    <div id="hintCoach" class="hint-coach" hidden><div class="hint-coach-title"><span>ACADEMY INSTRUCTOR</span><span id="hintStepLabel">YOUR MOVE</span></div><p id="hintCoachText">Work through the grid at your own pace. When you get stuck, ask for a hint.</p><button type="button" id="hintNext" class="secondary">Give me a hint</button></div><div class="hackplay"><div class="board" id="board" role="group" aria-label="Hacking grid"></div><div class="meterwell"><div class="vertical-track" aria-hidden="true"><div class="vertical-fill" id="verticalFill"></div><div class="vertical-label" id="verticalLabel">36%</div></div></div></div>
+    <div class="console-buttons"><button id="reset" class="secondary-action" disabled>Reset</button><button id="apply" class="apply" disabled>Apply</button><button id="abort" class="danger" disabled>Close</button></div><div id="hintPopup" class="hint-popup" hidden></div>
+  </div>
+  <div class="target-panel"><h2>Target System:</h2><div class="target-list" id="targetList"></div></div>
+</section>
+<section class="academy"><div class="pad row"><div><h2>Instructor readout</h2><div class="tiny">The useful behind-the-scenes data lives here rather than cluttering the play panel.</div></div><div class="tiny"><strong id="state">AWAITING BREACH</strong></div></div>
+<div class="metrics"><div class="metric"><strong id="clock">0.0s</strong><span>Breach time</span></div><div class="metric"><strong id="safe">0 / 0</strong><span>Safe nodes cleared</span></div><div class="metric"><strong id="errors">0 / 2</strong><span>Defence routines hit</span></div><div class="metric"><strong id="display">36.8%</strong><span>Displayed hack progress</span></div></div>
+<div class="academy-grid">
+  <div>
+    <div class="bars"><div><div class="row tiny"><span>Hidden safe-cell progress</span><span id="rawlabel">0%</span></div><div class="track"><div id="rawbar"></div></div></div><div><div class="row tiny"><span>Displayed progress (game formula)</span><span id="barlabel">36.8%</span></div><div class="track"><div id="displaybar"></div></div></div></div>
+    <div id="message" class="message" aria-live="polite"></div>
+    <p class="small-note" id="threshold">Apply unlocks after more than 70% of safe cells.</p><div class="hint-legend" id="hintLegend" hidden><span><i class="hint-dot safe"></i>Guaranteed safe</span><span><i class="hint-dot mine"></i>Guaranteed mine</span><span><i class="hint-dot clue"></i>Clue numbers used</span><span><i class="hint-dot related"></i>Other cells considered</span><span><i class="hint-dot focus"></i>Cell being explained</span></div>
+    <p class="small-note" id="hintSummary">No hints. Your training run is unaided.</p>
+    <div class="controls"><span class="tiny" id="hintIndex">Pause your pointer over a glowing cell, or hold your finger on it, to see why it is safe or dangerous.</span></div><div class="hint-explanation" id="hintExplanation" hidden aria-live="polite"></div>
+    <div class="targetline"><span>Transmission / effect state</span><span id="trendNote">Waiting for first grid</span></div><div class="uplink" id="pendingNotice" hidden>Uploading hacking result...</div>
+    <div class="targetline"><span>Target history · last 3 minutes</span><b id="projected">Clear safe nodes to estimate</b></div><div class="trend"><canvas id="trendGraph" width="670" height="166" aria-label="Time graph of accumulated hacking level"></canvas></div>
+  </div>
+  <div>
+    <div class="targetline"><span>Target system</span><b id="targetTitle">Simulated enemy Beam Weapons · baseline 100% effectiveness</b></div>
+    <div class="metrics" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:10px;border-radius:10px;overflow:hidden"><div class="metric"><strong id="hackLevel">0.0%</strong><span>System hacked</span></div><div class="metric"><strong id="effectiveness">100.0%</strong><span>System effectiveness</span></div><div class="metric"><strong id="appliedCount">0</strong><span>Breaches applied</span></div><div class="metric"><strong id="attackRate">—</strong><span>Hacking added / min</span></div></div>
+    <div class="targetline"><span>Accumulated hacking level</span><b id="hackBarLabel">0.0%</b></div><div class="targetbar"><div id="hackBar"></div></div>
+    <div class="message" style="margin-top:14px" aria-live="off">
+      <strong style="color:var(--good)">TACTICAL ASSESSMENT · <span id="assessmentSystem">BEAM WEAPONS</span></strong>
+      <div id="assessmentText" style="margin-top:7px">Beam firing rate: 100% of normal.</div>
+      <div id="assessmentNote" class="tiny" style="margin-top:7px">Assumes a healthy, fully powered target. Hack effects take five seconds to arrive.</div>
+    </div>
+    <p class="small-note">Once a grid finishes, the grey bar briefly fills and then drains over five seconds, just as in Bridge Command. The hack takes effect when it reaches the bottom. Each successful grid applies <strong>half the displayed progress</strong> to the enemy system, after that five-second delay. Natural recovery removes 100 hacking points over 180 seconds. Effectiveness assumes a healthy system with 100% power, energy and no repair crew.</p>
+  </div>
+</div></section>
+<section class="results"><div class="pad row"><h2>Training results</h2><div class="controls"></div></div><div class="metrics"><div class="metric"><strong id="avg">—</strong><span>Avg successful breach</span></div><div class="metric"><strong id="fastest">—</strong><span>Best successful breach</span></div><div class="metric"><strong id="winrate">—</strong><span>Successful breaches</span></div><div class="metric"><strong id="total">0</strong><span>Recorded attempts</span></div></div><div class="resultstable"><table><thead><tr><th>Level</th><th>Time</th><th>Safe cells</th><th>Routine hits</th><th>Outcome</th></tr></thead><tbody id="history"><tr><td colspan="5" class="tiny">No attempts recorded.</td></tr></tbody></table></div><div class="foot"><strong>Source-accuracy note:</strong> From <code>BCsrcNEW.zip</code>: <code>mineSweeper.cpp</code>, <code>miniGame.cpp</code>, <code>hackingDialog.cpp</code>. This replica follows the source board sizes, mine density, adjacent clues, zero flood-fill, two-hit ending, Apply availability and the exponential progress display. The five-second transmission delay and the corresponding boost to the simulated target system run in real time. Optional instructor hints use only visible clues and are hidden by default. Natural target recovery is modelled; ship-specific repair crews, overheat, power changes and scanner heat from a successful hack are not included. The 70% threshold differs from the difficulty thresholds printed in the Academy manual; see explanation below.
+<details><summary>Why does Apply unlock at about 60% displayed progress?</summary><p>The code requires <code>getProgress() &gt; 0.7 + difficulty / 10</code>. Both <code>difficulty</code> and <code>10</code> are integers, so for standard difficulties 0–3 the second term is zero. This makes the raw safe-cell threshold greater than 70% for every standard tier. Meanwhile, the progress indicator displays <code>exp(rawProgress²) / exp(1)</code>, which reaches about 60% when raw progress reaches 70%. An automatic end after two routine hits is considered a successful partial breach by the C++ if raw progress exceeds 50%; otherwise it is a failed breach. This trainer reports both outcomes rather than assuming any mine hit means automatic failure.</p></details><details><summary>How does the enemy system recover?</summary><p>Per <code>spaceship.cpp</code>, natural hacking recovery is <code>hacked_level -= delta / 180</code> until zero. Successful hack effects arrive five seconds after the grid ends and add <code>0.5 × exp(rawProgress² − 1)</code> to the existing hacking level (capped at 100%). In the healthy, powered system shown here, effectiveness is <code>100% − 75% × hackedLevel</code>. On an actual ship, damage, heat, power allocation, low energy and repair crews can change the observed outcome. Each successful hack also adds Scanner heat to the attacking ship; that heat is not simulated.</p></details></div></section>
+</main>
+<div hidden aria-hidden="true"><button id="export" type="button"></button><button id="clear" type="button"></button></div>
+<script>
+(()=>{'use strict';
+const $=s=>document.getElementById(s),KEY='ucn_academy_hacking_v1';
+let tier=1,size=8,bombs=10,field=[],opened=[],bad=0,cleared=0,mode='ready',start=0,end=0,records=load();
+const names=['Basic','Secure','Hardened','Fortified'];
+const systems=['Beam Weapons','Missile System','Maneuvering','Impulse Engines','Warp Drive','Front Shield Generator','Rear Shield Generator','Scanner'];
+let hacked=0,targetStarted=performance.now(),lastUpdate=performance.now(),totalApplied=0,appliedCount=0,trainingHints=false,hintMode='none';
+let pending=null,series=[],targetName='Beam Weapons',latestLog='No hacking applied yet';
+ const targetStates=Object.fromEntries(systems.map(name=>[name,{hacked:0,totalApplied:0,appliedCount:0,targetStarted:performance.now(),series:[],latestLog:'No hacking applied yet'}]));
+ const queuedEffects=[];
+ function saveTarget(){const t=targetStates[targetName];Object.assign(t,{hacked,totalApplied,appliedCount,targetStarted,series,latestLog})}
+ function loadTarget(){const t=targetStates[targetName];({hacked,totalApplied,appliedCount,targetStarted,series,latestLog}=t)}
+ function stopGrid(){pending=null;mode='ready';hideHintPopup();clearHints();$('apply').disabled=true;$('reset').disabled=true;$('abort').disabled=true;$('status').textContent='STANDBY';$('state').textContent='AWAITING BREACH';renderIdleBoard();refreshHints()}
+ window.addEventListener('ucn-hack-exit',()=>{if(mode==='pending'&&pending)queuedEffects.push({...pending,target:targetName});stopGrid()});
+ function closeSimulator(){if(mode==='pending'&&pending)queuedEffects.push({...pending,target:targetName});stopGrid();window.dispatchEvent(new Event('ucn-hack-close'))}
+ 
+const MAX_WINDOW=180000,DELAY=5000,RECOVERY=180000;const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function load(){try{const a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a:[]}catch{return []}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(records))}catch{}}
+function rand(n){return Math.floor(Math.random()*n)}
+// Logical trainer: all inferences operate on visible clue numbers and triggered routines only.
+// The hidden mine array is NOT consulted to deduce any unopened cell.
+let hintResult={safe:[],mine:[],proofs:[]}, hintByCell=new Map(), hintRefreshQueued=false, hoverTimer=null, activeHoverCell=null, suppressClickCell=-1, suppressClickUntil=0, guidedProof=null, guidedStep=0, guidedUsed=new Set();
+function updateHintUI(){
+ const full=hintMode==='full', guided=hintMode==='guided', on=full||guided;
+ trainingHints=on;$('hintLevel').disabled=!on;$('hintCoach').hidden=!guided;$('hintLegend').hidden=!on;
+ if(!on){$('hintSummary').textContent='No hints. Your training run is unaided.';$('hintExplanation').hidden=true;$('hintIndex').textContent='Choose Hints on demand if you would like help only when stuck.'}
+ else if(full){$('hintIndex').textContent='Pause over a glowing cell, or hold your finger on it, to see why it is safe or dangerous.'}
+ else{$('hintIndex').textContent='Ask the Academy instructor for help in three stages. Your next safe cell is never shown in advance.'}
+ updateCoachUI();
+}
+function resetGuidedHint(clearUsed=false){guidedProof=null;guidedStep=0;hintByCell.clear();if(clearUsed)guidedUsed.clear();$('hintPopup').hidden=true;$('hintExplanation').hidden=true;updateCoachUI()}
+function updateCoachUI(){
+ if(hintMode!=='guided')return;
+ let active=mode==='active';$('hintNext').disabled=!active;
+ const messages=[
+  ['YOUR MOVE','Work through the grid normally. If you get stuck, ask for a hint.','Give me a hint'],
+  ['STEP 1 OF 3',guidedProof&&guidedProof.sources.length>1?'Look at the yellow numbers together. Which unopened squares does each number cover, and which ones do they share?':'Look at the numbered clue highlighted in yellow. What does that number tell you about the unopened squares beside it?','Help me understand'],
+  ['STEP 2 OF 3',guidedProof?guidedQuestion(guidedProof):'Compare the yellow numbers with the purple unopened squares. What can you rule out?',guidedProof?.kind==='mine'?'Show me the mine to avoid':'Show me the safe square'],
+  ['STEP 3 OF 3',guidedProof?(guidedProof.kind==='safe'?'The green square is safe to open. The yellow clues and purple squares show why.':'The red square must be a mine; do not open it. Use the yellow clues and purple squares to see why.'):'The answer is highlighted.','Give me another hint']
+ ];
+ const [step,text,button]=messages[Math.min(3,guidedStep)];$('hintStepLabel').textContent=step;$('hintCoachText').textContent=text;
+ $('hintNext').textContent=button;
+ if(!active){$('hintCoachText').textContent='Start a breach to practise. Ask for hints only when you need them.';$('hintNext').disabled=true;}
+}
+function guidedQuestion(p){
+ if(p.via==='Direct deduction')return 'Look at the yellow number. Count the mines you already know about beside it, then count the unopened purple squares. Does it still need more mines? If so, how many places could they be?';
+ if(p.via==='1–2–1 pattern')return 'Look at the three yellow numbers: 1, 2 and 1. The purple squares are the possibilities they share. Try placing the mines so all three numbers are right. Which possibilities work every time?';
+ if(p.via==='1–1 edge pattern')return 'These two yellow 1s count some of the same purple squares. If one mine is already needed in the shared group, can the extra squares beside the other 1 also be mines?';
+ return 'Compare the yellow numbers. Some purple squares are counted by more than one number. Imagine where the mines could be without making either number wrong. What does that tell you about the remaining squares?';
+}
+function clearHints(){for(const c of $('board').children)c.classList.remove('hint-safe','hint-mine','hint-source','hint-focus','hint-related-purple')}
+function boardCells(){return Array.from($('board').children).map(el=>{if(el.classList.contains('mine'))return {kind:'hit'};if(el.classList.contains('safe'))return {kind:'number',value:el.textContent?Number(el.textContent):0};return {kind:'covered'}})}
+function position(i,boardSize=size){return `row ${Math.floor(i/boardSize)+1}, column ${i%boardSize+1}`}
+function neighborCells(i,boardSize){const x=i%boardSize,y=Math.floor(i/boardSize),arr=[];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const xx=x+dx,yy=y+dy;if(xx>=0&&xx<boardSize&&yy>=0&&yy<boardSize)arr.push(yy*boardSize+xx)}return arr}
+// Publicly visible clue sets. Values are never retrieved from unrevealed cells.
+function inferVisibleBoard(boardSize,cells,advanced){
+ const knownMine=new Set(),knownSafe=new Set(),proofMap=new Map();
+ const proofs=[];
+ function mark(i,kind,via,sources,text,related=[]){if(cells[i]?.kind!=='covered')return false;let mine=kind==='mine',yes=mine?knownMine:knownSafe,no=mine?knownSafe:knownMine;if(no.has(i)||yes.has(i))return false;yes.add(i);let proof={cell:i,kind,via,sources:[...new Set(sources)],related:[...new Set(related.filter(x=>x!==i))],text};proofs.push(proof);proofMap.set(i,proof);return true}
+ const visClues=[];for(let i=0;i<cells.length;i++)if(cells[i].kind==='number')visClues.push(i);
+ function constraints(){const a=[];for(const i of visClues){const ns=neighborCells(i,boardSize);const visibleHit=ns.filter(j=>cells[j].kind==='hit').length;const remaining=ns.filter(j=>cells[j].kind==='covered'&&!knownSafe.has(j)&&!knownMine.has(j));const certainMine=ns.filter(j=>knownMine.has(j)).length;const need=cells[i].value-visibleHit-certainMine;if(need<0||need>remaining.length)continue;if(remaining.length)a.push({clue:i,number:cells[i].value,set:remaining,need});}return a}
+ let rounds=0,changed=true;while(changed && rounds++<70){changed=false;let con=constraints();
+  // Immediate zero/all-neighbour cases, exactly as in the basic trainer.
+  for(const c of con){if(c.need!==0&&c.need!==c.set.length)continue;const kind=c.need===0?'safe':'mine';let text=kind==='safe'?`Look at the yellow ${c.number}. All the mines it needs have already been accounted for, so this square cannot contain another one. If it did, the yellow number would be too high.`:`Look at the yellow ${c.number}. It still needs ${c.need} ${c.need===1?'mine':'mines'}, and only ${c.set.length} possible ${c.set.length===1?'square remains':'squares remain'}. Every one of those squares must hide a mine.`;for(const i of c.set)changed=mark(i,kind,'Direct deduction',[c.clue],text,c.set)||changed;}
+  if(changed)continue;
+  if(!advanced)break;
+  // Recognise a straight 1–2–1 run before the more general subset solver.
+  // Only make a deduction when every arrangement consistent with ALL THREE
+  // visible clues agrees. The printed numbers alone are never assumed enough.
+  const byClue=new Map(con.map(c=>[c.clue,c]));
+  oneTwoOne: for(const mid of con){if(mid.number!==2)continue;
+    for(const step of [1,boardSize]){
+      const left=byClue.get(mid.clue-step),right=byClue.get(mid.clue+step);
+      if(!left||!right||left.number!==1||right.number!==1)continue;
+      if(step===1&&(Math.floor(left.clue/boardSize)!==Math.floor(mid.clue/boardSize)||Math.floor(right.clue/boardSize)!==Math.floor(mid.clue/boardSize)))continue;
+      const trio=[left,mid,right],vars=[...new Set(trio.flatMap(c=>c.set))];if(!vars.length||vars.length>13)continue;
+      const ix=new Map(vars.map((v,i)=>[v,i])),tests=trio.map(c=>({set:c.set.map(i=>ix.get(i)),need:c.need}));
+      let total=0;const mines=new Array(vars.length).fill(0);
+      for(let mask=0;mask<(1<<vars.length);mask++){
+        if(!tests.every(t=>t.set.reduce((n,i)=>n+((mask>>i)&1),0)===t.need))continue;
+        total++;for(let i=0;i<vars.length;i++)mines[i]+=(mask>>i)&1;
+      }
+      if(!total)continue;
+      for(let i=0;i<vars.length;i++){
+        if(mines[i]!==0&&mines[i]!==total)continue;
+        const kind=mines[i]===0?'safe':'mine';
+        changed=mark(vars[i],kind,'1–2–1 pattern',trio.map(c=>c.clue),`Look at the yellow 1–2–1 clues together. There may be several ways to place mines among the covered squares, but every way that makes all three numbers correct puts ${kind==='mine'?'a mine':'no mine'} here.`,vars)||changed;
+      }
+      if(changed)break oneTwoOne;
+    }
+  }
+  if(changed)continue;
+  // Comparing two clues can prove a subset's additional cells are all mines or all safe.
+  for(let a=0;a<con.length;a++){for(let b=0;b<con.length;b++){if(a===b)continue;const A=con[a],B=con[b],small=new Set(A.set);if(A.set.length>=B.set.length || !A.set.every(i=>B.set.includes(i)))continue;const extra=B.set.filter(i=>!small.has(i)),extraMines=B.need-A.need;
+    if(extraMines!==0&&extraMines!==extra.length)continue;const kind=extraMines===0?'safe':'mine';let special=A.number===1&&B.number===1?'1–1 edge pattern':'Subset / overlap pattern';const desc=`Compare the two yellow numbers. One counts the same covered squares as the other, plus ${extra.length} extra ${extra.length===1?'square':'squares'}. The first needs ${A.need} more ${A.need===1?'mine':'mines'}; the second needs ${B.need}. That leaves ${extraMines} mines for the extra ${extra.length===1?'square':'squares'}, so ${kind==='safe'?'this one is safe':'this one must contain a mine'}.`;
+    for(const i of extra)changed=mark(i,kind,special,[A.clue,B.clue],desc,[...A.set,...B.set])||changed;
+  }}
+  if(changed)continue;
+  // Local exact arrangements across overlapping clue pairs/triples. We only assign
+  // the small frontier relevant to the clues, never read the hidden mine placement.
+  const checkGroup=(group)=>{let all=[...new Set(group.flatMap(c=>c.set))];if(all.length>13 || !all.length)return false;let pos=new Map(all.map((v,i)=>[v,i]));let checks=group.map(c=>({mask:c.set.map(i=>pos.get(i)),need:c.need}));let viable=0,mineCounts=new Array(all.length).fill(0),max=1<<all.length;
+    for(let mask=0;mask<max;mask++){let valid=true;for(const c of checks){let n=0;for(const p of c.mask)n+=(mask>>p)&1;if(n!==c.need){valid=false;break}}if(!valid)continue;viable++;for(let j=0;j<all.length;j++)mineCounts[j]+=(mask>>j)&1}
+    if(!viable)return false;
+    let nums=group.map(x=>x.number),is121=group.length===3&&nums.slice().sort((a,b)=>a-b).join(',')==='1,1,2';let via=is121?'1–2–1 pattern':group.length===3?'Three-clue overlap':'Two-clue overlap';let statement=`Look at the ${group.length} yellow numbers together. Some of their covered neighbours overlap. If we try every way of placing mines that keeps those numbers correct, this square is always `;
+    let found=false;for(let j=0;j<all.length;j++){if(mineCounts[j]!==0&&mineCounts[j]!==viable)continue;let mine=mineCounts[j]===viable;found=mark(all[j],mine?'mine':'safe',via,group.map(x=>x.clue),statement+(mine?'a mine.':'safe.'),all)||found}return found;
+  };
+  let attempts=0;
+  outer: for(let a=0;a<con.length;a++)for(let b=a+1;b<con.length;b++){
+    if(!con[a].set.some(i=>con[b].set.includes(i)))continue;
+    if(++attempts<=650)changed=checkGroup([con[a],con[b]])||changed;
+    if(changed)break outer;
+    for(let c=b+1;c<con.length;c++){
+      if(!con[c].set.some(i=>con[a].set.includes(i)||con[b].set.includes(i)))continue;
+      if(++attempts>650)break outer;
+      changed=checkGroup([con[a],con[b],con[c]])||changed;
+      if(changed)break outer;
+    }
+  }
+ }
+ return {safe:[...knownSafe],mine:[...knownMine],proofs};
+}
+function applyProofOverlays(p){
+ clearHints();if(hintMode!=='full')return;
+ for(const i of hintResult.safe){const e=$('board').children[i];if(e)e.classList.add('hint-safe')}
+ for(const i of hintResult.mine){const e=$('board').children[i];if(e)e.classList.add('hint-mine')}
+ if(!p)return;
+ for(const i of p.sources){const e=$('board').children[i];if(e)e.classList.add('hint-source')}
+ for(const i of (p.related||[])){const e=$('board').children[i];if(e&&i!==p.cell)e.classList.add('hint-related-purple')}
+ const e=$('board').children[p.cell];if(e)e.classList.add('hint-focus');
+}
+function guidedOverlays(){
+ clearHints();if(hintMode!=='guided'||!guidedProof||mode!=='active')return;
+ const p=guidedProof;
+ // Stage one: only numbered clue(s); no covered cell is singled out.
+ for(const i of p.sources){const e=$('board').children[i];if(e)e.classList.add('hint-source')}
+ if(guidedStep>=2){
+  // All covered neighbours of the clue(s) are purple, including the answer.
+  // This prevents the absence of colour from giving away the answer early.
+  let related=new Set((p.related||[]).concat([p.cell]));
+  for(const i of p.sources){for(const j of neighborCells(i,size))if(!opened[j])related.add(j)}
+  for(const i of related){if(!opened[i]){const e=$('board').children[i];if(e)e.classList.add('hint-related-purple')}}
+ }
+ if(guidedStep>=3){const e=$('board').children[p.cell];if(e){e.classList.remove('hint-related-purple');e.classList.add(p.kind==='safe'?'hint-safe':'hint-mine','hint-focus')}}
+}
+function nextGuidedHint(){
+ if(hintMode!=='guided'||mode!=='active')return;
+ if(guidedStep===0||guidedStep>=3){
+  let proofs=hintResult.proofs||[];
+  const rank=p=>p.via==='Direct deduction'?0:p.via==='1–1 edge pattern'?1:p.via==='Subset / overlap pattern'?2:p.via==='1–2–1 pattern'?3:4;
+  proofs=proofs.slice().sort((a,b)=>(a.kind==='safe'?0:1)-(b.kind==='safe'?0:1)||rank(a)-rank(b)||a.sources.length-b.sources.length||(a.related?.length||0)-(b.related?.length||0));
+  const pool=proofs.filter(p=>!guidedUsed.has(p.cell));guidedProof=pool[0]||proofs[0]||null;
+  if(!guidedProof){guidedStep=0;$('hintCoachText').textContent='There is no move the trainer can prove safe from the clues currently showing. You may need to uncover another area or make a careful guess.';$('hintNext').textContent='Try again after a move';$('hintNext').disabled=true;$('hintStepLabel').textContent='NO CERTAIN MOVE';return}
+  guidedUsed.add(guidedProof.cell);guidedStep=1;
+ }else guidedStep++;
+ // Only stage three identifies the specific target as safe or a mine.
+ hintByCell.clear();if(guidedStep===3)hintByCell.set(guidedProof.cell,guidedProof);
+ guidedOverlays();updateCoachUI();
+}
+function buildHintHtml(p){const verdict=p.kind==='mine'?'MINE — do not open':'SAFE — you can open it';const key=`<div class="hint-key"><b>Yellow</b> = clue numbers${p.related.length?' · <b>Purple</b> = other squares checked':''} · <b>Green</b> = this square</div>`;return `<div class="hint-heading">${verdict}</div><p class="hint-reason">${p.text}</p>${key}`;}
+function hideHintPopup(){if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null}activeHoverCell=null;$('hintPopup').hidden=true;
+ if(!trainingHints){$('hintExplanation').hidden=true;clearHints();return}
+ if(hintMode==='full')applyProofOverlays(null);else guidedOverlays();
+}
+function showHintPopup(cellIndex,el){
+ const p=hintByCell.get(cellIndex);if(!p||!trainingHints||mode!=='active'||(hintMode==='guided'&&guidedStep!==3))return;
+ activeHoverCell=cellIndex;if(hintMode==='full')applyProofOverlays(p);else guidedOverlays();const html=buildHintHtml(p);
+ $('hintExplanation').hidden=false;$('hintExplanation').innerHTML=html;
+ const pop=$('hintPopup');pop.innerHTML=html;pop.hidden=false;
+ const r=el.getBoundingClientRect();const pw=Math.min(380,window.innerWidth-24);
+ pop.style.maxWidth=pw+'px';
+ const left=window.innerWidth<=650?12:Math.min(window.innerWidth-pw-12,Math.max(12,r.right+12));
+ pop.style.left=left+'px';
+ requestAnimationFrame(()=>{if(pop.hidden)return;const ph=pop.getBoundingClientRect().height;
+  let top=window.innerWidth<=650?(r.top>ph+25?r.top-ph-12:r.bottom+12):r.top-4;
+  pop.style.top=Math.max(12,Math.min(window.innerHeight-ph-12,top))+'px';});
+}
+function scheduleHintPopup(cellIndex,el){
+ if(!trainingHints||mode!=='active'||!hintByCell.has(cellIndex))return;
+ if(hoverTimer)clearTimeout(hoverTimer);
+ hoverTimer=setTimeout(()=>{hoverTimer=null;showHintPopup(cellIndex,el)},750);
+}
+function wireHintHover(el,i){
+ el.addEventListener('mouseenter',()=>{if(window.matchMedia('(hover: hover)').matches)scheduleHintPopup(i,el)});
+ el.addEventListener('mouseleave',()=>{if(window.matchMedia('(hover: hover)').matches)hideHintPopup()});
+ el.addEventListener('focus',()=>{if(trainingHints)scheduleHintPopup(i,el)});
+ el.addEventListener('blur',()=>hideHintPopup());
+ el.addEventListener('touchstart',()=>{
+  if(!trainingHints||!hintByCell.has(i))return;
+  if(activeHoverCell!==null)hideHintPopup();
+  scheduleHintPopup(i,el);
+ },{passive:true});
+ el.addEventListener('touchend',e=>{
+  if(activeHoverCell===i){e.preventDefault();suppressClickCell=i;suppressClickUntil=performance.now()+1100;
+   if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null;}return;}
+  if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null;}
+ },{passive:false});
+ el.addEventListener('touchcancel',()=>{if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null;}});
+ el.addEventListener('contextmenu',e=>{if(trainingHints&&hintByCell.has(i))e.preventDefault()});
+}
+function refreshHints(){
+ hintRefreshQueued=false;if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null}$('hintPopup').hidden=true;activeHoverCell=null;clearHints();hintByCell.clear();
+ if(hintMode==='none') {hintResult={safe:[],mine:[],proofs:[]};resetGuidedHint();updateHintUI();return}
+ if(mode!=='active'){hintResult={safe:[],mine:[],proofs:[]};resetGuidedHint();$('hintSummary').textContent='Start a breach to receive hints.';updateHintUI();return}
+ hintResult=inferVisibleBoard(size,boardCells(),$('hintLevel').value==='advanced');
+ if(hintMode==='full'){
+  resetGuidedHint();for(const p of hintResult.proofs)if(!hintByCell.has(p.cell))hintByCell.set(p.cell,p);
+  const a=hintResult.safe.length,b=hintResult.mine.length;
+  $('hintSummary').textContent=a||b?`${a} guaranteed safe ${a===1?'cell':'cells'} and ${b} guaranteed ${b===1?'mine':'mines'} found. Hover over a glowing cell for its explanation.`:'No certain deduction available from the visible clues yet.';
+  applyProofOverlays(null);
+ } else {
+  // A changed grid is a new attempt. It removes any clue/answer from the previous move.
+  resetGuidedHint(true);$('hintSummary').textContent='Hints on demand are ready. Nothing is highlighted until you ask for help.';
+  guidedOverlays();
+ }
+ updateHintUI();
+}
+function queueHintRefresh(){if(hintRefreshQueued)return;hintRefreshQueued=true;requestAnimationFrame(()=>refreshHints())}
+function neighbors(i){const x=i%size,y=Math.floor(i/size),arr=[];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;let xx=x+dx,yy=y+dy;if(xx>=0&&yy>=0&&xx<size&&yy<size)arr.push(yy*size+xx)}return arr}
+function renderTargetButtons(){ $('targetList').innerHTML=''; systems.forEach(name=>{let b=document.createElement('button');b.type='button';b.className='target-btn'+(name===targetName?' active':'')+(name.length>22?' smalltext':'');b.textContent=name;
+ const level=name===targetName?hacked:targetStates[name].hacked;b.title=`${(level*100).toFixed(1)}% hacked`;b.onclick=()=>selectTarget(name);$('targetList').appendChild(b)})}
+ function selectTarget(name){if(name===targetName)return;
+  if(mode==='pending'&&pending)queuedEffects.push({...pending,target:targetName});
+  saveTarget();targetName=name;loadTarget();pending=null;
+  grid();$('message').textContent=`Switched to ${targetName}. Previous system retains its hacking level and continues recovering. New defence grid loaded.`;
+ }
+ function resetTarget(){let now=performance.now();hacked=0;totalApplied=0;appliedCount=0;targetStarted=now;lastUpdate=now;series=[{time:now,hack:0}];pending=null;latestLog='No hacking applied yet';saveTarget();renderTarget(now)}
+ function renderIdleBoard(){ tier=Number($('tier').value); size=tier*2+6; bombs=Math.floor(size*size/(8-2*Math.min(tier,2))); $('board').style.gridTemplateColumns=`repeat(${size},minmax(0,1fr))`; $('board').innerHTML=''; clearHints(); for(let i=0;i<size*size;i++){ let b=document.createElement('button'); b.type='button'; b.className='cell'; b.disabled=true; b.setAttribute('aria-label',`Hidden node row ${Math.floor(i/size)+1}, column ${i%size+1}`); wireHintHover(b,i);$('board').appendChild(b);} }
+function grid(){
+ tier=Number($('tier').value);size=tier*2+6;bombs=Math.floor(size*size/(8-2*Math.min(tier,2)));field=Array.from({length:size*size},()=>false);opened=Array(size*size).fill(false);
+ for(let n=0;n<bombs;){let i=rand(field.length);if(!field[i]){field[i]=true;n++}}
+ bad=0;cleared=0;start=performance.now();end=0;mode='active';pending=null;$('hackStatusText').textContent='HACKING IN PROGRESS:';
+ $('board').style.gridTemplateColumns=`repeat(${size},minmax(0,1fr))`;$('board').innerHTML='';
+ field.forEach((_,i)=>{let b=document.createElement('button');b.type='button';b.className='cell';b.dataset.i=i;b.setAttribute('aria-label',`Hidden node row ${Math.floor(i/size)+1}, column ${i%size+1}`);b.addEventListener('click',()=>{if(suppressClickCell===i&&performance.now()<suppressClickUntil){suppressClickCell=-1;return;}click(i)});wireHintHover(b,i);$('board').appendChild(b)});
+ $('tier').disabled=true;$('reset').disabled=false;$('begin').disabled=true;$('abort').disabled=false;$('apply').disabled=true;
+ $('state').textContent='BREACH IN PROGRESS';$('status').textContent='ACTIVE';$('message').innerHTML='';$('clock').textContent='0.0s';renderTargetButtons();update();refreshHints();}
+function click(i){hideHintPopup();if(hintMode==='guided'){guidedProof=null;guidedStep=0;guidedUsed.clear();clearHints();updateCoachUI()}if(mode!=='active'||opened[i])return;let btn=$('board').children[i];opened[i]=true;btn.disabled=true;
+ if(field[i]){bad++;btn.className='cell mine';btn.textContent='X';btn.setAttribute('aria-label','Triggered defence routine')}
+ else{cleared++;let n=neighbors(i).filter(j=>field[j]).length;btn.className='cell safe'+(n?' n'+n:'');btn.textContent=n?String(n):'';btn.setAttribute('aria-label',`${n} neighbouring defence routines`);if(n===0)neighbors(i).forEach(j=>{if(!opened[j])click(j)})}
+ update();if(bad>=2||cleared>=field.length-bombs)finish(bad>=2?'two_hits':'cleared');}
+function raw(){return cleared/(size*size-bombs)}
+function shown(){return Math.exp(raw()*raw()-1)}
+function update(){let p=raw(),d=shown();$('safe').textContent=`${cleared} / ${size*size-bombs}`;$('errors').textContent=`${bad} / 2`;
+ $('display').textContent=(100*d).toFixed(1)+'%';$('rawlabel').textContent=(100*p).toFixed(1)+'%';$('barlabel').textContent=(100*d).toFixed(1)+'%';
+ $('rawbar').style.width=(100*p)+'%';$('displaybar').style.width=(100*d)+'%';$('apply').disabled=mode!=='active'||p<=.7; $('apply').classList.toggle('ready', mode==='active'&&p>.7);
+ $('displayHeader').textContent=(100*d).toFixed(0)+'%'; $('verticalFill').style.height=(100*d)+'%'; $('verticalLabel').textContent=(100*d).toFixed(0)+'%'; renderTarget(performance.now()); queueHintRefresh()}
+function finish(why){if(mode!=='active')return;end=performance.now();mode='pending';$('tier').disabled=true;$('begin').disabled=true;$('reset').disabled=true;$('apply').disabled=true;$('abort').disabled=false;
+ $('apply').classList.remove('ready'); $('status').textContent='TRANSMITTING';$('state').textContent='GRID FINISHED';for(const b of $('board').children)b.disabled=true; renderTargetButtons();
+ let p=raw(),success=why==='applied'||why==='cleared'||(why==='two_hits'&&p>.5),bonus=success?shown()*.5:0;
+ let label=why==='applied'?'Applied':why==='cleared'?'Full breach':why==='two_hits'?(success?'Partial breach (2 hits)':'Failed (2 hits)'):'Aborted';
+ let secs=(end-start)/1000;
+ if(why!=='aborted'){const rec={date:new Date().toISOString(),tier,tierName:names[tier],secs,cleared,total:size*size-bombs,bad,raw:p,success,label,target:targetName};records.unshift(rec);persist();history();try{if(window.parent!==window)window.parent.postMessage({type:'ucn-result',protocol:'UCN-TRAINER/1',module:'hacking',record:{...rec,officer:new URLSearchParams(location.search).get('officer')||'Unassigned'}},'*')}catch(_){}}
+ if(why==='aborted'){mode='ready';$('tier').disabled=false;$('begin').disabled=false;$('reset').disabled=false;$('abort').disabled=true;$('status').textContent='ABORTED';$('state').textContent='BREACH CANCELLED';$('message').innerHTML=`<strong>${label}</strong> · No hacking applied.`;renderTarget(performance.now());renderTargetButtons();clearHints();refreshHints();return}
+ pending={at:end+DELAY,success,bonus,label,secs};$('hackStatusText').textContent=success?'HACKING SUCCESS!':'HACKING FAILURE!';$('displayHeader').textContent='';$('verticalFill').style.height='100%';$('verticalLabel').textContent='';hideHintPopup();clearHints();refreshHints();$('message').innerHTML=`<strong>${label}</strong> · ${secs.toFixed(1)}s<br>Safe cells cleared: ${(p*100).toFixed(1)}%. ${success?`Pending effect on ${targetName}: +${(bonus*100).toFixed(1)} hacking points.`:'No additional hacking will be applied.'} The grid will reset automatically after five seconds.`;
+ renderTarget(performance.now());}
+function applyPending(now){if(mode!=='pending'||!pending)return;let payload=pending;pending=null;
+ if(payload.success){hacked=Math.min(1,hacked+payload.bonus);totalApplied+=payload.bonus;appliedCount++;latestLog=`Applied +${(payload.bonus*100).toFixed(1)} points to ${targetName}`;}else{latestLog='Grid unsuccessful — no target effect'}
+ series.push({time:now,hack:hacked});saveTarget();grid();$('message').innerHTML=payload.success?`<strong>HACK UPLOADED:</strong> +${(payload.bonus*100).toFixed(1)} points to ${targetName}. Continue hacking to overwhelm recovery.`:`<strong>HACK FAILED:</strong> no change to ${targetName}. New grid loaded.`;renderTarget(now)}
+function updateAssessment(){
+ const pct=Math.max(0,1-hacked*.75)*100, val=pct.toFixed(1)+'%', reduction=(100-pct).toFixed(1)+'%';
+ const f=(n)=>Math.max(0,Math.min(100,n)).toFixed(1)+'%';
+ const own=val+' of normal';
+ const maneuver=(targetName==='Maneuvering'?pct:Math.max(0,1-targetStates['Maneuvering'].hacked*.75)*100);
+ const impulse=(targetName==='Impulse Engines'?pct:Math.max(0,1-targetStates['Impulse Engines'].hacked*.75)*100);
+ const front=(targetName==='Front Shield Generator'?pct:Math.max(0,1-targetStates['Front Shield Generator'].hacked*.75)*100);
+ const rear=(targetName==='Rear Shield Generator'?pct:Math.max(0,1-targetStates['Rear Shield Generator'].hacked*.75)*100);
+ const details={
+  'Beam Weapons':`Beam firing rate: ${own}. ${pct<99.95?'Weapons fire less frequently; the interval between shots is longer.':'No meaningful reduction in beam fire rate.'} If turrets are fitted, their rotation rate is also ${own}.`,
+  'Missile System':`Missile tube reload rate: ${own}. ${pct<99.95?'Tubes take longer to reload between launches.':'Normal tube reload rate.'} This does not mean launched missiles travel more slowly.`,
+  'Maneuvering':`Ship turning speed: ${own}. ${pct<99.95?'The ship turns more slowly.':'Normal turning capability.'} Combat-manoeuvre recharge: ${f((maneuver+impulse)/2)} of normal (shared with Impulse Engines).`,
+  'Impulse Engines':`Maximum impulse speed: ${own}. ${pct<99.95?'The ship moves more slowly under impulse.':'Normal impulse speed.'} Combat-manoeuvre recharge: ${f((maneuver+impulse)/2)} of normal (shared with Manoeuvring).`,
+  'Warp Drive':`Warp-drive travel speed: ${own}. ${pct<99.95?'The ship covers less distance per second at the same warp setting.':'Normal warp-drive speed.'}`,
+  'Front Shield Generator':`Front shield recharge rate: ${own}. ${pct<99.95?'The front shields regenerate more slowly.':'Normal recharge rate.'} Shield-frequency calibration rate, where enabled: ${f((front+rear)/2)} of normal. Existing shield strength does not simply become ${val}.`,
+  'Rear Shield Generator':`Rear shield recharge rate: ${own}. ${pct<99.95?'The rear shields regenerate more slowly.':'Normal recharge rate.'} Shield-frequency calibration rate, where enabled: ${f((front+rear)/2)} of normal. Existing shield strength does not simply become ${val}.`,
+  'Scanner':`Scanner effectiveness: ${own}. Simulated relay radar range: ${(5*pct/100).toFixed(2)} U (5 U unhacked). ${pct<99.95?'Scanning becomes less reliable as scanner impairment increases.':'Normal scanner performance.'} Actual scan behaviour also depends on noise and the ship configuration.`
+ };
+ $('assessmentSystem').textContent=targetName.toUpperCase();
+ $('assessmentText').textContent=details[targetName]||`System operates at ${own}.`;
+ $('assessmentNote').textContent=`${reduction} below baseline effectiveness · Assumes 100% requested power, full energy and a healthy system. Actual ship conditions can modify this. ${pending?'A breach is transmitting; the current effect is not yet included.':'Hack levels recover continuously.'}`;
+}
+function renderTarget(now){$('targetTitle').textContent=`Simulated enemy ${targetName} · baseline 100% effectiveness`; $('hackedHeader').innerHTML=`HACKED ${targetName.toUpperCase()}: <span>${(hacked*100).toFixed(0)}%</span>`;
+ $('hackLevel').textContent=(hacked*100).toFixed(1)+'%';$('hackBarLabel').textContent=(hacked*100).toFixed(1)+'%';$('hackBar').style.width=(hacked*100)+'%';$('effectiveness').textContent=(Math.max(0,1-hacked*.75)*100).toFixed(1)+'%';$('appliedCount').textContent=String(appliedCount);
+ let elapsed=Math.max(0,(now-targetStarted)/60000);$('attackRate').textContent=elapsed>=.05?(totalApplied*100/elapsed).toFixed(1)+' pp':'—';
+ const proj=$('projected');if(pending){proj.textContent=pending.success?`+${(pending.bonus*100).toFixed(1)} pp awaiting transmission`:'No effect (breach failed)'}else if(mode==='active'){let p=raw(),gain=shown()*.5;proj.textContent=p>.7?`+${(gain*100).toFixed(1)} pp if you press Apply`:(p>.5?`Potential +${(gain*100).toFixed(1)} pp · Apply still locked`:'Below the successful-breach threshold')}else proj.textContent='Clear safe nodes to estimate';
+ $('pendingNotice').hidden=!pending;if(pending){$('pendingNotice').textContent=`TRANSMITTING: ${pending.success?`+${(pending.bonus*100).toFixed(1)} pp will be applied`:'No effective breach'} in ${Math.max(0,(pending.at-now)/1000).toFixed(1)}s. Target continues recovering.`}
+ $('trendNote').textContent=latestLog;updateAssessment();drawTrend(now)}
+function drawTrend(now){let cvs=$('trendGraph'),ctx=cvs.getContext('2d');let w=cvs.width,h=cvs.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#041624';ctx.fillRect(0,0,w,h);
+ const x0=42,x1=w-12,y0=14,y1=h-27,W=x1-x0,H=y1-y0;ctx.font='11px ui-monospace,monospace';
+ for(let k=0;k<=4;k++){let v=k/4,y=y1-v*H;ctx.strokeStyle='#325369';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();ctx.fillStyle='#98b5c7';ctx.fillText(`${(v*100).toFixed(0)}%`,5,y+4)}
+ ctx.fillText('−180s',x0,y1+17);ctx.fillText('now',x1-24,y1+17);
+ const pts=series.filter(p=>p.time>=now-MAX_WINDOW);if(!pts.length)return;let visible=[{time:now-MAX_WINDOW,hack:pts[0].hack},...pts,{time:now,hack:hacked}];ctx.beginPath();for(let i=0;i<visible.length;i++){let v=visible[i],x=x0+clamp((v.time-(now-MAX_WINDOW))/MAX_WINDOW,0,1)*W,y=y1-clamp(v.hack,0,1)*H;if(!i)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.strokeStyle='#73daca';ctx.lineWidth=2.5;ctx.stroke();let curY=y1-clamp(hacked,0,1)*H;ctx.fillStyle='#73daca';ctx.beginPath();ctx.arc(x1,curY,3.5,0,Math.PI*2);ctx.fill();}
+function tick(now){let delta=Math.max(0,now-lastUpdate)/1000;lastUpdate=now;
+ if(hacked>0&&delta){hacked=Math.max(0,hacked-delta/180);if(!series.length||now-series[series.length-1].time>=800)series.push({time:now,hack:hacked})}
+ for(const [name,t] of Object.entries(targetStates))if(name!==targetName&&t.hacked>0&&delta){t.hacked=Math.max(0,t.hacked-delta/180);if(!t.series.length||now-t.series[t.series.length-1].time>=800)t.series.push({time:now,hack:t.hacked})}
+ for(let i=queuedEffects.length-1;i>=0;i--){const q=queuedEffects[i];if(now<q.at)continue;const t=targetStates[q.target];if(q.success){t.hacked=Math.min(1,t.hacked+q.bonus);t.totalApplied+=q.bonus;t.appliedCount++;t.latestLog=`Applied +${(q.bonus*100).toFixed(1)} points to ${q.target}`;}t.series.push({time:now,hack:t.hacked});queuedEffects.splice(i,1);if(q.target===targetName)loadTarget()}
+ 
+ if(series.length>2000)series=series.filter(p=>p.time>=now-MAX_WINDOW);
+ if(mode==='active')$('clock').textContent=((now-start)/1000).toFixed(1)+'s';
+ if(mode==='pending'&&pending){let remaining=Math.max(0,(pending.at-now)/DELAY);$('verticalFill').style.height=(100*remaining).toFixed(2)+'%';$('verticalLabel').textContent='';if(now>=pending.at)applyPending(now);}
+ saveTarget();renderTarget(now);requestAnimationFrame(tick)}
+function history(){let successful=records.filter(x=>x.success&&x.tier===Number($('tier').value)),a=successful.length?successful.reduce((s,r)=>s+r.secs,0)/successful.length:null;
+ $('avg').textContent=a===null?'—':a.toFixed(1)+'s';$('fastest').textContent=successful.length?Math.min(...successful.map(x=>x.secs)).toFixed(1)+'s':'—';
+ let r=records.filter(x=>x.tier===Number($('tier').value));$('winrate').textContent=r.length?(100*successful.length/r.length).toFixed(0)+'%':'—';$('total').textContent=r.length;
+ $('history').innerHTML=records.length?records.slice(0,25).map(r=>`<tr><td>${names[r.tier]}</td><td>${r.secs.toFixed(1)}s</td><td>${r.cleared}/${r.total}</td><td>${r.bad}</td><td>${r.label}</td></tr>`).join(''):'<tr><td colspan="5" class="tiny">No attempts recorded.</td></tr>'}
+function exportCSV(){if(!records.length)return;let rows=[['date_utc','tier','time_seconds','cleared','safe_total','defence_hits','raw_progress','successful','outcome'].join(',')];for(let r of records)rows.push([r.date,names[r.tier],r.secs,r.cleared,r.total,r.bad,r.raw,r.success,r.label].join(','));let u=URL.createObjectURL(new Blob([rows.join('\r\n')],{type:'text/csv'})),a=document.createElement('a');a.href=u;a.download='UCN_Hacking_Training.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),3000)}
+$('begin').onclick=grid;$('reset').onclick=grid;$('apply').onclick=()=>finish('applied');$('abort').onclick=closeSimulator;$('export').onclick=exportCSV;
+$('newTarget').onclick=()=>{if((mode==='active'||mode==='pending')&&!confirm('Reset the simulated target and lose its accumulated hacking level?'))return;resetTarget();mode='ready';$('tier').disabled=false;$('begin').disabled=false;$('reset').disabled=true;$('apply').disabled=true;$('abort').disabled=true;renderIdleBoard();$('status').textContent='STANDBY';$('state').textContent='AWAITING BREACH';$('message').textContent=`${targetName} target reset. Accumulated hacking cleared.`;renderTargetButtons();refreshHints();};
+$('clear').onclick=()=>{if(confirm('Delete all saved hacking drill records?')){records=[];persist();history()}};
+$('tier').onchange=()=>{$('tierDetail').textContent=`${Number($('tier').value)*2+6} × ${Number($('tier').value)*2+6} grid · ${[4,10,25,36][Number($('tier').value)]} defence routines`;renderIdleBoard();history()};
+$('hintMode').onchange=()=>{hintMode=$('hintMode').value;trainingHints=hintMode!=='none';resetGuidedHint(true);refreshHints()};$('hintNext').onclick=nextGuidedHint;$('hintLevel').onchange=()=>refreshHints();window.addEventListener('scroll',hideHintPopup,{passive:true});window.addEventListener('resize',hideHintPopup);document.addEventListener('pointerdown',e=>{if(activeHoverCell!==null&&!e.target.closest('.cell')&&!e.target.closest('#hintPopup'))hideHintPopup();});$('tier').dispatchEvent(new Event('change'));renderTargetButtons();resetTarget();renderIdleBoard();updateHintUI();requestAnimationFrame(tick);
+})();
+</script>
+<script>
+/* Navigation adapter for the Academy suite. Deliberately independent of game logic. */
+(()=>{
+ 'use strict';
+ const main=document.querySelector('main');
+ const intro=main.querySelector('.intro');
+ const toolbar=main.querySelector('.toolbar');
+ const consoleEl=main.querySelector('.mainconsole');
+ const instructor=main.querySelector('.academy');
+ const results=main.querySelector('.results');
+ const selection=document.createElement('section');
+ selection.id='ucnSelection';selection.className='ucn-screen ucn-selection';
+ const training=document.createElement('section');
+ training.id='ucnTraining';training.className='ucn-screen';training.hidden=true;
+ main.insertBefore(selection,intro);
+ selection.append(intro,toolbar);
+ const nav=document.createElement('nav');nav.className='ucn-navigation';nav.setAttribute('aria-label','Trainer navigation');
+ const backSelect=document.createElement('button');backSelect.type='button';backSelect.textContent='← Back to Selection';
+ const backAcademy=document.createElement('button');backAcademy.type='button';backAcademy.textContent='← Back to Academy';
+ nav.append(backAcademy,backSelect);
+ // Hint settings are accessible during the exercise, not locked on selection.
+ const hintControls=toolbar.querySelector('.hint-controls');
+ const hintBar=document.createElement('div');
+ hintBar.className='ucn-live-hints';
+ hintBar.setAttribute('aria-label','Live instructor hint settings');
+ hintBar.append(hintControls);
+ training.append(nav,hintBar,consoleEl,instructor,results);
+ main.append(training);
+ const start=document.getElementById('begin');start.textContent='Breach';
+ const oldBegin=start.onclick;
+ function showTraining(){selection.hidden=true;training.hidden=false;window.scrollTo(0,0)}
+ function showSelection(){training.hidden=true;selection.hidden=false;window.scrollTo(0,0)}
+ function active(){return document.getElementById('status').textContent==='ACTIVE'||document.getElementById('status').textContent==='TRANSMITTING'}
+ function mayLeave(){return !active()||confirm('Leave the simulator? The current grid will be discarded. Accumulated hacking levels will keep recovering.');}
+ start.onclick=(event)=>{oldBegin?.call(start,event);showTraining()};
+ window.addEventListener('ucn-hack-close',showSelection);
+ backSelect.onclick=()=>{if(!mayLeave())return; window.dispatchEvent(new Event('ucn-hack-exit'));showSelection()};
+ backAcademy.onclick=()=>{if(!mayLeave())return;window.dispatchEvent(new Event('ucn-hack-exit'));window.parent.postMessage({type:'ucn-close',protocol:'UCN-TRAINER/1'},'*');if(window.parent===window){showSelection();location.href='../UCN_Academy_Training_Suite.html'}};
+})();
+</script>
+</body></html>

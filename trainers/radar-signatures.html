@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071624">
+<title>UCN Academy | Radar Signature Trainer v1.4 — Ship Physics</title>
+<style>
+:root{color-scheme:dark;--bg:#06131f;--panel:#12283d;--edge:#355a71;--ink:#ecf6ff;--muted:#9cb8ca;--mint:#60e1bc;--cyan:#71d9eb;--red:#ff5863;--green:#50eb88;--blue:#609dff;--amber:#f1c67c}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#1a3b54 0,#081825 58%,#060f1a 100%);color:var(--ink);font:15px/1.46 system-ui,-apple-system,Segoe UI,Arial,sans-serif}main{width:min(920px,100%);margin:auto;padding:22px 14px 42px}.eyebrow{font:700 11px/1.5 ui-monospace,Consolas,monospace;letter-spacing:2.1px;color:var(--cyan)}h1{font-size:clamp(25px,5vw,35px);letter-spacing:-.03em;margin:7px 0 5px}h2{font-size:18px;margin:0}p{margin:7px 0}.muted,.small{color:var(--muted)}.small{font-size:12px;line-height:1.55}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:14px;overflow:hidden;margin-top:16px;box-shadow:0 12px 29px #0003}.pad{padding:16px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.controlgroup{display:flex;align-items:center;flex-wrap:wrap;gap:9px}button,select{font:inherit;color:var(--ink);border:1px solid #557e95;background:#193a51;border-radius:9px;min-height:44px;padding:9px 13px}button{cursor:pointer;touch-action:manipulation;font-weight:700}button:hover:not(:disabled){filter:brightness(1.14)}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,select:focus-visible{outline:2px solid #90e3f4;outline-offset:3px}.primary{background:#186961;border-color:#47c4aa}.ghost{background:#142d43}.pill{display:inline-block;border:1px solid #4b8d95;border-radius:35px;padding:7px 10px;font:750 11px ui-monospace,Consolas,monospace;color:#88d9e2}.tabstrip{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tab{min-height:53px;border-color:#345d75;background:#0c2233;color:#b1cbd8}.tab.active{border-color:#66b4bd;background:#20556a;color:#f0ffff}.layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(270px,1fr)}.radarwrap{padding:12px 10px 17px;background:#061825;border-right:1px solid #2b4c63}.scope{position:relative;width:100%;aspect-ratio:1;border-radius:50%;border:1px solid #3d7084;background:#061320;overflow:hidden;margin:auto;max-width:540px}.scope canvas{width:100%;height:100%;display:block}.cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;gap:8px;padding:20px;background:#0b2132ed}.cover strong{font:800 clamp(15px,3vw,21px) ui-monospace,Consolas,monospace;letter-spacing:1.3px}.cover span{color:var(--muted);font-size:12px}.legend{font:700 11px ui-monospace,Consolas,monospace;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin-top:12px}.legend .r{color:var(--red)}.legend .g{color:var(--green)}.legend .b{color:var(--blue)}.radar-meta{display:flex;justify-content:space-between;align-items:center;gap:7px;margin-top:11px;color:var(--muted);font:11px ui-monospace,Consolas,monospace}.prompt{padding:16px}.prompt h3{font-size:14px;margin:0 0 8px}.subhead{font-size:12px;margin:12px 0 8px;color:var(--muted)}.directions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.choice{min-height:44px;padding:8px 4px;border:1px solid #3d6179;background:#17354b;font-size:13px;border-radius:8px}.choice.selected{background:#1f6279;border:2px solid #a5dbe9}.bandbuttons{display:grid;grid-template-columns:1fr;gap:8px}.band{display:flex;align-items:center;gap:10px;text-align:left;min-height:48px;padding:9px 12px;background:#0d293b;border:1px solid #436580;border-radius:8px;font-weight:600}.band.on{background:#1e5365;border:2px solid #8dd6e2}.swatch{width:13px;height:13px;border-radius:100%}.swatch.r{background:var(--red)}.swatch.g{background:var(--green)}.swatch.b{background:var(--blue)}.bandcopy{display:flex;flex-direction:column;gap:3px}.bandcopy strong{font-size:14px;font-weight:700}.bandhint{color:#a9c9db;font-size:11px;font-weight:500}.signature-key{border:1px solid #4c8498;background:#0a2940;padding:11px 12px;border-radius:9px;font-size:13px;line-height:1.5;color:#d7f0fc;margin-top:12px}.signature-key strong{color:#8addeb}.explanation{border-top:1px solid #3d8179;margin-top:10px;padding-top:9px}.explanation strong{color:#b6ecf0}.prompt .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.prompt .btnrow button{flex:1 1 120px}.tip{border:1px solid #355d70;background:#0a2235;border-radius:9px;padding:10px 11px;font-size:12px;line-height:1.5;color:#b9d5e1;margin-top:13px}.result{background:#103c36;border:1px solid #438677;border-radius:9px;padding:12px;margin-top:14px;font-size:13px;line-height:1.6}.result b{color:#a7efd3}.result[hidden]{display:none}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#35546a;border-top:1px solid #35546a}.stat{padding:12px 7px;background:#0b1e30;text-align:center}.stat strong{display:block;font:780 clamp(18px,3vw,25px) ui-monospace,Consolas,monospace}.stat span{display:block;color:var(--muted);font-size:11px}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap}th,td{text-align:left;padding:10px 12px;border-top:1px solid #36576e}th{font-size:11px;color:#b5d2df}tr:nth-child(even){background:#0b2233}.foot{font-size:12px;color:var(--muted);line-height:1.65;margin-top:15px}.foot summary{cursor:pointer;color:#e1f1fa}.foot details{margin-top:12px}.menurow{display:flex;align-items:center;gap:11px;flex-wrap:wrap}.scenario-list{list-style:none;padding:0;margin:10px 0 0}.scenario-list li{margin:5px 0}.warp-lab{border:1px solid #386c7f;background:#092335;border-radius:10px;padding:11px;margin-top:12px}.warp-lab select{color:#effaff;background:#12374b;border:1px solid #5c92a9;border-radius:7px;padding:8px;margin:7px 0;max-width:100%}.notice{padding:10px 12px;border:1px solid #4b6e85;border-radius:8px;font-size:12px;color:#bad3e1;margin-top:11px}[hidden]{display:none!important}
+@media(max-width:720px){main{padding:15px 9px 34px}.layout{grid-template-columns:1fr}.radarwrap{border-right:0;border-bottom:1px solid #32566b}.scope{max-width:420px}.prompt{padding:13px}.stat{padding:9px 5px}.pad{padding:13px}.controlgroup{gap:7px}}
+@media(max-width:395px){.directions{gap:4px}.choice{font-size:12px;padding:5px 2px}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">UNITED CONFEDERATION NAVY · RADAR ACADEMY</div><h1>Radar Signature Recognition</h1><p class="muted">Read the raw Radar squiggles: identify where a contact is, which signature bands are active, and how its behaviour changes.</p></header>
+<section class="panel"><div class="pad"><div class="tabstrip"><button id="basicTab" class="tab active" type="button" aria-pressed="true">Basic Recognition<br><span class="small">One changing band</span></button><button id="combinedTab" class="tab" type="button" aria-pressed="false">Combined Signatures<br><span class="small">Two or three changes</span></button></div><div class="row" style="margin-top:13px"><span class="pill" id="difficulty">CADET · BASIC</span><span class="pill">STANDARD RADAR SIGNATURES</span></div><p class="small" id="explainMode">Identify the bearing and the single band with significant activity.</p><div class="signature-key" id="signatureKey"><strong>STANDARD SIGNATURES:</strong> Red inward = gravitational; green inward = thermal; blue irregular = electrical. <strong>Ship-state calculations:</strong> from BC C++.</div></div></section>
+<section class="panel"><div class="row pad"><h2 id="exerciseTitle">Contact analysis</h2><span class="pill" id="stateText">AWAITING CONTACT</span></div><div class="layout">
+<div class="radarwrap"><div class="scope"><canvas width="600" height="600" id="scope" aria-label="Circular raw radar display with red, green and blue traces"></canvas><div class="cover" id="cover"><strong id="coverTitle">AWAITING CONTACT</strong><span id="coverSub">Press Generate Contact when ready</span></div></div><div class="legend"><span class="r">● RED</span><span class="g">● GREEN</span><span class="b">● BLUE</span></div><div class="radar-meta"><span id="phase">RADAR OFFLINE</span><span id="timer">0.0s</span></div></div>
+<div class="prompt"><div id="quizControls"><h3>Contact report</h3><div class="subhead">1. Bearing sector of the return</div><div id="bearings" class="directions"></div><div class="subhead">2. Which signal bands are significantly active?</div><div class="bandbuttons"><button type="button" class="band" data-band="gravity"><span class="swatch r"></span><span class="bandcopy"><strong>Gravitational activity</strong><small class="bandhint" data-cue="gravity">Red inward</small></span></button><button type="button" class="band" data-band="thermal"><span class="swatch g"></span><span class="bandcopy"><strong>Thermal / biological activity</strong><small class="bandhint" data-cue="thermal">Green inward</small></span></button><button type="button" class="band" data-band="electrical"><span class="swatch b"></span><span class="bandcopy"><strong>Electrical activity</strong><small class="bandhint" data-cue="electrical">Blue irregular</small></span></button></div><div class="tip" id="interpretation">Red deflects for gravity, green for thermal, and blue becomes irregular for electrical activity. Report the changes you can detect.</div></div><div class="warp-lab" id="warpLab" hidden><label for="warpFactor"><strong>Simulated warp factor</strong></label> <select id="warpFactor"><option value="0">Warp 0 — off</option><option value="0.25">Warp 0.25</option><option value="0.5">Warp 0.5</option><option value="1" selected>Warp 1</option><option value="2">Warp 2</option><option value="4">Warp 4</option></select><div class="small" id="warpReadout"></div></div><div class="btnrow"><button class="primary" id="generate" type="button">Generate Contact</button><button class="ghost" id="demo" type="button">Inspect warp signal</button><button class="primary" id="report" disabled hidden type="button">Submit Report</button><button class="ghost" id="replay" disabled hidden type="button">Replay Change</button><button class="ghost" id="next" hidden type="button">Next Contact</button><button class="ghost" id="compare" hidden type="button">Show quiet baseline</button></div><div class="result" id="result" hidden aria-live="polite"></div><div class="notice" id="note">Combined drills begin with a quiet baseline, then show the ship's changing emissions. The baseline is a comparison, not a scan result.</div></div>
+</div><div class="stats"><div class="stat"><strong id="bearingRate">—</strong><span>Bearing accuracy</span></div><div class="stat"><strong id="bandRate">—</strong><span>All bands correct</span></div><div class="stat"><strong id="timeMean">—</strong><span>Average report time</span></div><div class="stat"><strong id="attempts">0</strong><span>Attempts in mode</span></div></div></section>
+<section class="panel"><div class="pad row"><div><h2>Training record</h2><p class="small">Results are kept locally when browser storage is available. Scores are tracked separately for Basic Recognition and Combined Signatures.</p></div><div class="controlgroup"></div></div><div class="tablewrap"><table><thead><tr><th>Drill</th><th>Bearing</th><th>Bands</th><th>Time</th><th>Scenario revealed</th></tr></thead><tbody id="history"><tr><td colspan="5" class="small">No completed reports.</td></tr></tbody></table></div></section>
+<div class="foot"><b>What the trainer can and cannot teach:</b> The trainer calculates physical signatures from each simulated ship's warp factor, jump delay, system heat, coolant and power settings using the C++ getDynamicRadarSignatureInfo() formula, rather than manually assigning colour amplitudes. It then recreates the 512-bin circular overlay, per-bin random noise, range attenuation, five-point smoothing and radial displacement from rawScannerDataRadarOverlay.cpp. The example ship states are invented training situations, but the emitted signals are calculated using the game code. This is not a live feed from a Bridge Command server.
+<details><summary>How the Combined Signatures exercise works</summary>First observe a quiet ship for 1.3 seconds. Its activity then changes, sometimes in two or three signature bands at once. Select the bearing and every band with a substantial new contribution, then submit the report. The exercise reveals an example of the activity producing those signatures (such as warp plus overheated systems). Replay returns to the quiet baseline so officers can compare the changes. The timer includes replay time.</details>
+
+<details><summary>Source and limitations</summary>Verified against <code>BCsrcNEW.zip</code>: <code>spaceObjects/spaceship.cpp</code> (<code>getDynamicRadarSignatureInfo</code>) and <code>screenComponents/rawScannerDataRadarOverlay.cpp</code>. These are single-contact exercises rather than full simulation of every ship system; they do not reconstruct the navigation map or prove IFF, ship class, jump versus warp, or exact system power. For training clarity, bearings use 0° at the top and scenarios are placed sufficiently close for signatures to be distinguishable. Their apparent angular width is derived from ship radius and distance as in the source. The source clamps each accumulated signal to 1.0 before drawing it, so even Warp 1 typically saturates the red gravitational return at close range. One contact is simulated at a time; other mission objects and real network data are not included.</details>
+</div></main>
+<button id="export" type="button" hidden style="display:none!important"></button><button id="clear" type="button" hidden style="display:none!important"></button>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),canvas=$('scope'),ctx=canvas.getContext('2d'),KEY='ucn_radar_signature_v11';
+const SECTORS=['N','NE','E','SE','S','SW','W','NW'];
+const BANDS=[{id:'gravity',name:'Gravitational'},{id:'thermal',name:'Thermal'},{id:'electrical',name:'Electrical'}];
+const BASE={gravity:.05,thermal:.2,electrical:.2},SAMPLES=512,TAU=2*Math.PI;
+// All physical ship states below are training examples. Signal amplitudes are NOT preselected.
+// They are calculated by shipSignature(), copied from SpaceShip::getDynamicRadarSignatureInfo().
+const SCENARIOS=[
+ {id:'warp',name:'Warp drive engaged',detail:'current_warp is added directly to gravity; the display clamps per-angle gravity to 1.0.',bands:['gravity'],state:{currentWarp:1.0}},
+ {id:'jump',name:'Jump preparation',detail:'jump_delay generates gravity using (1 / jump_delay + .01) + .25.',bands:['gravity'],state:{jumpDelay:1.5}},
+ {id:'heat',name:'Overheated systems',detail:'The hot warp system adds its heat minus coolant / 10 to the thermal signature.',bands:['thermal'],state:{systems:{warp:{heat:.92,coolant:.5,power:1}}}},
+ {id:'power',name:'Power reallocation',detail:'Warp-system power 1.8 contributes power - 1 to electrical emissions.',bands:['electrical'],state:{systems:{warp:{heat:0,coolant:0,power:1.8}}}},
+ {id:'recharge',name:'Jump-drive recharging',detail:'Jump-drive recharging uses a special electrical formula in the source, often reaching the renderer cap.',bands:['electrical'],state:{jumpDriveCharge:25000,jumpDriveMax:50000}},
+ {id:'warp_heat',name:'Warping with overheated systems',detail:'Warp and system heat simultaneously affect gravitational and thermal channels.',bands:['gravity','thermal'],state:{currentWarp:1,systems:{warp:{heat:.90,coolant:.25,power:1}}}},
+ {id:'warp_power',name:'Warping with elevated power allocation',detail:'Warp raises gravitational output while a boosted system raises electrical output.',bands:['gravity','electrical'],state:{currentWarp:2,systems:{reactor:{heat:0,coolant:0,power:1.85}}}},
+ {id:'power_heat',name:'High power and overheating',detail:'One overheated, overpowered system affects both biological and electrical channels.',bands:['electrical','thermal'],state:{systems:{reactor:{heat:.90,coolant:.5,power:1.90}}}},
+ {id:'jump_heat',name:'Jump preparation with overheated systems',detail:'The jump countdown and a hot system contribute separate signal components.',bands:['gravity','thermal'],state:{jumpDelay:1.5,systems:{reactor:{heat:.90,coolant:0,power:1}}}},
+ {id:'all',name:'Warp, elevated power and system heat',detail:'Warp adds gravity; hot and overpowered systems raise thermal and electrical emissions.',bands:['gravity','electrical','thermal'],state:{currentWarp:1,systems:{warp:{heat:.90,coolant:.5,power:1.8}}}}
+];
+function quietShip(){return {currentWarp:0,jumpDelay:0,jumpDriveCharge:50000,jumpDriveMax:50000,systems:{}}}
+function makeShip(overrides={}){const s={...quietShip(),...overrides};s.systems={...overrides.systems};return s}
+function shipSignature(ship){
+ // Implements SpaceShip::getDynamicRadarSignatureInfo().
+ let gravity=BASE.gravity,electrical=BASE.electrical,thermal=BASE.thermal;
+ for(const [name,sys] of Object.entries(ship.systems)){
+  const heat=sys.heat??0,coolant=sys.coolant??0,power=sys.power??1;
+  thermal+=Math.max(0,Math.min(1,heat-coolant/10));
+  if(name==='jumpdrive' && ship.jumpDriveCharge<ship.jumpDriveMax){
+   electrical+=Math.max(0,Math.min(1,power*(ship.jumpDriveCharge+.01/ship.jumpDriveMax)));
+  }else if(power!==1){
+   electrical+=Math.max(-1,Math.min(1,power-1));
+  }
+ }
+ // All ship systems not specified in the scenario have nominal heat=0, coolant=0, power=1.
+ // JumpDrive exists in our simulated ship, even if no explicit system override is set.
+ if(!Object.hasOwn(ship.systems,'jumpdrive') && ship.jumpDriveCharge<ship.jumpDriveMax){
+  electrical+=Math.max(0,Math.min(1,1*(ship.jumpDriveCharge+.01/ship.jumpDriveMax)));
+ }
+ if(ship.jumpDelay>0){gravity+=Math.max(0,Math.min((1/ship.jumpDelay+.01)+.25,10));}
+ else if(ship.currentWarp>0){gravity+=ship.currentWarp;}
+ return {gravity,electrical,thermal};
+}
+
+let mode='basic',state='ready',current=null,chosenBearing=null,chosenBands=new Set(),startTime=0,phaseStart=0,records=load(),replayCount=0,reviewBaseline=false;const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));const rnd=(a,b)=>a+Math.random()*(b-a);const fmt=n=>n.toFixed(1);
+function load(){try{let r=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(r)?r:[]}catch{return []}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(records))}catch{}}
+function bearingIndex(a){return Math.floor(((a+22.5)%360)/45)}
+function setChoice(){document.querySelectorAll('[data-sector]').forEach(b=>b.classList.toggle('selected',+b.dataset.sector===chosenBearing));document.querySelectorAll('[data-band]').forEach(b=>{b.classList.toggle('on',chosenBands.has(b.dataset.band));b.setAttribute('aria-pressed',String(chosenBands.has(b.dataset.band)))});$('report').disabled=state!=='active'||chosenBearing===null||chosenBands.size===0}
+function showCover(title,subtitle){$('coverTitle').textContent=title;$('coverSub').textContent=subtitle;$('cover').hidden=false}
+function hideCover(){$('cover').hidden=true}
+function configure(m){if(state==='active')return;$('quizControls').hidden=false;if(state==='demo'){state='ready';$('warpLab').hidden=true;$('compare').hidden=true;$('demo').hidden=false;$('generate').hidden=false;showCover('AWAITING CONTACT','Press Generate Contact when ready');}mode=m;$('basicTab').classList.toggle('active',m==='basic');$('combinedTab').classList.toggle('active',m==='combined');$('basicTab').setAttribute('aria-pressed',String(m==='basic'));$('combinedTab').setAttribute('aria-pressed',String(m==='combined'));$('difficulty').textContent=m==='basic'?'CADET · BASIC':'OFFICER · COMBINED';$('explainMode').textContent=m==='basic'?'Identify the bearing and the one significantly active physical signature.':'Watch a quiet ship change its emissions. Identify the bearing and ALL physical signature bands that increase.';$('note').textContent=m==='basic'?'Basic exercises show one new signature band. They establish the core trace recognition skill.':'Combined drills begin with a quiet baseline and then show two or three changed bands. Compare the new return with the baseline before reporting.';stats()}
+function generate(){$('quizControls').hidden=false;let pool=SCENARIOS.filter(s=>mode==='basic'?s.bands.length===1:s.bands.length>=2),scenario=pool[Math.floor(Math.random()*pool.length)];let bearing=((Math.floor(Math.random()*8)*45)+rnd(-12,12)+360)%360;let dist=rnd(750,1250),radius=rnd(75,120);current={scenario,bearing,dist,radius,base:{...BASE},ship:makeShip(scenario.state),quietShip:quietShip()};startTime=performance.now();phaseStart=startTime;replayCount=0;reviewBaseline=false;state='active';$('compare').hidden=true;$('compare').textContent='Show quiet baseline';chosenBearing=null;chosenBands.clear();setChoice();$('basicTab').disabled=true;$('combinedTab').disabled=true;$('generate').hidden=true;$('demo').hidden=true;$('warpLab').hidden=true;$('next').hidden=true;$('report').hidden=false;$('replay').hidden=mode!=='combined';$('replay').disabled=mode!=='combined';$('stateText').textContent='CONTACT ACTIVE';$('result').hidden=true;hideCover();$('exerciseTitle').textContent=mode==='combined'?'Signature change analysis':'Basic signature recognition';}
+function replay(){if(state!=='active'||mode!=='combined')return;phaseStart=performance.now();replayCount++}
+function patternExplanation(actual){const descriptions={gravity:'GRAVITY: the red trace steps inward around the contact bearing.',thermal:'THERMAL: the green trace steps inward around the contact bearing.',electrical:'ELECTRICAL: the blue trace becomes increasingly irregular around the contact bearing.'};return actual.map(b=>`<div><strong>${descriptions[b]}</strong></div>`).join('')}
+function endRound(){if(state!=='active')return;let secs=(performance.now()-startTime)/1000,correctSector=bearingIndex(current.bearing),actual=current.scenario.bands,bandCorrect=actual.length===chosenBands.size&&actual.every(id=>chosenBands.has(id)),sectorCorrect=chosenBearing===correctSector;let rec={date:new Date().toISOString(),mode,bearing:current.bearing,sectorGuess:chosenBearing,bands:actual.join('+'),guessed:[...chosenBands].join('+'),sectorCorrect,bandCorrect,seconds:secs,scenario:current.scenario.name,replays:replayCount};records.unshift(rec);persist();
+try {
+  if(window.parent !== window) window.parent.postMessage({
+    type:'ucn-result', protocol:'UCN-TRAINER/1', module:'radar-signatures',
+    record:{...rec,officer:new URLSearchParams(location.search).get('officer')||'Unassigned'}
+  },'*');
+} catch(_) {}
+state='review';reviewBaseline=false;$('basicTab').disabled=false;$('combinedTab').disabled=false;$('report').hidden=true;$('replay').hidden=true;$('next').hidden=false;$('demo').hidden=false;$('compare').hidden=false;$('compare').textContent='Show quiet baseline';$('stateText').textContent=sectorCorrect&&bandCorrect?'CORRECT REPORT':'CONTACT REVIEW';$('phase').textContent='ANALYSIS COMPLETE';$('result').hidden=false;$('result').innerHTML=`<b>${sectorCorrect&&bandCorrect?'✓ BOTH IDENTIFICATIONS CORRECT':'CONTACT ANALYSIS'}</b><br>True bearing: <strong>${SECTORS[correctSector]} (${Math.round(current.bearing)}°)</strong> · You: ${SECTORS[chosenBearing]}<br>Active bands: <strong>${actual.map(k=>BANDS.find(b=>b.id===k).name).join(' + ')}</strong><br>Your report: ${[...chosenBands].map(k=>BANDS.find(b=>b.id===k).name).join(' + ')}<br><strong>Example activity: ${current.scenario.name}.</strong> ${current.scenario.detail}<div class="small">Simulated source signature: ${signatureText(shipSignature(current.ship))} (before Radar clamping)</div><div class="explanation"><strong>How the trace reveals this:</strong>${patternExplanation(actual)}</div><br>Response time: ${fmt(secs)}s.${replayCount?' Replays: '+replayCount+'.':''}`;stats()}
+function signatureText(v){return `G ${v.gravity.toFixed(2)} · E ${v.electrical.toFixed(2)} · T ${v.thermal.toFixed(2)}`}
+function updateWarpDemo(){
+ if(state!=='demo'||!current)return;
+ current.ship.currentWarp=Number($('warpFactor').value);
+ let v=shipSignature(current.ship);
+ $('warpReadout').innerHTML=`Source values: <b>${signatureText(v)}</b><br>Rendered red gravity after clamp: <b>${Math.min(1,v.gravity).toFixed(2)}</b>. ${current.ship.currentWarp>=1?'At Warp 1 and above, the local red gravity amplitude saturates; faster warp does not create a taller spike.':'Small warp factors produce a proportionally smaller gravity signal.'}`;
+ reviewBaseline=false;$('compare').textContent='Show quiet baseline';render(performance.now());
+}
+function demonstrate(){
+ if(state==='active')return;
+ $('quizControls').hidden=true;
+ state='demo';current={scenario:{name:'Warp physics demonstration'},bearing:225,dist:900,radius:110,ship:makeShip({currentWarp:Number($('warpFactor').value)}),quietShip:quietShip()};
+ $('warpLab').hidden=false;$('report').hidden=true;$('replay').hidden=true;$('next').hidden=true;
+ $('demo').hidden=true;$('generate').hidden=false;$('compare').hidden=false;
+ $('basicTab').disabled=false;$('combinedTab').disabled=false;
+ $('exerciseTitle').textContent='BC source-code warp demonstration';$('stateText').textContent='LIVE WARP SIMULATION';$('note').textContent='Rotate between Warp 0, 0.25, 0.5, 1, 2 and 4 to inspect the actual C++ signature. The ship is simulated at a fixed bearing and range; this is not a live connection to your game.';
+ $('result').hidden=true;hideCover();reviewBaseline=false;startTime=performance.now();
+ updateWarpDemo();
+}
+function compare(){if(state!=='review'&&state!=='demo')return;reviewBaseline=!reviewBaseline;$('compare').textContent=reviewBaseline?'Show active emissions':'Show quiet baseline';$('phase').textContent=reviewBaseline?'QUIET BASELINE · REVIEW':'ACTIVE EMISSIONS · REVIEW';render(performance.now())}
+function standardRecords(){return records.filter(x=>x.renderMode!=='complex')}
+function stats(){let entries=standardRecords(),subset=entries.filter(x=>x.mode===mode),n=subset.length;$('bearingRate').textContent=n?Math.round(100*subset.filter(x=>x.sectorCorrect).length/n)+'%':'—';$('bandRate').textContent=n?Math.round(100*subset.filter(x=>x.bandCorrect).length/n)+'%':'—';$('timeMean').textContent=n?fmt(subset.reduce((a,x)=>a+x.seconds,0)/n)+'s':'—';$('attempts').textContent=String(n);$('history').innerHTML=entries.length?entries.slice(0,30).map(x=>`<tr><td>${x.mode}</td><td>${x.sectorCorrect?'✓':'×'}</td><td>${x.bandCorrect?'✓':'×'}</td><td>${fmt(x.seconds)}s</td><td>${x.scenario}</td></tr>`).join(''):'<tr><td colspan="5" class="small">No completed reports.</td></tr>';$('export').disabled=!entries.length;$('clear').disabled=!records.length}
+function download(){let entries=standardRecords();if(!entries.length)return;let rows=[['date_utc','drill','bearing_deg','reported_sector','actual_bands','reported_bands','bearing_correct','bands_correct','seconds','scenario','replays'].join(',')];for(let x of [...entries].reverse())rows.push([x.date,x.mode,fmt(x.bearing),SECTORS[x.sectorGuess],x.bands,x.guessed,x.sectorCorrect,x.bandCorrect,x.seconds,x.scenario,x.replays].join(','));let u=URL.createObjectURL(new Blob([rows.join('\r\n')],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='UCN_Radar_Signature_Training.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000)}
+function render(now){let C=300,R=261;ctx.clearRect(0,0,600,600);ctx.fillStyle='#061622';ctx.fillRect(0,0,600,600);ctx.save();ctx.translate(C,C);ctx.lineWidth=1;for(let d=1;d<=4;d++){ctx.strokeStyle=d===4?'#54798b':'#33536a';ctx.beginPath();ctx.arc(0,0,R*d/4,0,TAU);ctx.stroke()}for(let i=0;i<360;i+=15){let a=i*Math.PI/180;ctx.strokeStyle=i%45===0?'#547488':'#1b3b51';ctx.beginPath();ctx.moveTo(Math.sin(a)*R*.06,-Math.cos(a)*R*.06);ctx.lineTo(Math.sin(a)*R,-Math.cos(a)*R);ctx.stroke()}ctx.fillStyle='#b7d1e3';ctx.textAlign='center';ctx.font='700 15px ui-monospace,monospace';SECTORS.forEach((dir,i)=>{let a=i*Math.PI/4;ctx.fillText(dir,Math.sin(a)*(R+20),-Math.cos(a)*(R+20)+5)});ctx.fillStyle='#65b6bf';ctx.fillRect(-3,-3,6,6);
+let quiet=(mode==='combined'&&state==='active'&&now-phaseStart<1300)||((state==='review'||state==='demo')&&reviewBaseline);
+const phys=current?shipSignature(quiet?current.quietShip:current.ship):null;
+// Equivalent to RawScannerDataRadarOverlay::onDraw(): at most 2x long-range radar,
+// attenuate once outside range, add each ship's dynamic signature to 512 angle bins,
+// then clamp per channel. The trainer has one ship; BC sums all objects.
+let sig=Array.from({length:SAMPLES},()=>({gravity:0,electrical:0,thermal:0}));
+if(current){
+ let range=30000,dist=current.dist,scale=dist>range?1-(dist-range)/range:1;
+ if(dist<=range*2){let halfAngle=dist<=current.radius?180:Math.asin(current.radius/dist)*180/Math.PI;
+  let a0=dist<=current.radius?0:current.bearing-halfAngle;
+  let a1=dist<=current.radius?360:current.bearing+halfAngle;
+  for(let a=a0;a<=a1;a+=360/SAMPLES){
+   const idx=((Math.trunc(a/360*SAMPLES)+SAMPLES*2)%SAMPLES);
+   for(const band of ['gravity','electrical','thermal'])sig[idx][band]+=phys[band]*scale;
+  }
+ }
+}
+let amp=[new Array(SAMPLES),new Array(SAMPLES),new Array(SAMPLES)];
+for(let n=0;n<SAMPLES;n++){
+ let g=clamp(sig[n].gravity,0,1),e=clamp(sig[n].electrical,0,1),b=clamp(sig[n].thermal,0,1);
+ let r=rnd(-1,1)+g*40,gr=rnd(-1,1)+b*30,bl=rnd(-1,1)+rnd(-20,20)*e;
+ amp[0][n]=r;amp[1][n]=gr;amp[2][n]=bl;
+}
+ctx.globalCompositeOperation='lighter';const colors=['#f50c1b','#0aff30','#234cfa'];for(let c=0;c<3;c++){let path=ctx;path.strokeStyle=colors[c];path.lineWidth=2;path.beginPath();for(let n=0;n<=SAMPLES;n++){let ix=n%SAMPLES,sum=0;for(let off=-2;off<=2;off++)sum+=amp[c][(ix+off+SAMPLES)%SAMPLES]/5;let r=R*([.95,.92,.89][c]-sum/500),a=ix*TAU/SAMPLES,x=Math.sin(a)*r,y=-Math.cos(a)*r;if(n===0)path.moveTo(x,y);else path.lineTo(x,y)}path.stroke()}ctx.globalCompositeOperation='source-over';ctx.restore();if(state==='active'||state==='demo'){$('phase').textContent=state==='demo'?(quiet?'QUIET SHIP — WARP OFF':'WARP SIGNATURE — SOURCE MODEL'):(mode==='basic'?'ACTIVE EMISSION':quiet?'QUIET BASELINE':'CHANGED EMISSIONS');$('timer').textContent=state==='demo'?'WARP TEST':fmt((now-startTime)/1000)+'s'}
+}
+SECTORS.forEach((s,i)=>{let b=document.createElement('button');b.className='choice';b.type='button';b.textContent=s+' '+(i*45)+'°';b.dataset.sector=i;b.onclick=()=>{if(state==='active'){chosenBearing=i;setChoice()}};$('bearings').appendChild(b)});document.querySelectorAll('[data-band]').forEach(b=>{b.setAttribute('aria-pressed','false');b.onclick=()=>{if(state!=='active')return;let v=b.dataset.band;if(chosenBands.has(v))chosenBands.delete(v);else{if(mode==='basic')chosenBands.clear();chosenBands.add(v)}setChoice()}});
+$('basicTab').onclick=()=>configure('basic');$('combinedTab').onclick=()=>configure('combined');$('generate').onclick=generate;$('next').onclick=generate;$('report').onclick=endRound;$('replay').onclick=replay;$('compare').onclick=compare;$('demo').onclick=demonstrate;$('warpFactor').onchange=updateWarpDemo;$('export').onclick=download;$('clear').onclick=()=>{if(!confirm('Clear all saved Radar recognition results?'))return;records=[];persist();stats()};
+window.addEventListener('ucn-reset-training',()=>{
+  state='ready'; current=null; chosenBearing=null; chosenBands.clear();
+  $('basicTab').disabled=false; $('combinedTab').disabled=false;
+  $('report').hidden=true; $('next').hidden=true; $('replay').hidden=true;
+  $('compare').hidden=true; $('warpLab').hidden=true;
+  $('generate').hidden=false; $('demo').hidden=false;
+  $('quizControls').hidden=false; $('result').hidden=true;
+  $('exerciseTitle').textContent='Contact analysis';
+  $('stateText').textContent='AWAITING CONTACT';
+  $('phase').textContent='RADAR OFFLINE'; $('timer').textContent='0.0s';
+  showCover('AWAITING CONTACT','Press Generate Contact when ready');
+  setChoice(); configure(mode);
+});
+configure('basic');setChoice();function frame(t){if(state!=='ready')render(t);requestAnimationFrame(frame)}render(0);requestAnimationFrame(frame);
+})();
+</script>
+
+<style>
+  #ucnSignatureSelection {width:min(920px,100%);margin:0 auto;padding:24px 14px 46px}
+  #ucnSignatureSelection[hidden],#ucnSignatureTraining[hidden]{display:none!important}
+  .ucn-nav {display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px}
+  .ucn-nav button {background:#142d43;border:1px solid #557e95;border-radius:9px;padding:10px 15px;
+    min-height:46px;color:#ecf6ff;font:700 14px system-ui,sans-serif;cursor:pointer}
+  .ucn-nav button:hover {filter:brightness(1.15)}
+  .ucn-selection-intro {color:#9cb8ca;margin:8px 0 17px}
+  .ucn-start {background:#186961!important;border-color:#47c4aa!important}
+</style>
+<script>
+(()=>{'use strict';
+  const main=document.querySelector('body > main');
+  if(!main)return;
+  main.id='ucnSignatureTraining';
+  const selection=document.createElement('section');
+  selection.id='ucnSignatureSelection';
+  selection.innerHTML=`
+    <div class="eyebrow">UCN ACADEMY / RADAR</div>
+    <h1>Radar Signature Recognition</h1>
+    <p class="ucn-selection-intro">Select a training exercise before entering the Radar console.</p>
+    <div id="ucnSignatureOptions"></div>
+    <div class="ucn-nav" style="margin-top:20px">
+      <button type="button" class="ucn-start" id="ucnSignatureStart">Begin Training</button>
+      <button type="button" id="ucnSignatureAcademy">← Back to Academy</button>
+    </div>`;
+  main.before(selection);
+  const config=main.querySelector('.panel');
+  selection.querySelector('#ucnSignatureOptions').append(config);
+  const nav=document.createElement('nav');
+  nav.className='ucn-nav';
+  nav.innerHTML=`<button type="button" id="ucnSignatureBackAcademy">← Back to Academy</button>
+    <button type="button" id="ucnSignatureBack">← Back to Selection</button>`;
+  main.prepend(nav);
+  main.hidden=true;
+  function academy(){
+    if(window.parent!==window)window.parent.postMessage({type:'ucn-close',protocol:'UCN-TRAINER/1'},'*');
+    else {main.hidden=true;selection.hidden=false;window.scrollTo(0,0)}
+  }
+  function toSelection(){
+    if(document.getElementById('stateText').textContent==='CONTACT ACTIVE' &&
+      !confirm('Abandon this active contact? Unsubmitted results will not be recorded.'))return;
+    window.dispatchEvent(new Event('ucn-reset-training'));
+    main.hidden=true;selection.hidden=false;window.scrollTo(0,0);
+  }
+  document.getElementById('ucnSignatureStart').onclick=()=>{
+    selection.hidden=true;main.hidden=false;window.scrollTo(0,0);
+  };
+  document.getElementById('ucnSignatureBack').onclick=toSelection;
+  document.getElementById('ucnSignatureAcademy').onclick=academy;
+  document.getElementById('ucnSignatureBackAcademy').onclick=()=>{
+    if(document.getElementById('stateText').textContent==='CONTACT ACTIVE' &&
+       !confirm('Leave the active Radar analysis? Unsubmitted results will be lost.'))return;
+    academy();
+  };
+})();
+</script>
+</body></html>

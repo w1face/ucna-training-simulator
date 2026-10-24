@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<title>United Confederation Naval Academy | Training Portal</title>
+<style>
+:root {
+  --bg: #070c13;
+  --panel: #0d1621;
+  --panel2: #101d2b;
+  --line: #274159;
+  --line2: #365d7b;
+  --text: #e8f1f7;
+  --muted: #93a9b9;
+  --cyan: #78d8ff;
+  --cyan2: #1a89b8;
+  --green: #7fe39a;
+  --amber: #ffc86a;
+  --red: #ff7b78;
+  --shadow: 0 14px 34px rgba(0,0,0,.32);
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 10% -10%, rgba(25,137,184,.18), transparent 34%),
+    linear-gradient(180deg, #08111a 0%, var(--bg) 58%, #05080d 100%);
+  color: var(--text);
+  font-family: "Segoe UI", Inter, Arial, sans-serif;
+}
+button, input { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+.shell { max-width: 1440px; margin: 0 auto; padding: 22px 24px 32px; }
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  background: rgba(11,22,33,.88);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+}
+.brand { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.crest {
+  width: 64px; height: 64px; flex: 0 0 auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0 7px rgba(120,216,255,.22));
+}
+.eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: .18em; font-size: 12px; font-weight: 700; }
+h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; letter-spacing: .02em; }
+.subtitle { color: var(--muted); font-size: 14px; }
+.statusbox { min-width: 240px; text-align: right; }
+.statusline { font-size: 13px; color: var(--muted); }
+.statusline strong { color: var(--green); font-weight: 700; }
+.profile {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr auto;
+  gap: 12px;
+  margin: 18px 0 20px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: rgba(11,22,33,.74);
+  border-radius: var(--radius);
+}
+.field label { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .12em; margin: 0 0 6px 2px; }
+.field input {
+  width: 100%; min-height: 48px;
+  border: 1px solid var(--line2);
+  background: #09121b;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+}
+.field input:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(120,216,255,.10); }
+.saveBtn, .secondaryBtn, .launchBtn, .backBtn {
+  border: 1px solid var(--line2);
+  color: var(--text);
+  background: linear-gradient(180deg, #173047, #102337);
+  border-radius: 10px;
+  min-height: 48px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.saveBtn { align-self: end; }
+.saveBtn:hover, .launchBtn:hover, .secondaryBtn:hover, .backBtn:hover { border-color: var(--cyan); }
+.sectionTitle {
+  display: flex; justify-content: space-between; gap: 12px; align-items: end;
+  margin: 4px 2px 12px;
+}
+.sectionTitle h2 { margin: 0; font-size: 18px; text-transform: uppercase; letter-spacing: .12em; }
+.sectionTitle span { color: var(--muted); font-size: 13px; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+.card {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 86px 1fr; gap: 16px;
+  min-height: 205px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, rgba(17,31,45,.96), rgba(10,20,30,.96));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.card::after {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--accent, var(--cyan));
+}
+.moduleIcon {
+  height: 86px; width: 86px;
+  border: 1px solid color-mix(in srgb, var(--accent, var(--cyan)) 68%, #173047);
+  background: rgba(0,0,0,.14);
+  border-radius: 12px;
+  display: grid; place-items: center;
+  color: var(--accent, var(--cyan));
+  font-size: 30px; font-weight: 900; letter-spacing: .05em;
+}
+.cardbody { min-width: 0; display: flex; flex-direction: column; }
+.kicker { color: var(--accent, var(--cyan)); text-transform: uppercase; letter-spacing: .14em; font-size: 11px; font-weight: 800; }
+.card h3 { margin: 5px 0 6px; font-size: 21px; }
+.card p { margin: 0 0 14px; color: var(--muted); line-height: 1.45; font-size: 14px; max-width: 62ch; }
+.cardmeta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+.pill { border: 1px solid var(--line); background: #09121b; border-radius: 999px; padding: 4px 8px; color: #b9cad5; font-size: 11px; }
+.launchRow { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; }
+.launchBtn { min-width: 150px; border-color: color-mix(in srgb, var(--accent, var(--cyan)) 55%, #274159); }
+.launchBtn:focus-visible, .saveBtn:focus-visible, .backBtn:focus-visible { outline: 3px solid rgba(120,216,255,.28); outline-offset: 2px; }
+.path { color: #667f91; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.footer {
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  margin-top: 18px; padding: 13px 4px 0; color: #687f8f; font-size: 12px;
+}
+.toast {
+  position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 16px);
+  opacity: 0; pointer-events: none;
+  background: #102337; border: 1px solid var(--line2); color: var(--text);
+  padding: 10px 14px; border-radius: 10px; box-shadow: var(--shadow); transition: .2s ease;
+  z-index: 1000;
+}
+.toast.show { opacity: 1; transform: translate(-50%,0); }
+.player {
+  position: fixed; inset: 0; z-index: 900;
+  background: #02050a;
+  display: none;
+  grid-template-rows: 58px 1fr;
+}
+.player.open { display: grid; }
+.playerbar {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  background: #09121b;
+}
+.backBtn { min-height: 40px; padding: 7px 14px; }
+.playerTitle { min-width: 0; }
+.playerTitle strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.playerTitle span { color: var(--muted); font-size: 11px; }
+.player iframe { width: 100%; height: 100%; border: 0; background: #070c13; }
+.playerOfficer { color: var(--muted); font-size: 12px; text-align: right; }
+
+@media (max-width: 900px) {
+  .topbar { grid-template-columns: 1fr; }
+  .statusbox { text-align: left; min-width: 0; }
+  .profile { grid-template-columns: 1fr 1fr; }
+  .saveBtn { grid-column: 1 / -1; }
+  .cards { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .shell { padding: 12px; }
+  .profile { grid-template-columns: 1fr; }
+  .card { grid-template-columns: 64px 1fr; padding: 15px; }
+  .moduleIcon { width: 64px; height: 64px; font-size: 22px; }
+  .launchRow { align-items: stretch; flex-direction: column; }
+  .launchBtn { width: 100%; }
+  .playerOfficer { display:none; }
+}
+
+.recordPanel{margin-top:24px;background:#0d1621;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.recordHeader{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.recordHeader h2{margin:5px 0;font-size:22px}.recordHeader p,.recordsNote{color:var(--muted);font-size:13px}
+.recordActions,.recordFilters{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.recordActions button{border:1px solid var(--line2);color:var(--text);background:#183247;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:700;min-height:42px}
+.recordActions button:disabled{opacity:.4;cursor:not-allowed}#clearRecords{border-color:#79515c}
+.recordFilters{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}
+.recordFilters label{font-size:12px;color:var(--muted)}.recordFilters select{background:#071624;color:var(--text);border:1px solid var(--line2);padding:9px;border-radius:8px;min-height:39px}
+.recordCount{color:var(--green);font-size:12px;margin-left:auto}
+.recordTableWrap{overflow-x:auto;margin-top:13px;border:1px solid var(--line);border-radius:9px}
+.recordTable{width:100%;border-collapse:collapse;text-align:left;font-size:13px;min-width:750px}
+.recordTable th,.recordTable td{padding:11px 12px;border-bottom:1px solid #243a4d;vertical-align:top}
+.recordTable th{color:var(--muted);background:#112233;font-size:12px}.recordTable tbody tr:last-child td{border-bottom:0}
+.recordTable .empty{text-align:center;color:var(--muted);padding:24px}
+.academyWelcome {margin:0 0 20px;padding:21px 24px;border:1px solid var(--line2);border-radius:var(--radius);background:linear-gradient(115deg,#122538,#0a1724);box-shadow:var(--shadow)}
+.academyWelcome h2{font-size:clamp(20px,2.6vw,27px);margin:8px 0 12px}
+.academyWelcome p{max-width:100ch;color:#c3d6e2;line-height:1.7;margin:8px 0}
+.legalNotice{margin-top:28px;border:1px solid #627181;border-left:4px solid #93a9b9;background:#111b26;border-radius:11px;padding:18px 21px;color:#b7c6d0}
+.legalNotice h2{margin:0 0 9px;font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:#d4e1ea}
+.legalNotice p{font-size:12px;line-height:1.65;margin:8px 0}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <img class="crest" src="assets/ucn-logo.svg" alt="United Confederation Navy crest" />
+      <div>
+        <div class="eyebrow">United Confederation Navy · Naval Academy</div>
+        <h1>Naval Academy Training Portal</h1>
+        <div class="subtitle">Fleet Operations Division · Bridge Officer Qualification Programme</div>
+      </div>
+    </div>
+    <div class="statusbox">
+      <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
+      <div class="statusline" id="suiteVersion">Academy release 0.19</div>
+      <div class="statusline" id="lastModuleLabel">No module launched this session</div>
+    </div>
+  </header>
+
+  <section class="profile" aria-label="Officer profile">
+    <div class="field">
+      <label for="officerName">Officer Name / Callsign</label>
+      <input id="officerName" autocomplete="name" placeholder="Enter officer name or callsign" />
+    </div>
+    <button class="saveBtn" id="saveProfile">Save profile</button>
+  </section>
+
+  <div class="sectionTitle">
+    <h2>Training Assignments</h2>
+    <span>Authorised bridge-officer training exercises</span>
+  </div>
+
+  <section class="academyWelcome" aria-labelledby="welcomeHeading">
+    <div class="eyebrow">OFFICE OF NAVAL TRAINING · FLEET READINESS</div>
+    <h2 id="welcomeHeading">Welcome aboard, Officer.</h2>
+    <p>The United Confederation Naval Academy prepares bridge crews for the demands of active fleet service. These training assignments develop the judgement, accuracy and composure expected of every officer entrusted with a Confederation vessel.</p>
+    <p>Enter your name or callsign, select an assignment, and complete the exercise at your own pace. Your assessment record will be retained at this terminal for review. Repeated practice is encouraged; confident decisions are made long before the first hostile contact.</p>
+  </section>
+  <section class="cards" id="trainerCards" aria-label="Training assignments"></section>
+
+  <section class="recordPanel" aria-labelledby="recordHeading">
+    <div class="recordHeader">
+      <div><div class="eyebrow">UCN ACADEMY / RECORDS</div><h2 id="recordHeading">Training Records</h2>
+        <p>Completed assessments across all four disciplines. Review your progress or secure a copy of your training record.</p></div>
+      <div class="recordActions">
+        <button type="button" id="exportCsv">Export CSV</button>
+        <button type="button" id="exportJson">Backup JSON</button>
+        <button type="button" id="clearRecords">Clear Records</button>
+      </div>
+    </div>
+    <div class="recordFilters"><label for="recordScope">Officer</label>
+      <select id="recordScope"><option value="current">Current officer</option><option value="all">All officers</option></select>
+      <label for="recordModule">Module</label>
+      <select id="recordModule"><option value="all">All modules</option>
+        <option value="scanning">Radar Scanning</option><option value="radar-icons">Radar Icon Recognition</option>
+        <option value="radar-signatures">Radar Signature Recognition</option><option value="hacking">Hacking &amp; Disruption</option></select>
+      <span id="recordCount" class="recordCount">0 records</span>
+    </div>
+    <div class="recordTableWrap"><table class="recordTable"><thead><tr><th>When</th><th>Officer</th><th>Module</th><th>Exercise</th><th>Result</th><th>Time</th></tr></thead><tbody id="recordRows"></tbody></table></div>
+    <p class="recordsNote" id="storageWarning">This terminal retains your training record locally. Export a copy before transferring to another terminal or clearing its records.</p>
+  </section>
+
+  <aside class="legalNotice" aria-labelledby="legalHeading">
+    <h2 id="legalHeading">Unofficial Fan Project — Rights &amp; Attribution</h2>
+    <p>This is an independently created, non-commercial fan training resource. The United Confederation Navy (UCN) insignia and associated Bridge Command intellectual property belong to their respective rights holders, including the Bridge Command creators. The UCN logo is used here solely to identify the fictional setting.</p>
+    <p>This project is not official, endorsed by, sponsored by or affiliated with the Bridge Command team. No copyright or trademark infringement is intended. All applicable rights remain with their respective owners.</p>
+  </aside>
+  <footer class="footer"><span>United Confederation Naval Academy · Fleet Training Directorate</span><span>For Academy training use</span></footer>
+</main>
+
+<section class="player" id="player" aria-label="Trainer player">
+  <div class="playerbar">
+    <button class="backBtn" id="closeTrainer" type="button">← Academy</button>
+    <div class="playerTitle">
+      <strong id="playerTitle">Training Module</strong>
+      <span id="playerSubtitle">UCN Academy</span>
+    </div>
+    <div class="playerOfficer" id="playerOfficer"></div>
+  </div>
+  <iframe id="trainerFrame" title="UCN Academy training module" allow="fullscreen"></iframe>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/*
+  UCN ACADEMY TRAINING SUITE — FRONT-END SHELL
+  ------------------------------------------------
+  Stable module sockets are deliberately unversioned:
+    trainers/scanning.html
+    trainers/radar-icons.html
+    trainers/radar-signatures.html
+    trainers/hacking.html
+
+  To upgrade a trainer later, replace the corresponding file. The launcher
+  does not need to know the trainer's internal implementation or version.
+
+  Optional module integration contract (UCN-TRAINER/1):
+  1. Launcher supplies officer/callsign/module as query-string parameters.
+  2. After iframe load, launcher also postMessages:
+       { type: 'ucn-profile', protocol: 'UCN-TRAINER/1', profile: {...} }
+  3. Future modules may report results with:
+       parent.postMessage({ type:'ucn-result', protocol:'UCN-TRAINER/1', ... }, '*')
+     The shell already listens for this and stores it locally.
+*/
+
+const SUITE_VERSION = '1.1';
+const PROTOCOL = 'UCN-TRAINER/1';
+
+const TRAINERS = [
+  {
+    id: 'scanning',
+    code: 'SCN',
+    title: 'Scanning Training Programme',
+    kicker: 'Science / Radar',
+    description: 'Waveform reading, scan positioning, slider control and multi-stage scanning practice.',
+    file: 'trainers/scanning.html',
+    accent: '#78d8ff',
+    tags: ['Waveforms', 'Single & multi-scan', 'Accuracy']
+  },
+  {
+    id: 'radar-icons',
+    code: 'RID',
+    title: 'Radar Icon Recognition',
+    kicker: 'Radar',
+    description: 'Rapid recognition of tactical display contacts, IFF states and visual radar symbology.',
+    file: 'trainers/radar-icons.html',
+    accent: '#7fe39a',
+    tags: ['Recognition', 'IFF', 'Speed']
+  },
+  {
+    id: 'radar-signatures',
+    code: 'RSG',
+    title: 'Radar Signature Analysis',
+    kicker: 'Radar / Analysis',
+    description: 'Interpret raw radar signatures and infer ship activity from signal behaviour.',
+    file: 'trainers/radar-signatures.html',
+    accent: '#ffc86a',
+    tags: ['Signatures', 'Ship state', 'Analysis']
+  },
+  {
+    id: 'hacking',
+    code: 'HCK',
+    title: 'Hacking & System Disruption',
+    kicker: 'Science / Electronic Warfare',
+    description: 'Practise hacking-grid decisions while tracking system disruption and recovery effects.',
+    file: 'trainers/hacking.html',
+    accent: '#ff8a9a',
+    tags: ['Hacking grid', 'Disruption', 'Recovery']
+  }
+];
+
+const STORAGE = {
+  profile: 'ucn.academy.profile.v1',
+  lastModule: 'ucn.academy.lastModule.v1',
+  results: 'ucn.academy.results.v1'
+};
+
+const $ = (id) => document.getElementById(id);
+const els = {
+  cards: $('trainerCards'),
+  officerName: $('officerName'),
+  saveProfile: $('saveProfile'),
+  toast: $('toast'),
+  player: $('player'),
+  frame: $('trainerFrame'),
+  close: $('closeTrainer'),
+  playerTitle: $('playerTitle'),
+  playerSubtitle: $('playerSubtitle'),
+  playerOfficer: $('playerOfficer'),
+  lastModuleLabel: $('lastModuleLabel'),
+  suiteVersion: $('suiteVersion')
+};
+
+let activeTrainer = null;
+
+function safeParse(text, fallback) {
+  try { return text ? JSON.parse(text) : fallback; } catch { return fallback; }
+}
+
+function getProfile() {
+  return safeParse(localStorage.getItem(STORAGE.profile), { officerName: '', callsign: '' });
+}
+
+function saveProfile(showConfirmation = true) {
+  const profile = {
+    officerName: els.officerName.value.trim(),
+    callsign: ''
+  };
+  localStorage.setItem(STORAGE.profile, JSON.stringify(profile));
+  updatePlayerOfficer(profile);
+  if (showConfirmation) showToast('Officer profile saved.');
+  return profile;
+}
+
+function updatePlayerOfficer(profile = getProfile()) {
+  const display = profile.officerName || profile.callsign || '';
+  els.playerOfficer.textContent = display || 'Unassigned officer';
+}
+
+function renderCards() {
+  els.cards.innerHTML = TRAINERS.map(t => `
+    <article class="card" style="--accent:${t.accent}">
+      <div class="moduleIcon" aria-hidden="true">${t.code}</div>
+      <div class="cardbody">
+        <div class="kicker">${t.kicker}</div>
+        <h3>${t.title}</h3>
+        <p>${t.description}</p>
+        <div class="cardmeta">${t.tags.map(tag => `<span class="pill">${tag}</span>`).join('')}</div>
+        <div class="launchRow">
+          <div class="path">${t.kicker} · Academy syllabus</div>
+          <button class="launchBtn" type="button" data-launch="${t.id}">Begin assignment</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
+
+  els.cards.querySelectorAll('[data-launch]').forEach(button => {
+    button.addEventListener('click', () => launchTrainer(button.dataset.launch));
+  });
+}
+
+function buildModuleUrl(trainer, profile) {
+  const params = new URLSearchParams();
+  if (profile.officerName) params.set('officer', profile.officerName);
+  // A single Officer Name / Callsign field is used for identity.
+  params.set('module', trainer.id);
+  params.set('protocol', PROTOCOL);
+  return `${trainer.file}?${params.toString()}`;
+}
+
+function launchTrainer(id) {
+  const trainer = TRAINERS.find(t => t.id === id);
+  if (!trainer) return;
+
+  const profile = saveProfile(false);
+  activeTrainer = trainer;
+  els.playerTitle.textContent = trainer.title;
+  els.playerSubtitle.textContent = `${trainer.kicker} · Officer Training`;
+  updatePlayerOfficer(profile);
+  els.frame.src = buildModuleUrl(trainer, profile);
+  els.player.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  localStorage.setItem(STORAGE.lastModule, trainer.id);
+  els.lastModuleLabel.textContent = `Last module: ${trainer.title}`;
+  history.pushState({ ucnTrainer: trainer.id }, '', `#${trainer.id}`);
+}
+
+function closeTrainer(fromHistory = false) {
+  if (!els.player.classList.contains('open')) return;
+  els.player.classList.remove('open');
+  document.body.style.overflow = '';
+  els.frame.src = 'about:blank';
+  activeTrainer = null;
+  if (!fromHistory && location.hash) history.back();
+}
+
+function showToast(message) {
+  els.toast.textContent = message;
+  els.toast.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => els.toast.classList.remove('show'), 1800);
+}
+
+
+const RESULT_LIMIT = 2000;
+function readRecords(){
+  try { const r=safeParse(localStorage.getItem(STORAGE.results),[]);return Array.isArray(r)?r:[]; }
+  catch(_) {return []}
+}
+function officerOf(result){return String(result.officer || result.record?.officer || 'Unassigned').trim() || 'Unassigned'}
+function summaryOf(item){
+  const r=item.record||{}, mod=item.module;
+  if(mod==='scanning')return {exercise:{full:'Complete contact',initial:'Initial scan',depth:'In-depth scan'}[r.mode]||r.mode||'Scanning',result:r.complete!=null?'Complete':r.initial!=null||r.depth!=null?'Completed':'—',time:r.complete??r.initial??r.depth,detail:`${r.depthSliders??''} sliders / ${r.depthStages??''} stages`.trim()};
+  if(mod==='hacking')return {exercise:`${r.tierName||['Basic','Secure','Hardened','Fortified'][r.tier]||'Breach'} · ${r.target||'Target'}`,result:r.label|| (r.success?'Successful':'Failed'),time:r.secs};
+  if(mod==='radar-signatures')return {exercise:r.mode==='combined'?'Combined signatures':'Basic recognition',result:`Bearing ${r.sectorCorrect?'✓':'✗'} · Bands ${r.bandCorrect?'✓':'✗'}`,time:r.seconds};
+  if(mod==='radar-icons')return {exercise: r.type||r.category||r.deck||'Recognition test',result:iconScore(r),time:r.average??r.avg??r.mean??null};
+  return {exercise:'Assessment',result:'Completed',time:null};
+}
+function iconScore(r){
+  for(const key of ['score','correct','shipRight','shipCorrect','right'])if(Number.isFinite(r[key]))return `${r[key]} correct`;
+  const a=[];for(const k of ['shipRight','iffRight','best'])if(r[k]!=null)a.push(`${k}: ${r[k]}`);
+  return a.join(' · ')||'Completed';
+}
+function csvCell(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"'}
+function fileDownload(name,body,mime){const blob=new Blob([body],{type:mime});const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),5000)}
+function filteredRecords(){let list=readRecords(),scope=$('recordScope').value,mod=$('recordModule').value;
+  if(scope==='current'){const officer=els.officerName.value.trim().toLocaleLowerCase('en-GB');list=list.filter(x=>officer && officerOf(x).toLocaleLowerCase('en-GB')===officer)}
+  if(mod!=='all')list=list.filter(x=>x.module===mod);return list;
+}
+function renderRecords(){const data=filteredRecords(),all=readRecords();$('recordCount').textContent=`${data.length} shown · ${all.length} total`;
+  for(const id of ['exportCsv','exportJson','clearRecords'])$(id).disabled=!all.length;
+  const tbody=$('recordRows');tbody.replaceChildren();
+  if(!data.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.className='empty';td.textContent='No matching training results recorded yet.';tr.append(td);tbody.append(tr);return}
+  for(const x of [...data].reverse().slice(0,100)){
+    const r=x.record||{},z=summaryOf(x),trainer=TRAINERS.find(t=>t.id===x.module);
+    const tr=document.createElement('tr');const vals=[x.receivedAt||r.date||'',officerOf(x),trainer?.title||x.module||'Unknown',z.exercise,z.result,z.time==null?'—':Number(z.time).toFixed(1)+'s'];
+    vals[0]=vals[0]?new Date(vals[0]).toLocaleString('en-GB',{dateStyle:'short',timeStyle:'short'}):'—';
+    for(const value of vals){const td=document.createElement('td');td.textContent=value;tr.append(td)}tbody.append(tr)
+  }
+}
+function exportRecordsCsv(){const data=filteredRecords();if(!data.length){showToast('No matching results to export.');return}
+ const keys=[...new Set(data.flatMap(x=>Object.keys(x.record||{})))].sort();
+ const cols=['received_at_utc','officer','module','exercise','result','time_seconds',...keys.map(k=>'detail_'+k)];
+ const rows=[cols.map(csvCell).join(',')];for(const x of data){const z=summaryOf(x),r=x.record||{};rows.push([x.receivedAt||r.date||'',officerOf(x),x.module,z.exercise,z.result,z.time??'',...keys.map(k=>typeof r[k]==='object'?JSON.stringify(r[k]):r[k]??'')].map(csvCell).join(','))}
+ fileDownload('UCN_Academy_Training_Records_'+new Date().toISOString().slice(0,10)+'.csv',rows.join('\r\n'),'text/csv;charset=utf-8');
+}
+function exportRecordsJson(){const list=readRecords();if(!list.length)return;fileDownload('UCN_Academy_Records_Backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({format:'UCN-TRAINER/1',exportedAt:new Date().toISOString(),records:list},null,2),'application/json')}
+function clearRecords(){const data=readRecords();if(!data.length)return;if(!confirm(`Delete all ${data.length} Academy training records from this browser? Export a backup first if you need one.`))return;
+ localStorage.removeItem(STORAGE.results);renderRecords();showToast('Academy records cleared.');}
+
+function storeResult(payload) {
+  if (!payload || !payload.record || !TRAINERS.some(t=>t.id===payload.module)) return;
+  const records=readRecords();
+  const copy={module:payload.module,officer:officerOf(payload),record:payload.record,receivedAt:new Date().toISOString()};
+  records.push(copy);
+  try {localStorage.setItem(STORAGE.results,JSON.stringify(records.slice(-RESULT_LIMIT)));renderRecords()}
+  catch(_) { $('storageWarning').textContent='Browser storage is unavailable or full. Please export your records and check browser settings.';showToast('Warning: result could not be saved.'); }
+}
+
+els.frame.addEventListener('load', () => {
+  if (!activeTrainer || els.frame.src === 'about:blank') return;
+  try {
+    els.frame.contentWindow.postMessage({
+      type: 'ucn-profile',
+      protocol: PROTOCOL,
+      module: activeTrainer.id,
+      profile: getProfile()
+    }, '*');
+  } catch (_) { /* Modules are intentionally isolated. */ }
+});
+
+window.addEventListener('message', (event) => {
+  const data = event.data;
+  if (event.source !== els.frame.contentWindow || !activeTrainer || !data || data.protocol !== PROTOCOL) return;
+  if (data.module && data.module !== activeTrainer.id) return;
+  if (data.type === 'ucn-result') {
+    storeResult(data);
+    showToast('Training result recorded.');
+  }
+  if (data.type === 'ucn-close') closeTrainer();
+});
+
+window.addEventListener('popstate', () => {
+  if (els.player.classList.contains('open')) closeTrainer(true);
+});
+
+els.saveProfile.addEventListener('click', () => {saveProfile(true);renderRecords()});
+els.officerName.addEventListener('input',renderRecords);
+$('recordScope').addEventListener('change',renderRecords);
+$('recordModule').addEventListener('change',renderRecords);
+$('exportCsv').addEventListener('click',exportRecordsCsv);
+$('exportJson').addEventListener('click',exportRecordsJson);
+$('clearRecords').addEventListener('click',clearRecords);
+els.close.addEventListener('click', () => closeTrainer());
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && els.player.classList.contains('open')) closeTrainer();
+});
+
+(function init() {
+  document.querySelector('#suiteVersion').textContent = `Front-end v${SUITE_VERSION}`;
+  const profile = getProfile();
+  els.officerName.value = profile.officerName || profile.callsign || '';
+  updatePlayerOfficer(profile);
+  renderCards();
+  renderRecords();
+
+  const lastId = localStorage.getItem(STORAGE.lastModule);
+  const last = TRAINERS.find(t => t.id === lastId);
+  if (last) els.lastModuleLabel.textContent = `Last module: ${last.title}`;
+})();
+</script>
+</body>
+</html>
