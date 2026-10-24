@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 310" role="img" aria-label="Tactical contact and IFF icon recognition">
+<defs>
+<linearGradient id="bg" x2="1" y2="1"><stop stop-color="#061522"/><stop offset="1" stop-color="#0d2a41"/></linearGradient>
+<linearGradient id="lit" x2="1"><stop stop-color="#65b8f2" stop-opacity=".12"/><stop offset=".5" stop-color="#9dd9ff" stop-opacity=".40"/><stop offset="1" stop-color="#65b8f2" stop-opacity=".04"/></linearGradient>
+<pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#63bdf0" stroke-opacity=".11" stroke-width="1"/></pattern>
+<filter id="glow"><feGaussianBlur stdDeviation="3.5"/></filter>
+</defs>
+<rect width="640" height="310" rx="17" fill="url(#bg)"/>
+<rect x="10" y="10" width="620" height="290" rx="13" fill="url(#grid)" stroke="#458bb8" stroke-width="2"/>
+<path d="M10 58V25L25 10H85 M630 58V25L615 10H555 M10 252V285L25 300H85 M630 252V285L615 300H555" stroke="#90caff" stroke-width="3" fill="none" opacity=".9"/>
+<g fill="none" stroke="#90caff" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(319 150)" stroke-width="1.8" opacity=".44">
+<circle r="128"/><circle r="86"/><circle r="43"/><path d="M-294 0H294 M0 -125V125"/>
+</g>
+<g stroke-width="3">
+<path d="M310 86 l-25 56 25 -13 25 13z" fill="#92d3ff" fill-opacity=".85"/>
+<path d="M91 108 l14 -26 14 26z" fill="#90caff" fill-opacity=".65"/>
+<path d="M170 171 l23 -18 23 18 -23 18z" fill="#90caff" fill-opacity=".35"/>
+<path d="M391 203l10 -36 10 36" fill="#90caff" fill-opacity=".65"/>
+<path d="M515 127 l32 -7 0 -13 14 0 0 13 32 7 -32 7 0 13 -14 0 0 -13z" fill="#90caff" fill-opacity=".8"/>
+<path d="M105 237 v-33 M105 220h-19 M105 220h38" opacity=".8"/>
+<path d="M536 226 l0 -37 m-18 19h36" opacity=".8"/>
+</g>
+<g stroke-width="4.1"><path d="M268 84 V58H292 M350 58H374V84 M268 207 V233H292 M350 233H374V207"/></g>
+<circle cx="75" cy="57" r="18" stroke-width="2.4" opacity=".75"/><circle cx="75" cy="57" r="7" fill="#90caff" opacity=".7" stroke="none"/>
+<g stroke-width="2" opacity=".65"><path d="M444 60H520 M444 70H486 M444 80H504"/></g>
+<g stroke-width="1.3" opacity=".5"><path d="M38 268 H606"/></g></g>
+<path d="M34 282H118 M522 282H606" stroke="#90caff" opacity=".30" stroke-width="2"/>
+</svg>
