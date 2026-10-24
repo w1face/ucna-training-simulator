@@ -244,7 +244,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     </div>
     <div class="statusbox">
       <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.5</div>
+      <div class="statusline" id="suiteVersion">Academy release 1.6</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -301,14 +301,14 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
   <section class="publicBoard" aria-labelledby="publicHeading">
     <div class="eyebrow">UCN ACADEMY / OPTIONAL PUBLIC RECORDS</div>
     <h2 id="publicHeading">Public Leaderboard</h2>
-    <p>Training is private by default. Officers may choose to publish an individual result under a public callsign. Rankings are <strong>self-reported and unofficial</strong>; the Academy cannot independently verify browser-based scores.</p>
+    <p>Training is private by default. Officers may choose to publish an individual result under a public callsign and optional crew affiliation. Rankings are <strong>self-reported and unofficial</strong>; the Academy cannot independently verify browser-based scores.</p>
     <div class="publicGrid">
       <div>
         <h3>Academy rankings</h3>
         <label for="publicCategory">Exercise and difficulty</label>
         <select id="publicCategory"></select>
         <div class="recordTableWrap">
-          <table class="publicTable"><thead><tr><th>Rank</th><th>Callsign</th><th>Accuracy</th><th>Time</th></tr></thead><tbody id="publicRows"></tbody></table>
+          <table class="publicTable"><thead><tr><th>Rank</th><th>Callsign</th><th>Crew</th><th>Accuracy</th><th>Time</th></tr></thead><tbody id="publicRows"></tbody></table>
         </div>
         <p class="publicFine" id="publicLastSync">Loading public scores…</p>
         <button type="button" id="publicRefresh">Refresh leaderboard</button>
@@ -319,8 +319,11 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
         <select id="publicLocalResult"></select>
         <label for="publicCallsign">Public callsign (not your real name)</label>
         <input id="publicCallsign" type="text" autocomplete="off" maxlength="24" placeholder="2–24 letters, numbers, spaces, . _ -" />
+        <label for="publicCrew">Crew / ship (optional)</label>
+        <input id="publicCrew" type="text" autocomplete="off" maxlength="40" placeholder="e.g. UCM Audacity — or leave blank" />
+        <p class="publicFine" id="publicCrewHelp">If provided, your crew or ship will be public alongside your callsign.</p>
         <label class="publicConsent" for="publicConsent"><input id="publicConsent" type="checkbox" />
-          <span>I choose to publish this result under my callsign. I understand it will be visible to everyone and may remain in GitHub's public version history even if later removed from the leaderboard.</span>
+          <span>I choose to publish this result under my callsign and optional crew name. I understand it will be visible to everyone and may remain in GitHub's public version history even if later removed from the leaderboard.</span>
         </label>
         <div id="ucnaTurnstile"></div>
         <button type="button" id="publicSubmit" disabled>Verify &amp; publish selected result</button>
@@ -374,7 +377,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.5';
+const SUITE_VERSION = '1.6';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
