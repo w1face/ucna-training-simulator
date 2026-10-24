@@ -208,6 +208,27 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 .legalNotice{margin-top:28px;border:1px solid #627181;border-left:4px solid #93a9b9;background:#111b26;border-radius:11px;padding:18px 21px;color:#b7c6d0}
 .legalNotice h2{margin:0 0 9px;font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:#d4e1ea}
 .legalNotice p{font-size:12px;line-height:1.65;margin:8px 0}
+
+/* Optional public ranking — entirely separate from private training records. */
+.publicBoard{margin:24px 0;padding:22px;border:1px solid #365874;border-radius:13px;background:linear-gradient(135deg,#102338,#0a1725)}
+.publicBoard h2{margin:0 0 8px;font-size:1.3rem;color:#e5f5ff}
+.publicBoard p{color:#b9cbdc;line-height:1.5}
+.publicGrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:16px}
+.publicGrid h3{font-size:1.06rem;margin:5px 0 8px}
+.publicGrid label{font-size:.92rem;display:block;margin:11px 0 5px;color:#c8deee}
+.publicGrid select,.publicGrid input[type="text"]{box-sizing:border-box;width:100%;min-height:38px;color:#ebf4ff;background:#0c1b2d;border:1px solid #456680;border-radius:7px;padding:8px}
+.publicGrid button{margin-top:12px;border:1px solid #5b8caf;border-radius:7px;background:#183b57;color:#ebf5ff;padding:9px 14px;cursor:pointer}
+.publicGrid button:disabled{opacity:.47;cursor:not-allowed}
+.publicTable{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:9px}
+.publicTable th,.publicTable td{text-align:left;border-bottom:1px solid #34516a;padding:8px 6px}
+.publicTable th{color:#b6d9ef;font-weight:700}
+.publicConsent{display:flex!important;align-items:flex-start;gap:9px;line-height:1.45;margin-top:13px!important}
+.publicConsent input{margin-top:4px}
+.publicFine{font-size:.78rem;color:#98b5cc!important}
+#publicStatus{min-height:2em;margin-bottom:0}
+#ucnaTurnstile{margin:8px 0}
+@media(max-width:760px){.publicGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -223,7 +244,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     </div>
     <div class="statusbox">
       <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.4</div>
+      <div class="statusline" id="suiteVersion">Academy release 1.5</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -276,6 +297,39 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     <p class="recordsNote" id="storageWarning">This terminal retains your training record locally. Export a copy before transferring to another terminal or clearing its records.</p>
   </section>
 
+
+  <section class="publicBoard" aria-labelledby="publicHeading">
+    <div class="eyebrow">UCN ACADEMY / OPTIONAL PUBLIC RECORDS</div>
+    <h2 id="publicHeading">Public Leaderboard</h2>
+    <p>Training is private by default. Officers may choose to publish an individual result under a public callsign. Rankings are <strong>self-reported and unofficial</strong>; the Academy cannot independently verify browser-based scores.</p>
+    <div class="publicGrid">
+      <div>
+        <h3>Academy rankings</h3>
+        <label for="publicCategory">Exercise and difficulty</label>
+        <select id="publicCategory"></select>
+        <div class="recordTableWrap">
+          <table class="publicTable"><thead><tr><th>Rank</th><th>Callsign</th><th>Accuracy</th><th>Time</th></tr></thead><tbody id="publicRows"></tbody></table>
+        </div>
+        <p class="publicFine" id="publicLastSync">Loading public scores…</p>
+        <button type="button" id="publicRefresh">Refresh leaderboard</button>
+      </div>
+      <div>
+        <h3>Publish one of your results</h3>
+        <label for="publicLocalResult">Completed local attempt</label>
+        <select id="publicLocalResult"></select>
+        <label for="publicCallsign">Public callsign (not your real name)</label>
+        <input id="publicCallsign" type="text" autocomplete="off" maxlength="24" placeholder="2–24 letters, numbers, spaces, . _ -" />
+        <label class="publicConsent" for="publicConsent"><input id="publicConsent" type="checkbox" />
+          <span>I choose to publish this result under my callsign. I understand it will be visible to everyone and may remain in GitHub's public version history even if later removed from the leaderboard.</span>
+        </label>
+        <div id="ucnaTurnstile"></div>
+        <button type="button" id="publicSubmit" disabled>Verify &amp; publish selected result</button>
+        <p id="publicStatus" aria-live="polite">Public publishing is not yet enabled.</p>
+        <p class="publicFine">No accounts required for officers. Never enter a real name or private information. Publishing is available on the online Academy only.</p>
+      </div>
+    </div>
+  </section>
+
   <aside class="legalNotice" aria-labelledby="legalHeading">
     <h2 id="legalHeading">Unofficial Fan Project — Rights &amp; Attribution</h2>
     <p>This is an independently created, non-commercial fan training resource. The United Confederation Navy (UCN) insignia and associated Bridge Command intellectual property belong to their respective rights holders, including the Bridge Command creators. The UCN logo is used here solely to identify the fictional setting.</p>
@@ -320,7 +374,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.4';
+const SUITE_VERSION = '1.5';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
@@ -535,7 +589,7 @@ function storeResult(payload) {
   const records=readRecords();
   const copy={module:payload.module,officer:officerOf(payload),record:payload.record,receivedAt:new Date().toISOString()};
   records.push(copy);
-  try {localStorage.setItem(STORAGE.results,JSON.stringify(records.slice(-RESULT_LIMIT)));renderRecords()}
+  try {localStorage.setItem(STORAGE.results,JSON.stringify(records.slice(-RESULT_LIMIT)));renderRecords();window.dispatchEvent(new Event("ucna-records-changed"))}
   catch(_) { $('storageWarning').textContent='Browser storage is unavailable or full. Please export your records and check browser settings.';showToast('Warning: result could not be saved.'); }
 }
 
@@ -591,5 +645,7 @@ window.addEventListener('keydown', (e) => {
   if (last) els.lastModuleLabel.textContent = `Last module: ${last.title}`;
 })();
 </script>
+<script src="assets/leaderboard-config.js"></script>
+<script src="assets/leaderboard.js"></script>
 </body>
 </html>
