@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 310" role="img" aria-label="Radar signature analysis with ship profile and signal plots">
+<defs>
+<linearGradient id="bg" x2="1" y2="1"><stop stop-color="#061522"/><stop offset="1" stop-color="#0d2a41"/></linearGradient>
+<linearGradient id="lit" x2="1"><stop stop-color="#65b8f2" stop-opacity=".12"/><stop offset=".5" stop-color="#9dd9ff" stop-opacity=".40"/><stop offset="1" stop-color="#65b8f2" stop-opacity=".04"/></linearGradient>
+<pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#63bdf0" stroke-opacity=".11" stroke-width="1"/></pattern>
+<filter id="glow"><feGaussianBlur stdDeviation="3.5"/></filter>
+</defs>
+<rect width="640" height="310" rx="17" fill="url(#bg)"/>
+<rect x="10" y="10" width="620" height="290" rx="13" fill="url(#grid)" stroke="#458bb8" stroke-width="2"/>
+<path d="M10 58V25L25 10H85 M630 58V25L615 10H555 M10 252V285L25 300H85 M630 252V285L615 300H555" stroke="#90caff" stroke-width="3" fill="none" opacity=".9"/>
+<g fill="none" stroke="#90caff" stroke-linecap="round" stroke-linejoin="round">
+<g stroke-width="2">
+<rect x="28" y="36" width="344" height="228" rx="5" opacity=".65"/>
+<path d="M28 110H372 M28 184H372" opacity=".42"/>
+<path d="M43 79 l8 -9 6 5 8 -22 5 33 7 -24 6 12 6 -2 8 -16 8 29 9 -7 7 -9 9 17 5 -10 7 2 9 -18 8 36 8 -27 8 11 7 -8 8 19 8 -23 8 10 6 -5 7 -14 8 21 8 -10 8 10 8 -10 8 12 8 -19 8 9 8 -13 8 21 8 -20 8 10 8 -8 8 17" opacity=".91"/>
+<path d="M42 147 q16 -34 32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0" stroke-width="3" opacity=".9"/>
+<path d="M43 245 v-25 m7 25v-32 m7 32v-14 m7 14v-50 m7 50v-29 m7 29v-42 m7 42v-57 m7 57v-39 m7 39v-17 m7 17v-41 m7 41v-59 m7 59v-18 m7 18v-34 m7 34v-53 m7 53v-27 m7 27v-44 m7 44v-57 m7 57v-29 m7 29v-49 m7 49v-26 m7 26v-19 m7 19v-45 m7 45v-56 m7 56v-33 m7 33v-51 m7 51v-20 m7 20v-42 m7 42v-30 m7 30v-15 m7 15v-40 m7 40v-26 m7 26v-31 m7 31v-23 m7 23v-42 m7 42v-18" opacity=".66"/>
+</g>
+<g stroke-width="2.4">
+<rect x="390" y="36" width="224" height="150" rx="5" opacity=".66"/>
+<path d="M421 117 L449 101 L479 84 L509 78 L531 90 L576 102 L598 112 L574 122 L531 134 L509 145 L480 138 L449 130 Z" fill="#78c5f7" fill-opacity=".23"/>
+<path d="M421 117H598 M479 84V138 M509 78V145 M531 90V134 M449 101V130" stroke-width="1.1" opacity=".6"/>
+<path d="M397 151 L609 59 M397 63 L609 156" opacity=".18"/>
+<rect x="390" y="199" width="224" height="65" rx="5" opacity=".55"/>
+<path d="M405 216H503 M405 230H486 M405 244H518" opacity=".75" stroke-width="3"/>
+<rect x="547" y="210" width="53" height="6" rx="2" fill="#90caff" fill-opacity=".55" stroke="none"/>
+<rect x="547" y="226" width="43" height="6" rx="2" fill="#90caff" fill-opacity=".4" stroke="none"/>
+<rect x="547" y="242" width="50" height="6" rx="2" fill="#90caff" fill-opacity=".5" stroke="none"/>
+</g></g>
+<path d="M34 282H118 M522 282H606" stroke="#90caff" opacity=".30" stroke-width="2"/>
+</svg>
