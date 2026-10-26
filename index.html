@@ -278,7 +278,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
   <section class="recordPanel" aria-labelledby="recordHeading">
     <div class="recordHeader">
       <div><div class="eyebrow">UCN ACADEMY / RECORDS</div><h2 id="recordHeading" class="utilityHeading"><img src="assets/icons/records.svg" alt="" />Training Records</h2>
-        <p>Completed assessments across all four disciplines. Review your progress or secure a copy of your training record.</p></div>
+        <p>Completed assessments across the scored disciplines. Review your progress or secure a copy of your training record.</p></div>
       <div class="recordActions">
         <button type="button" id="exportCsv">Export CSV</button>
         <button type="button" id="exportJson">Backup JSON</button>
@@ -424,6 +424,17 @@ const TRAINERS = [
     file: 'trainers/hacking.html',
     accent: '#90caff',
     tags: ['Hacking grid', 'Disruption', 'Recovery']
+  },
+  {
+    id: 'tractor-beam',
+    code: 'TRC',
+    icon: 'assets/icons/tractor-beam.svg',
+    title: 'Tractor Beam Sandbox',
+    kicker: 'Tractor Operations / Practice',
+    description: 'Single-object practice with Pull, Push and Hold. Adjust range, direction and arc; carry an object around your ship.',
+    file: 'trainers/tractor-beam.html',
+    accent: '#90caff',
+    tags: ['v0.1 sandbox', 'Single object', 'Unscored']
   }
 ];
 
