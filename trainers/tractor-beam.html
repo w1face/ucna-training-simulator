@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCNA — Tractor Beam Simulator v0.3.0</title><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCNA — Tractor Beam Simulator v0.3.1</title><style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700;font-display:swap}
 
@@ -11,7 +11,7 @@
 
 .targetPanel{margin-bottom:18px;border:1px solid #50697d;background:#18232d;padding:16px 18px}.targetPanelHeading{display:flex;justify-content:space-between;align-items:center;gap:12px}.targetPanel h2{margin:0 0 10px;font-size:26px;font-weight:400}.targetPanelHeading span{font-size:12px;letter-spacing:.1em;color:#8cadbe}.targetPanel label{display:block;font-size:16px;margin-bottom:5px;color:#b8c9d6}.targetPanel select{width:100%;max-width:100%;padding:9px 10px;font:20px 'Bebas Neue',sans-serif;background:#101820;border:1px solid #5d7586;color:#edf4f8;min-height:44px}.targetStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 8px;margin-top:18px}.targetStats small{display:block;font-size:13px;letter-spacing:.07em;color:#a5b9c9}.targetStats strong{font:27px 'Bebas Neue',sans-serif;font-variant-numeric:tabular-nums}.targetStats div:last-child strong{color:#7fe5f4}.targetPanel p{font:12px/1.55 Arial,sans-serif;color:#a7bac9;margin-bottom:0}
 @media(max-width:450px){.targetStats{grid-template-columns:1fr 1fr}}
-</style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.0</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
+</style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.1</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
   <div class="brand">TRACTOR OPERATIONS / EXERCISE SELECT</div>
   <h2 id="trainingHeading">Control the field.</h2>
   <p class="homeIntro">Learn the controls, then put your handling to the test. Both exercises use the same Pull, Push and Hold beam mechanics.</p>
@@ -101,7 +101,7 @@ const shipImage=new Image();shipImage.onload=()=>{shipArtwork.width=128;shipArtw
 shipImage.src='../assets/icons/destroyer.svg';
 const targetArtwork=new Map();
 for(const t of TARGETS){if(!t.icon)continue;const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=128;c.height=128;const cx=c.getContext('2d');cx.drawImage(img,0,0,128,128);cx.globalCompositeOperation='source-in';cx.fillStyle=t.color;cx.fillRect(0,0,128,128);targetArtwork.set(t.id,c)};img.src='../assets/targets/'+t.icon;}
-function drawBasicTarget(x,y,R){const t=basicPreset(),art=targetArtwork.get(t.id);ctx.save();ctx.translate(x,y);if(t.group==='Asteroids'){ctx.fillStyle=t.color;ctx.beginPath();ctx.arc(0,0,3.5,0,Math.PI*2);ctx.fill()}else if(art){const size=t.group==='Ordnance'?25:30;ctx.drawImage(art,-size/2,-size/2,size,size)}
+function drawBasicTarget(x,y,R){const t=basicPreset(),art=targetArtwork.get(t.id);ctx.save();ctx.translate(x,y);if(t.group==='Asteroids'){ctx.fillStyle=t.color;ctx.beginPath();ctx.arc(0,0,3.5,0,Math.PI*2);ctx.fill()}else if(art){const size=t.group==='Ordnance'?14:30;ctx.drawImage(art,-size/2,-size/2,size,size)}
  if(beam.mode>0&&inVolume()){ctx.strokeStyle='#58d9ee';ctx.lineWidth=1;ctx.beginPath();ctx.arc(0,0,19,0,Math.PI*2);ctx.stroke()}
  ctx.font='13px "Bebas Neue"';ctx.fillStyle=t.color;ctx.textAlign=x>R*.45?'right':'left';ctx.fillText(t.name,x>R*.45?-23:23,-15);ctx.restore();
 }
