@@ -23,16 +23,18 @@ let ticks=0;function tick(){now+=1000/120;ticks++;run('advance(1/120)')}
 function radius(){return run('Math.hypot(object.x,object.y)')}
 function setDirection(a){run('beam.direction='+(((a+180)%360+360)%360-180))}
 function holdSweep(to){let a=run('run.lap'),r=radius();run(`beam.mode=3;beam.range=${r+141};beam.arc=Math.min(15,24000000/(beam.range*beam.range))`);while(a<to){a=Math.min(to,a+.06);setDirection(a);tick();if(run('run.contact'))throw Error('Wall at sweep '+a+' r '+radius())}for(let i=0;i<120&&run('run.state')==='running';i++)tick()}
-for(let i=0;i<7;i++){
- const angle=(i+.5)*45;
+const gateAngles=run('MAZE.gates.map(g=>g.angle)');
+assert.deepStrictEqual(Array.from(gateAngles),[45,90,135,170,190,225,270,315]);
+for(let i=0;i<gateAngles.length;i++){
+ const angle=((i===0?10:gateAngles[i-1])+gateAngles[i])/2;
  holdSweep(angle);
  const target=run(`(MAZE.gates[${i}].low+MAZE.gates[${i}].high)/2`);setDirection(angle);
  const outward=radius()<target;run(`beam.mode=${outward?2:1};beam.range=1700;beam.arc=8`);
  let limit=10000;while((outward?radius()<target:radius()>target)&&--limit){tick();if(run('run.contact'))throw Error('Wall at radial '+angle+' radius '+radius())}assert(limit>0,'radial move reachable');
- holdSweep((i+1)*45+.3);
+ holdSweep(gateAngles[i]+.3);
  assert.equal(run('run.passed'),i+1,'ordered gate '+(i+1));
 }
-assert.equal(run('run.state'),'running','seventh gate is not the finish');
+assert.equal(run('run.state'),'running','eighth gate is not the finish');
 holdSweep(350.3);
 assert.equal(run('run.state'),'finished');assert(run('run.lap')>=350&&run('run.lap')<350.5);assert.equal(saved.size,1,'local best stored');
 const finish=run('run.elapsed');now+=10000;assert.equal(run('elapsed()'),finish,'finish stops timer');
