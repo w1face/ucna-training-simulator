@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
-<title>United Confederation Naval Academy | Training Portal</title>
+<title>UCN Academy Training Simulator</title>
 <style>
 :root {
   --bg: #070c13;
@@ -229,6 +229,17 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 #ucnaTurnstile{margin:8px 0}
 @media(max-width:760px){.publicGrid{grid-template-columns:1fr}}
 
+
+/* v1.7 readability and mobile welcome: concise on narrow screens, no forced modal. */
+@media(max-width:650px){
+  .academyWelcome {padding:12px 15px!important;margin-bottom:13px!important}
+  .academyWelcome .eyebrow, .academyWelcome p {display:none}
+  .academyWelcome h2 {font-size:18px!important;margin:0!important}
+  .sectionTitle {margin-top:9px}
+  .card p {font-size:15px;line-height:1.55}
+  .card h3 {font-size:20px}
+}
+
 </style>
 </head>
 <body>
@@ -237,14 +248,14 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     <div class="brand">
       <img class="crest" src="assets/ucn-logo.svg" alt="United Confederation Navy crest" />
       <div>
-        <div class="eyebrow">United Confederation Navy · Naval Academy</div>
-        <h1>UCNA Training Simulator</h1>
+        <div class="eyebrow">United Confederation Navy Academy</div>
+        <h1>Training Simulator</h1>
         <div class="subtitle">Fleet Operations Division · Bridge Officer Qualification Programme</div>
       </div>
     </div>
     <div class="statusbox">
       <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.6</div>
+      <div class="statusline" id="suiteVersion">Academy release 1.7</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -289,8 +300,8 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
       <select id="recordScope"><option value="current">Current officer</option><option value="all">All officers</option></select>
       <label for="recordModule">Module</label>
       <select id="recordModule"><option value="all">All modules</option>
-        <option value="scanning">Radar Scanning</option><option value="radar-icons">Radar Icon Recognition</option>
-        <option value="radar-signatures">Radar Signature Recognition</option><option value="hacking">Hacking &amp; Disruption</option></select>
+        <option value="scanning">Radar Scanning</option><option value="radar-icons">Radar Icon Identification</option>
+        <option value="radar-signatures">Radar Signature Analysis</option><option value="hacking">Hacking</option></select>
       <span id="recordCount" class="recordCount">0 records</span>
     </div>
     <div class="recordTableWrap"><table class="recordTable"><thead><tr><th>When</th><th>Officer</th><th>Module</th><th>Exercise</th><th>Result</th><th>Time</th></tr></thead><tbody id="recordRows"></tbody></table></div>
@@ -377,7 +388,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.6';
+const SUITE_VERSION = '1.7';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
@@ -385,7 +396,7 @@ const TRAINERS = [
     id: 'scanning',
     code: 'SCN',
     icon: 'assets/icons/radar-scanning.svg',
-    title: 'Scanning Training Programme',
+    title: 'Radar Scanning',
     kicker: 'Science / Radar',
     description: 'Waveform reading, scan positioning, slider control and multi-stage scanning practice.',
     file: 'trainers/scanning.html',
@@ -396,7 +407,7 @@ const TRAINERS = [
     id: 'radar-icons',
     code: 'RID',
     icon: 'assets/icons/radar-recognition.svg',
-    title: 'Radar Icon Recognition',
+    title: 'Radar Icon Identification',
     kicker: 'Bridge-wide / Recognition',
     description: 'Rapid recognition of tactical display contacts, IFF states and visual radar symbology.',
     file: 'trainers/radar-icons.html',
@@ -418,7 +429,7 @@ const TRAINERS = [
     id: 'hacking',
     code: 'HCK',
     icon: 'assets/icons/navigation-hacking.svg',
-    title: 'Hacking & System Disruption',
+    title: 'Hacking',
     kicker: 'Command / Navigation',
     description: 'Practise tactical hacking, disruption and recovery from Command or Navigation.',
     file: 'trainers/hacking.html',
@@ -429,7 +440,7 @@ const TRAINERS = [
     id: 'tractor-beam',
     code: 'TRC',
     icon: 'assets/icons/tractor-beam.svg',
-    title: 'Tractor Beam Training',
+    title: 'Tractor Beam',
     kicker: 'Tractor Operations / Practice',
     description: 'Compare ships, mines, ordnance and asteroids in Basic, then navigate the fixed 360 Maze against the clock.',
     file: 'trainers/tractor-beam.html',
