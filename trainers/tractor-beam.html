@@ -11,6 +11,52 @@
 
 .targetPanel{margin-bottom:18px;border:1px solid #50697d;background:#18232d;padding:16px 18px}.targetPanelHeading{display:flex;justify-content:space-between;align-items:center;gap:12px}.targetPanel h2{margin:0 0 10px;font-size:26px;font-weight:400}.targetPanelHeading span{font-size:12px;letter-spacing:.1em;color:#8cadbe}.targetPanel label{display:block;font-size:16px;margin-bottom:5px;color:#b8c9d6}.targetPanel select{width:100%;max-width:100%;padding:9px 10px;font:20px 'Bebas Neue',sans-serif;background:#101820;border:1px solid #5d7586;color:#edf4f8;min-height:44px}.targetStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 8px;margin-top:18px}.targetStats small{display:block;font-size:13px;letter-spacing:.07em;color:#a5b9c9}.targetStats strong{font:27px 'Bebas Neue',sans-serif;font-variant-numeric:tabular-nums}.targetStats div:last-child strong{color:#7fe5f4}.targetPanel p{font:12px/1.55 Arial,sans-serif;color:#a7bac9;margin-bottom:0}
 @media(max-width:450px){.targetStats{grid-template-columns:1fr 1fr}}
+
+/* UCNA v1.7 mobile tractor: tactical radar remains visible with its controls.
+   The compact horizontal layout avoids a full-screen radar beneath the controls. */
+@media(max-width:800px){
+  main#simulator{display:flex;flex-direction:column;gap:10px;padding:8px 10px 24px;min-height:0}
+  #simulator .radar-panel{
+    order:-1;position:sticky;top:0;z-index:30;
+    display:grid;grid-template-columns:min(43vw,175px) minmax(0,1fr);
+    grid-template-rows:auto 1fr;align-items:center;gap:4px 12px;
+    border:1px solid #526b7d;background:#101b26;
+    padding:7px;border-radius:9px;box-shadow:0 7px 18px rgba(0,0,0,.65);
+  }
+  #simulator .radar-panel canvas{
+    grid-column:1;grid-row:1 / 3;
+    width:100%;height:auto;aspect-ratio:1;
+    border:1px solid #455e72;touch-action:none;
+  }
+  #simulator .radar-top{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:5px;
+    font-size:12px;line-height:1.35;padding:0;letter-spacing:.025em}
+  #simulator .legend{grid-column:2;grid-row:2;display:flex;flex-direction:column;align-items:flex-start;
+    justify-content:flex-start;gap:5px;margin:0;font-size:12px;letter-spacing:0}
+  #simulator .controls{padding:0}
+  #simulator .title{padding:7px;font-size:21px}
+  #simulator .mode{height:37px;margin-top:5px}
+  #simulator .control{margin-top:9px}
+  #simulator .control label{font-size:16px}
+  #simulator .sliderTrack{margin-top:5px}
+  #simulator .sliderTrack output{font-size:21px}
+  #simulator .telemetry{margin-top:12px;padding:9px}
+  #simulator .readouts{margin-top:8px;gap:6px}
+  #simulator .readouts small{margin-bottom:3px}
+  #simulator .actions{margin-top:10px}
+  #simulator .hint{margin:10px 0}
+  #simulator details{margin-top:10px}
+  #simulator footer{margin-top:10px}
+  #simulator .targetPanel,#simulator .mazePanel{padding:10px;margin-bottom:10px}
+  #simulator .targetStats{margin-top:10px;gap:8px}
+  #simulator .targetStats strong{font-size:23px}
+}
+@media(max-width:390px){
+  #simulator .radar-panel{grid-template-columns:42vw minmax(0,1fr);gap:3px 6px}
+  #simulator .radar-top,#simulator .legend{font-size:10px}
+}
+@media(max-height:520px) and (max-width:800px){
+  #simulator .radar-panel{position:relative}
+}
 </style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.1</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
   <div class="brand">TRACTOR OPERATIONS / EXERCISE SELECT</div>
   <h2 id="trainingHeading">Control the field.</h2>
