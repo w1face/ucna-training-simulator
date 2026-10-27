@@ -1,4 +1,4 @@
-<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08111c"><title>UCN Academy — Hacking and System Disruption Trainer v1.8</title>
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08111c"><title>UCN Academy — Hacking Trainer v1.8</title>
 <style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700 900;font-display:swap}
@@ -38,6 +38,11 @@
 
 /* Match the in-game typeface without changing trainer layout or scoring. */
 html body,html body *{font-family:'Bebas Neue','Arial Narrow',sans-serif!important}
+
+/* v1.7: always accessible navigation including after aborted drills. */
+.ucn-navigation{position:sticky;top:0;z-index:20;background:#101e2b;padding:8px 0;display:flex;gap:9px;flex-wrap:wrap}
+.ucn-navigation button{min-height:45px}
+@media(max-width:600px){.ucn-navigation{padding:7px 5px}.ucn-navigation button{flex:1 1 135px}}
 </style></head><body><main>
 <header class="intro"><div class="eyebrow">UCN ACADEMY / NAVIGATION / CYBER WARFARE</div><h1>Defence Grid Trainer</h1><p>Bridge Command hacking practice. The console mirrors the in-game defence grid; choose whether to receive no hints, gentle hints when stuck, or full colour-coded assistance.</p></header>
 <section class="toolbar"><div class="pad row"><div><strong>Cyber defence level</strong><div class="tiny" id="tierDetail">8 × 8 grid · 10 defence routines</div></div><div class="controls"><select id="tier" aria-label="Cyber defence level"><option value="0">Basic</option><option value="1" selected>Secure</option><option value="2">Hardened</option><option value="3">Fortified</option></select><button id="begin" class="primary">Start breach</button><button id="newTarget" class="secondary" type="button">Reset target</button><div class="hint-controls"><label class="tiny" for="hintMode">Training support</label><select id="hintMode" aria-label="Training support"><option value="none" selected>No hints</option><option value="guided">Hints on demand</option><option value="full">Full hints</option></select><select id="hintLevel" aria-label="Hint logic level"><option value="basic">Basic patterns</option><option value="advanced" selected>Advanced patterns</option></select></div><span class="status" id="status">STANDBY</span></div></div></section>
@@ -89,7 +94,7 @@ let pending=null,series=[],targetName='Beam Weapons',latestLog='No hacking appli
  const queuedEffects=[];
  function saveTarget(){const t=targetStates[targetName];Object.assign(t,{hacked,totalApplied,appliedCount,targetStarted,series,latestLog})}
  function loadTarget(){const t=targetStates[targetName];({hacked,totalApplied,appliedCount,targetStarted,series,latestLog}=t)}
- function stopGrid(){pending=null;mode='ready';hideHintPopup();clearHints();$('apply').disabled=true;$('reset').disabled=true;$('abort').disabled=true;$('status').textContent='STANDBY';$('state').textContent='AWAITING BREACH';renderIdleBoard();refreshHints()}
+ function stopGrid(){pending=null;mode='ready';hideHintPopup();clearHints();$('tier').disabled=false;$('begin').disabled=false;$('apply').disabled=true;$('reset').disabled=true;$('abort').disabled=true;$('status').textContent='STANDBY';$('state').textContent='AWAITING BREACH';renderIdleBoard();refreshHints()}
  window.addEventListener('ucn-hack-exit',()=>{if(mode==='pending'&&pending)queuedEffects.push({...pending,target:targetName});stopGrid()});
  function closeSimulator(){if(mode==='pending'&&pending)queuedEffects.push({...pending,target:targetName});stopGrid();window.dispatchEvent(new Event('ucn-hack-close'))}
  
@@ -426,7 +431,7 @@ $('hintMode').onchange=()=>{hintMode=$('hintMode').value;trainingHints=hintMode!
  start.onclick=(event)=>{oldBegin?.call(start,event);showTraining()};
  window.addEventListener('ucn-hack-close',showSelection);
  backSelect.onclick=()=>{if(!mayLeave())return; window.dispatchEvent(new Event('ucn-hack-exit'));showSelection()};
- backAcademy.onclick=()=>{if(!mayLeave())return;window.dispatchEvent(new Event('ucn-hack-exit'));window.parent.postMessage({type:'ucn-close',protocol:'UCN-TRAINER/1'},'*');if(window.parent===window){showSelection();location.href='../UCN_Academy_Training_Suite.html'}};
+ backAcademy.onclick=()=>{if(!mayLeave())return;window.dispatchEvent(new Event('ucn-hack-exit'));window.parent.postMessage({type:'ucn-close',protocol:'UCN-TRAINER/1'},'*');if(window.parent===window){showSelection();location.href='../index.html'}};
 })();
 </script>
 </body></html>
