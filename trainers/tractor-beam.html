@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCN Academy — Tractor Beam Simulator v0.3.2</title><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCN Academy — Tractor Beam Simulator v0.3.3</title><style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700;font-display:swap}
 
@@ -85,7 +85,7 @@
 @media(max-height:420px) and (max-width:800px){
   #simulator .radar-panel{position:relative}
 }
-</style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.2</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
+</style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.3</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
   <div class="brand">TRACTOR OPERATIONS / EXERCISE SELECT</div>
   <h2 id="trainingHeading">Control the field.</h2>
   <p class="homeIntro">Learn the controls, then put your handling to the test. Both exercises use the same Pull, Push and Hold beam mechanics.</p>
@@ -199,5 +199,35 @@ function drawMaze(s){
  const start=polar(MAZE.startAngle,MAZE.startRadius),finish=polar(MAZE.finishAngle,MAZE.startRadius);ctx.font='15px "Bebas Neue"';ctx.textAlign='left';ctx.fillStyle='#a9e5d7';ctx.fillText('START 010',start.x*s+14,start.y*s+23);ctx.textAlign='right';ctx.fillText('FINISH 350',finish.x*s-12,finish.y*s-13);const arrow=polar(20,MAZE.outer+120);ctx.save();ctx.translate(arrow.x*s,arrow.y*s);ctx.rotate(20*rad);ctx.strokeStyle='#58d9ee';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-18,0);ctx.lineTo(18,0);ctx.lineTo(10,-6);ctx.moveTo(18,0);ctx.lineTo(10,6);ctx.stroke();ctx.restore();ctx.restore();
 }
 let previous=0,accumulator=0;function frame(t){if(previous)accumulator+=Math.min((t-previous)/1000,.1);previous=t;while(accumulator>=1/120){advance(1/120);accumulator-=1/120}draw();requestAnimationFrame(frame)}sync();requestAnimationFrame(frame);
-</script></body></html>
+</script>
+<script>
+/* Ask the Academy host to retract its full navigation bar only after
+   scrolling down in an active Tractor Beam exercise. The host retains a
+   compact, always-available Academy return button. */
+(()=>{
+  'use strict';
+  const simulator=document.getElementById('simulator');
+  let compact=false;
+  function syncAcademyBar(){
+    const y=Math.max(0,window.scrollY||document.documentElement.scrollTop||0);
+    const next=!simulator.hidden && y>85;
+    if(next===compact)return;
+    compact=next;
+    if(window.parent!==window)window.parent.postMessage({
+      type:'ucn-nav-compact',protocol:'UCN-TRAINER/1',
+      module:'tractor-beam',compact
+    },'*');
+  }
+  window.addEventListener('scroll',syncAcademyBar,{passive:true});
+  window.addEventListener('resize',syncAcademyBar,{passive:true});
+  document.getElementById('launchBasic').addEventListener('click',syncAcademyBar);
+  document.getElementById('launchMaze').addEventListener('click',syncAcademyBar);
+  document.getElementById('exerciseMenu').addEventListener('click',()=>{
+    window.scrollTo(0,0);
+    syncAcademyBar();
+  });
+  syncAcademyBar();
+})();
+</script>
+</body></html>
 
