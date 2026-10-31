@@ -14,6 +14,14 @@ A browser-based and offline-capable Academy for the Bridge Command / EmptyEpsilo
 - Tractor Beam
 
 
+## Release 1.8 — Tractor Beam station layout and mobile guidance
+
+- **Tractor Beam v0.3.2:** Exercise setup (Basic target selector or 360 Maze start panel) now spans the full width **above** the console.
+- On desktop, tablet and narrow portrait phones, **Range / Direction / Arc sliders stay to the left of the tactical radar** to match the bridge station.
+- On phones, the radar becomes compact and stays visible to the right while scrolling through the controls; controls are resized for touch without changing tractor-beam physics.
+- The Academy main assignments page and Tractor Beam course selection now advise: “If using your personal communications device for training, portrait mode is strongly encouraged.”
+- Score storage, public leaderboard, existing training courses, and the older separately-labelled v1.4 Offline Core have not been altered.
+
 ## Release 1.7 — Lt Doug review updates
 
 - Simplified the masthead to **United Confederation Navy Academy / Training Simulator**; standardised module titles.
