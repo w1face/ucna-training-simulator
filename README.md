@@ -14,6 +14,13 @@ A browser-based and offline-capable Academy for the Bridge Command / EmptyEpsilo
 - Tractor Beam
 
 
+## Release 1.9 — Tractor Beam distraction-free navigation
+
+- Inside Tractor Beam training, scrolling down retracts the Academy's otherwise fixed 58px launcher bar so the simulator gains the entire available height.
+- A small, accessible **← Academy** button remains available for returning home while the full launcher bar is hidden.
+- Scrolling back near the top or returning to the Tractor Beam exercise menu restores the original launcher bar.
+- This behaviour is restricted to the online Tractor Beam simulator; all other trainers, score records, and the offline download remain unchanged.
+
 ## Release 1.8 — Tractor Beam station layout and mobile guidance
 
 - **Tractor Beam v0.3.2:** Exercise setup (Basic target selector or 360 Maze start panel) now spans the full width **above** the console.
