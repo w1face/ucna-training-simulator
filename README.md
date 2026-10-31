@@ -24,6 +24,13 @@ The online Academy uses **MAJOR.MINOR.PATCH** numbers (for example, `1.9.0`):
 
 Current Academy release is **1.9.0**. The next small improvement should become **1.9.1**, not `1.10`. Individual trainers retain their own internal version numbers, which are separate from the Academy release number.
 
+## Release 1.9.1 — Mobile welcome disclosure
+
+- On screens 650px wide or narrower, **Welcome aboard, Officer.** starts collapsed and has a small chevron button to expand and collapse the full original welcome message.
+- Desktop and wider screens continue to display the welcome text in full, without a disclosure button.
+- The button has an accessible expand/collapse label and state, keyboard support, and reduced-motion handling; without JavaScript the text remains readable.
+- All modules, published scores, training records, and offline downloads remain unchanged.
+
 ## Release 1.9.0 — Tractor Beam distraction-free navigation
 
 - Inside Tractor Beam training, scrolling down retracts the Academy's otherwise fixed 58px launcher bar so the simulator gains the entire available height.
