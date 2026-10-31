@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071523">
-<title>UCN Academy | Radar Radar Scanning v1.4</title>
+<title>UCN Academy | Radar Scanning v1.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap">
 <style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700 900;font-display:swap}
@@ -19,12 +22,31 @@
 .ucn-launch{margin-top:14px;width:100%;max-width:340px;min-height:50px;border:1px solid #40c2ad;background:#176b67;color:white;border-radius:9px;font-weight:800}
 .ucn-selection .settings{border-top:1px solid #294b63}
 
-/* Match the in-game typeface without changing trainer layout or scoring. */
-html body,html body *{font-family:'Bebas Neue','Arial Narrow',sans-serif!important}
+/* In-game lettering is now scoped to actual scanning console controls. */
+</style>
+<style>
+/* UCNA v1.9.2: readable copy; keep the EE HUD inside the actual scanner. */
+html body,html body *{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body .console-panel,html body .console-panel *{
+  font-family:'Bebas Neue','Arial Narrow',Arial,sans-serif!important;
+  text-transform:uppercase!important;
+}
+html body .console-panel .cover span,
+html body .console-panel .hint,
+html body .console-panel .instruction,
+html body .console-panel .foot{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body .eyebrow,html body .kicker{letter-spacing:.035em}
+html body header p,html body .powerdesc{line-height:1.6;font-size:14px}
 </style>
 </head>
 <body><main>
-<header><div class="eyebrow">UNITED CONFEDERATION NAVY · RADAR ACADEMY</div><h1>Radar Scanning</h1><p>Train against live, randomly generated waveforms. Two single-slider stages establish the <strong>initial scan</strong>; two or three configurable multi-slider stages complete the <strong>in-depth scan</strong>. In a complete-contact exercise, press <strong>Scan Again</strong> between the two phases, as on the bridge.</p></header>
+<header><div class="eyebrow">United Confederation Navy · Radar Academy</div><h1>Radar Scanning</h1><p>Train against live, randomly generated waveforms. Two single-slider stages establish the <strong>initial scan</strong>; two or three configurable multi-slider stages complete the <strong>in-depth scan</strong>. In a complete-contact exercise, press <strong>Scan Again</strong> between the two phases, as on the bridge.</p></header>
 <section class="panel" aria-label="Training configuration"><div class="pad"><h2>Training exercise</h2><div class="modebar" role="group" aria-label="Select exercise"><button class="tab active" id="mode-full" aria-pressed="true">Complete contact<br><small id="modeFullDesc">2 single + 2 in-depth</small></button><button class="tab" id="mode-initial" aria-pressed="false">Initial scan<br><small>2 single</small></button><button class="tab" id="mode-depth" aria-pressed="false">In-depth scan<br><small id="modeDepthDesc">2 configured stages</small></button></div></div><div hidden><input id="officerName" type="text" maxlength="60"><span id="officerNote"></span></div>
   <div class="settings"><label for="depthCount">In-depth sliders per stage</label>
     <select id="depthCount" aria-describedby="depthdesc">
