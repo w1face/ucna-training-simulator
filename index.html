@@ -240,6 +240,16 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
   .card h3 {font-size:20px}
 }
 
+
+/* v1.8 — mobile portrait guidance in Academy's main assignment area. */
+.mobileTrainingNote{
+  border-left:3px solid #90caff;border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:8px 0 17px;
+  background:rgba(16,42,61,.8);color:#c1d7e9;
+  font-size:14px;line-height:1.55;
+}
+.mobileTrainingNote strong{color:#b5e4ff}
+@media(max-width:560px){.mobileTrainingNote{font-size:13px;padding:10px 12px}}
 </style>
 </head>
 <body>
@@ -255,7 +265,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     </div>
     <div class="statusbox">
       <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.7</div>
+      <div class="statusline" id="suiteVersion">Academy release 1.8</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -279,6 +289,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     <p>The United Confederation Naval Academy prepares bridge crews for the demands of active fleet service. These training assignments develop the judgement, accuracy and composure expected of every officer entrusted with a Confederation vessel.</p>
     <p>Enter your name or callsign, select an assignment, and complete the exercise at your own pace. Your assessment record will be retained at this terminal for review. Repeated practice is encouraged; confident decisions are made long before the first hostile contact.</p>
   </section>
+  <div class="mobileTrainingNote" role="note"><strong>Personal communications device advisory:</strong> If using your personal communications device for training, portrait mode is strongly encouraged.</div>
   <section class="cards" id="trainerCards" aria-label="Training assignments"></section>
   <section aria-label="Offline edition" style="margin:24px 0;padding:18px 22px;border:1px solid #39516b;border-radius:12px;background:rgba(19,34,53,.85)">
     <h2 class="utilityHeading" style="margin:0 0 8px;font-size:1.15rem"><img src="assets/icons/download.svg" alt="" />Training away from the network?</h2>
@@ -388,7 +399,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.7';
+const SUITE_VERSION = '1.8';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
@@ -445,7 +456,7 @@ const TRAINERS = [
     description: 'Compare ships, mines, ordnance and asteroids in Basic, then navigate the fixed 360 Maze against the clock.',
     file: 'trainers/tractor-beam.html',
     accent: '#90caff',
-    tags: ['v0.3.1', 'Basic practice', 'Timed maze']
+    tags: ['v0.3.2', 'Basic practice', 'Timed maze']
   }
 ];
 
