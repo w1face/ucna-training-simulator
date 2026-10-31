@@ -250,14 +250,37 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 @media(max-width:760px){.publicGrid{grid-template-columns:1fr}}
 
 
-/* v1.7 readability and mobile welcome: concise on narrow screens, no forced modal. */
+/* v1.9.1: compact, accessible mobile welcome disclosure. Desktop remains expanded.
+   Without JavaScript the message remains readable and the toggle stays hidden. */
+.welcomeToggle {display:none}
 @media(max-width:650px){
   .academyWelcome {padding:12px 15px!important;margin-bottom:13px!important}
-  .academyWelcome .eyebrow, .academyWelcome p {display:none}
+  .welcomeHeadingRow{display:flex;align-items:center;justify-content:space-between;gap:9px}
   .academyWelcome h2 {font-size:18px!important;margin:0!important}
+  .academyWelcome[data-welcome-enhanced="true"]:not(.welcomeExpanded) .eyebrow,
+  .academyWelcome[data-welcome-enhanced="true"]:not(.welcomeExpanded) .welcomeBody {display:none}
+  .academyWelcome[data-welcome-enhanced="true"] .welcomeToggle{
+    display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;
+    padding:0;border-radius:9px;cursor:pointer;color:var(--cyan);
+    border:1px solid var(--line2);background:#102a40;
+  }
+  .welcomeToggle:hover{border-color:var(--cyan);background:#163b53}
+  .welcomeToggle:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+  .welcomeChevron{
+    display:block;width:10px;height:10px;border-right:2px solid currentColor;
+    border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);
+    transition:transform .15s ease;
+  }
+  .academyWelcome.welcomeExpanded .welcomeChevron{transform:translateY(3px) rotate(225deg)}
+  .academyWelcome.welcomeExpanded .eyebrow{margin-bottom:9px;font-size:11px}
+  .academyWelcome .welcomeBody{padding-top:10px}
+  .academyWelcome .welcomeBody p{font-size:14px;line-height:1.6;margin:9px 0}
   .sectionTitle {margin-top:9px}
   .card p {font-size:15px;line-height:1.55}
   .card h3 {font-size:20px}
+}
+@media(prefers-reduced-motion:reduce){
+  .welcomeChevron{transition:none}
 }
 
 
@@ -285,7 +308,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     </div>
     <div class="statusbox">
       <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.9.0</div>
+      <div class="statusline" id="suiteVersion">Academy release 1.9.1</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -305,9 +328,17 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 
   <section class="academyWelcome" aria-labelledby="welcomeHeading">
     <div class="eyebrow">OFFICE OF NAVAL TRAINING · FLEET READINESS</div>
-    <h2 id="welcomeHeading">Welcome aboard, Officer.</h2>
-    <p>The United Confederation Naval Academy prepares bridge crews for the demands of active fleet service. These training assignments develop the judgement, accuracy and composure expected of every officer entrusted with a Confederation vessel.</p>
-    <p>Enter your name or callsign, select an assignment, and complete the exercise at your own pace. Your assessment record will be retained at this terminal for review. Repeated practice is encouraged; confident decisions are made long before the first hostile contact.</p>
+    <div class="welcomeHeadingRow">
+      <h2 id="welcomeHeading">Welcome aboard, Officer.</h2>
+      <button type="button" class="welcomeToggle" id="welcomeToggle"
+        aria-label="Expand welcome message" aria-controls="welcomeBody" aria-expanded="false">
+        <span class="welcomeChevron" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="welcomeBody" id="welcomeBody">
+      <p>The United Confederation Naval Academy prepares bridge crews for the demands of active fleet service. These training assignments develop the judgement, accuracy and composure expected of every officer entrusted with a Confederation vessel.</p>
+      <p>Enter your name or callsign, select an assignment, and complete the exercise at your own pace. Your assessment record will be retained at this terminal for review. Repeated practice is encouraged; confident decisions are made long before the first hostile contact.</p>
+    </div>
   </section>
   <div class="mobileTrainingNote" role="note"><strong>Personal communications device advisory:</strong> If using your personal communications device for training, portrait mode is strongly encouraged.</div>
   <section class="cards" id="trainerCards" aria-label="Training assignments"></section>
@@ -420,7 +451,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.9.0';
+const SUITE_VERSION = '1.9.1';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
@@ -701,6 +732,16 @@ window.addEventListener('keydown', (e) => {
 
 (function init() {
   document.querySelector('#suiteVersion').textContent = `Front-end v${SUITE_VERSION}`;
+  const welcome = document.querySelector('.academyWelcome');
+  const toggle = $('welcomeToggle');
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    toggle.setAttribute('aria-label', expanded ? 'Expand welcome message' : 'Collapse welcome message');
+    welcome.classList.toggle('welcomeExpanded', !expanded);
+  });
+  // Enhance only after the toggle works; otherwise mobile readers still see the text.
+  welcome.dataset.welcomeEnhanced = 'true';
   const profile = getProfile();
   els.officerName.value = profile.officerName || profile.callsign || '';
   updatePlayerOfficer(profile);
