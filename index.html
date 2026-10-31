@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
 <title>UCN Academy Training Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap">
 <style>
 :root {
   --bg: #070c13;
@@ -293,6 +296,19 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 }
 .mobileTrainingNote strong{color:#b5e4ff}
 @media(max-width:560px){.mobileTrainingNote{font-size:13px;padding:10px 12px}}
+
+/* v1.9.2 — clear Academy typography; bridge-display fonts are inside trainers. */
+html body,html body *{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body .eyebrow,html body .kicker,
+html body .sectionTitle h2,html body .field label,html body .legalNotice h2{
+  letter-spacing:.015em;
+}
+html body .eyebrow,html body .kicker{font-size:13px}
+html body .sectionTitle h2{font-size:19px}
+html body .recordPanel,html body .publicBoard,html body .academyWelcome{line-height:1.55}
 </style>
 </head>
 <body>
@@ -307,8 +323,8 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
       </div>
     </div>
     <div class="statusbox">
-      <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.9.1</div>
+      <div class="statusline">Suite status · <strong>Ready</strong></div>
+      <div class="statusline" id="suiteVersion">Academy release 1.9.2</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -327,7 +343,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
   </div>
 
   <section class="academyWelcome" aria-labelledby="welcomeHeading">
-    <div class="eyebrow">OFFICE OF NAVAL TRAINING · FLEET READINESS</div>
+    <div class="eyebrow">Office of Naval Training · Fleet Readiness</div>
     <div class="welcomeHeadingRow">
       <h2 id="welcomeHeading">Welcome aboard, Officer.</h2>
       <button type="button" class="welcomeToggle" id="welcomeToggle"
@@ -350,7 +366,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 
   <section class="recordPanel" aria-labelledby="recordHeading">
     <div class="recordHeader">
-      <div><div class="eyebrow">UCN ACADEMY / RECORDS</div><h2 id="recordHeading" class="utilityHeading"><img src="assets/icons/records.svg" alt="" />Training Records</h2>
+      <div><div class="eyebrow">UCN Academy / Records</div><h2 id="recordHeading" class="utilityHeading"><img src="assets/icons/records.svg" alt="" />Training Records</h2>
         <p>Completed assessments across the scored disciplines. Review your progress or secure a copy of your training record.</p></div>
       <div class="recordActions">
         <button type="button" id="exportCsv">Export CSV</button>
@@ -372,7 +388,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
 
 
   <section class="publicBoard" aria-labelledby="publicHeading">
-    <div class="eyebrow">UCN ACADEMY / OPTIONAL PUBLIC RECORDS</div>
+    <div class="eyebrow">UCN Academy / Optional public records</div>
     <h2 id="publicHeading">Public Leaderboard</h2>
     <p>Training is private by default. Officers may choose to publish an individual result under a public callsign and optional crew affiliation. Rankings are <strong>self-reported and unofficial</strong>; the Academy cannot independently verify browser-based scores.</p>
     <div class="publicGrid">
@@ -451,7 +467,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.9.1';
+const SUITE_VERSION = '1.9.2';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
