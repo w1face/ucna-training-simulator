@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCNA — Tractor Beam Simulator v0.3.1</title><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCN Academy — Tractor Beam Simulator v0.3.2</title><style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700;font-display:swap}
 
@@ -12,67 +12,96 @@
 .targetPanel{margin-bottom:18px;border:1px solid #50697d;background:#18232d;padding:16px 18px}.targetPanelHeading{display:flex;justify-content:space-between;align-items:center;gap:12px}.targetPanel h2{margin:0 0 10px;font-size:26px;font-weight:400}.targetPanelHeading span{font-size:12px;letter-spacing:.1em;color:#8cadbe}.targetPanel label{display:block;font-size:16px;margin-bottom:5px;color:#b8c9d6}.targetPanel select{width:100%;max-width:100%;padding:9px 10px;font:20px 'Bebas Neue',sans-serif;background:#101820;border:1px solid #5d7586;color:#edf4f8;min-height:44px}.targetStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 8px;margin-top:18px}.targetStats small{display:block;font-size:13px;letter-spacing:.07em;color:#a5b9c9}.targetStats strong{font:27px 'Bebas Neue',sans-serif;font-variant-numeric:tabular-nums}.targetStats div:last-child strong{color:#7fe5f4}.targetPanel p{font:12px/1.55 Arial,sans-serif;color:#a7bac9;margin-bottom:0}
 @media(max-width:450px){.targetStats{grid-template-columns:1fr 1fr}}
 
-/* UCNA v1.7 mobile tractor: tactical radar remains visible with its controls.
-   The compact horizontal layout avoids a full-screen radar beneath the controls. */
+
+/* v0.3.2 — mirror the bridge: course setup above; beam controls LEFT, radar RIGHT. */
+#simulator .courseSetup{grid-column:1/-1;min-width:0}
+#simulator .controls,#simulator .radar-panel{min-width:0}
+#simulator .courseSetup .targetPanel,
+#simulator .courseSetup .mazePanel{margin-bottom:0}
+.commsAdvice{
+  margin:0 0 20px;padding:11px 15px;border-left:3px solid var(--cyan);
+  background:#142936;color:#d3e6f1;font:14px/1.6 Arial,sans-serif;
+}
+.commsAdvice strong{color:#90dff3}
 @media(max-width:800px){
-  main#simulator{display:flex;flex-direction:column;gap:10px;padding:8px 10px 24px;min-height:0}
+  main#simulator{
+    display:grid;grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);
+    column-gap:9px;row-gap:12px;align-items:start;
+    padding:8px 10px 24px;min-height:0;
+  }
+  #simulator .courseSetup{grid-column:1/-1;grid-row:1}
+  #simulator .controls{grid-column:1;grid-row:2;padding:0;min-width:0}
   #simulator .radar-panel{
-    order:-1;position:sticky;top:0;z-index:30;
-    display:grid;grid-template-columns:min(43vw,175px) minmax(0,1fr);
-    grid-template-rows:auto 1fr;align-items:center;gap:4px 12px;
+    grid-column:2;grid-row:2;order:initial;position:sticky;top:8px;z-index:20;
+    width:100%;min-width:0;display:flex;flex-direction:column;
     border:1px solid #526b7d;background:#101b26;
-    padding:7px;border-radius:9px;box-shadow:0 7px 18px rgba(0,0,0,.65);
+    border-radius:8px;padding:6px;box-shadow:0 7px 18px rgba(0,0,0,.48);
   }
   #simulator .radar-panel canvas{
-    grid-column:1;grid-row:1 / 3;
-    width:100%;height:auto;aspect-ratio:1;
+    width:100%;height:auto;min-width:0;aspect-ratio:1;
     border:1px solid #455e72;touch-action:none;
   }
-  #simulator .radar-top{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:5px;
-    font-size:12px;line-height:1.35;padding:0;letter-spacing:.025em}
-  #simulator .legend{grid-column:2;grid-row:2;display:flex;flex-direction:column;align-items:flex-start;
-    justify-content:flex-start;gap:5px;margin:0;font-size:12px;letter-spacing:0}
-  #simulator .controls{padding:0}
-  #simulator .title{padding:7px;font-size:21px}
-  #simulator .mode{height:37px;margin-top:5px}
-  #simulator .control{margin-top:9px}
-  #simulator .control label{font-size:16px}
-  #simulator .sliderTrack{margin-top:5px}
-  #simulator .sliderTrack output{font-size:21px}
-  #simulator .telemetry{margin-top:12px;padding:9px}
-  #simulator .readouts{margin-top:8px;gap:6px}
-  #simulator .readouts small{margin-bottom:3px}
-  #simulator .actions{margin-top:10px}
+  #simulator .radar-top{
+    display:flex;flex-direction:column;gap:3px;padding:0 0 5px;
+    font:12px/1.3 Arial,sans-serif;letter-spacing:0;color:#bbd7e8;
+  }
+  #simulator .radar-top span:last-child{font-size:10px;color:#8ea9ba}
+  #simulator .legend{
+    display:flex;justify-content:flex-start;flex-wrap:wrap;gap:3px 8px;
+    margin-top:6px;font:10px/1.35 Arial,sans-serif;letter-spacing:0;
+  }
+  #simulator .title{padding:7px 3px;font-size:18px;line-height:1.1}
+  #simulator .mode{grid-template-columns:34px minmax(0,1fr) 34px;height:39px;margin-top:6px}
+  #simulator .mode select{min-width:0;font-size:20px}
+  #simulator .mode button{padding:0;font-size:18px}
+  #simulator .control{margin-top:12px}
+  #simulator .control label{font-size:15px;line-height:1.2}
+  #simulator .sliderTrack{margin-top:6px;height:34px}
+  #simulator .sliderTrack input{height:34px}
+  #simulator .sliderTrack output{font-size:19px}
+  #simulator .telemetry{margin-top:12px;padding:8px}
+  #simulator .status{font-size:11px;letter-spacing:0}
+  #simulator .readouts{grid-template-columns:1fr;gap:8px;margin-top:9px}
+  #simulator .readouts small{font-size:10px;margin-bottom:1px}
+  #simulator .readouts strong{font-size:16px}
+  #simulator .actions{display:grid;grid-template-columns:1fr;gap:6px;margin-top:10px}
+  #simulator .actions button{padding:10px 6px}
   #simulator .hint{margin:10px 0}
-  #simulator details{margin-top:10px}
-  #simulator footer{margin-top:10px}
-  #simulator .targetPanel,#simulator .mazePanel{padding:10px;margin-bottom:10px}
+  #simulator details,#simulator footer{margin-top:10px}
+  #simulator .courseSetup .targetPanel,#simulator .courseSetup .mazePanel{padding:10px 12px;margin-bottom:0}
   #simulator .targetStats{margin-top:10px;gap:8px}
   #simulator .targetStats strong{font-size:23px}
+  #simulator .targetPanelHeading{flex-wrap:wrap;gap:3px}
+  #simulator .targetPanelHeading span{font-size:10px}
+  #simulator .targetPanel p{margin-top:8px}
 }
 @media(max-width:390px){
-  #simulator .radar-panel{grid-template-columns:42vw minmax(0,1fr);gap:3px 6px}
-  #simulator .radar-top,#simulator .legend{font-size:10px}
+  main#simulator{column-gap:7px;padding:7px}
+  #simulator .radar-top{font-size:11px}
+  #simulator .radar-top span:last-child,#simulator .legend{font-size:9px}
+  #simulator .targetStats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #simulator .title{font-size:16px}
 }
-@media(max-height:520px) and (max-width:800px){
+@media(max-height:420px) and (max-width:800px){
   #simulator .radar-panel{position:relative}
 }
-</style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.1</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
+</style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.2</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
   <div class="brand">TRACTOR OPERATIONS / EXERCISE SELECT</div>
   <h2 id="trainingHeading">Control the field.</h2>
   <p class="homeIntro">Learn the controls, then put your handling to the test. Both exercises use the same Pull, Push and Hold beam mechanics.</p>
+  <p class="commsAdvice"><strong>Personal communications device:</strong> If using your personal communications device for training, portrait mode is strongly encouraged.</p>
   <div class="exerciseCards">
     <article class="exerciseCard"><div class="courseArt" aria-hidden="true"><svg viewBox="0 0 240 150"><circle cx="120" cy="79" r="58"/><path d="M120 79 91 28M120 79l29-51M105 51q15-8 30 0M111 65h18"/><path d="m120 26 8 8-8 8-8-8zM110 119h20l-4-10h-12z"/><path class="artDashed" d="M65 82h27m56 0h27"/></svg></div><div class="brand">01 / FREE PRACTICE</div><h3>Basic</h3><p>Choose ships, mines, ordnance or asteroids. Compare their tractor speeds with no obstacles or clock.</p><div class="courseTags">FREE PRACTICE · RESET & PAUSE</div><button id="launchBasic" class="primary">Open Basic</button></article>
     <article class="exerciseCard"><div class="courseArt" aria-hidden="true"><svg viewBox="0 0 240 150"><circle cx="120" cy="75" r="61"/><circle cx="120" cy="75" r="25"/><path d="M120 14v24m0 57v41M59 75h22m60 0h40M77 32l22 22m42 42 22 22M77 118l15-15m49-49 22-22"/><path class="artDashed" d="M120 49q35-14 40 22t-36 41"/><path d="m126 105-6 8 10 3"/></svg></div><div class="brand">02 / TIMED HANDLING</div><h3>360 Maze</h3><p>Carry the object clockwise through eight staggered openings. Start at bearing 010 and finish at 350. Change its distance to negotiate each opening.</p><div class="courseTags">FIXED COURSE · TIMED RUN · PERSONAL BEST</div><button id="launchMaze" class="primary">Open Maze</button></article>
   </div><p class="homeNote">Maze 01 is identical on every attempt. Scores are local to this browser; this course is not connected to the public leaderboard.</p>
 </section>
-<main id="simulator" hidden><section class="controls" aria-label="Tractor beam controls"><section id="basicTargetPanel" class="targetPanel" hidden aria-labelledby="targetHeading"><div class="targetPanelHeading"><h2 id="targetHeading">Practice target</h2><span>INERT / FREE PRACTICE</span></div><label for="basicTarget">Target</label><select id="basicTarget"><optgroup label="Ships"><option value="drone">Scout drone (0.050U)</option><option value="shuttle">UCN shuttle (0.040U)</option><option value="interceptor">UCS interceptor (0.050U)</option><option value="bomber">UCS bomber (0.060U)</option><option value="frigate">Vanguard frigate (0.150U)</option><option value="destroyer" selected>Hoplite destroyer (0.150U)</option><option value="cruiser">Sword cruiser (0.200U)</option><option value="battlecruiser">Colony battlecruiser (0.250U)</option><option value="battleship">Centurion battleship (0.300U)</option><option value="carrier">President carrier (0.300U)</option><option value="freighter-light">Goods freighter — 1 cargo section (0.150U)</option><option value="freighter-heavy">Goods freighter — 5 cargo sections (0.350U)</option></optgroup><optgroup label="Mines"><option value="mine">Mine (0.050U)</option></optgroup><optgroup label="Ordnance"><option value="torpedo">Torpedo (Homing) (0.010U)</option><option value="hvli">HVLI (0.010U)</option><option value="nuke">Nuke (0.010U)</option><option value="emp">EMP (0.010U)</option></optgroup><optgroup label="Asteroids"><option value="asteroid-110">Asteroid — small (0.110U)</option><option value="asteroid-120">Asteroid — medium (0.120U)</option><option value="asteroid-130">Asteroid — large (0.130U)</option></optgroup></select><div class="targetStats"><div><small>PHYSICAL RADIUS</small><strong id="targetRadius"></strong></div><div><small>MAX PULL / PUSH</small><strong id="targetPullSpeed"></strong></div><div><small>MAX HOLD</small><strong id="targetHoldSpeed"></strong></div><div><small>MEASURED SPEED</small><strong id="targetActualSpeed">0.000U/s</strong></div></div><p id="targetNote">Targets are inert: no propulsion, guidance or detonation. Changing target resets its position ahead; beam settings stay as they are.</p></section><section id="mazePanel" class="mazePanel" hidden aria-labelledby="mazeHeading">
+<main id="simulator" hidden><div class="courseSetup" aria-label="Exercise selection and setup"><section id="basicTargetPanel" class="targetPanel" hidden aria-labelledby="targetHeading"><div class="targetPanelHeading"><h2 id="targetHeading">Practice target</h2><span>INERT / FREE PRACTICE</span></div><label for="basicTarget">Target</label><select id="basicTarget"><optgroup label="Ships"><option value="drone">Scout drone (0.050U)</option><option value="shuttle">UCN shuttle (0.040U)</option><option value="interceptor">UCS interceptor (0.050U)</option><option value="bomber">UCS bomber (0.060U)</option><option value="frigate">Vanguard frigate (0.150U)</option><option value="destroyer" selected>Hoplite destroyer (0.150U)</option><option value="cruiser">Sword cruiser (0.200U)</option><option value="battlecruiser">Colony battlecruiser (0.250U)</option><option value="battleship">Centurion battleship (0.300U)</option><option value="carrier">President carrier (0.300U)</option><option value="freighter-light">Goods freighter — 1 cargo section (0.150U)</option><option value="freighter-heavy">Goods freighter — 5 cargo sections (0.350U)</option></optgroup><optgroup label="Mines"><option value="mine">Mine (0.050U)</option></optgroup><optgroup label="Ordnance"><option value="torpedo">Torpedo (Homing) (0.010U)</option><option value="hvli">HVLI (0.010U)</option><option value="nuke">Nuke (0.010U)</option><option value="emp">EMP (0.010U)</option></optgroup><optgroup label="Asteroids"><option value="asteroid-110">Asteroid — small (0.110U)</option><option value="asteroid-120">Asteroid — medium (0.120U)</option><option value="asteroid-130">Asteroid — large (0.130U)</option></optgroup></select><div class="targetStats"><div><small>PHYSICAL RADIUS</small><strong id="targetRadius"></strong></div><div><small>MAX PULL / PUSH</small><strong id="targetPullSpeed"></strong></div><div><small>MAX HOLD</small><strong id="targetHoldSpeed"></strong></div><div><small>MEASURED SPEED</small><strong id="targetActualSpeed">0.000U/s</strong></div></div><p id="targetNote">Targets are inert: no propulsion, guidance or detonation. Changing target resets its position ahead; beam settings stay as they are.</p></section><section id="mazePanel" class="mazePanel" hidden aria-labelledby="mazeHeading">
   <div class="mazePanelTop"><div><div class="brand">MAZE 01 / FIXED COURSE</div><h2 id="mazeHeading">360 Maze</h2></div><span id="runState" class="runState">READY</span></div>
   <div class="mazeStats"><div><small>ELAPSED</small><strong id="mazeTime">00:00.00</strong></div><div><small>OPENINGS</small><strong id="mazeGates">0 / 8</strong></div><div><small>PERSONAL BEST</small><strong id="mazeBest">—</strong></div></div>
   <p id="mazeMessage" role="status">Press Start run. Start at bearing 010, clear all eight openings clockwise, then cross the finish at 350.</p>
   <button id="startMaze" class="primary">Start run</button>
   <p class="mazeFine">The clock starts immediately. Walls block the object; the beam passes through them. Wall contact costs time but does not reset the run. Returning to the menu abandons the attempt.</p>
-</section><div class="title">TRACTOR BEAM CONTROL</div><div class="mode"><button id="prev" aria-label="Previous beam mode">◀</button><select id="mode" aria-label="Beam mode"><option>OFF</option><option>PULL</option><option>PUSH</option><option>HOLD</option></select><button id="next" aria-label="Next beam mode">▶</button></div><div class="control"><label for="range">RANGE:</label><div class="sliderTrack"><input id="range" type="range" min="0" max="2000" value="1000" step="1"><output id="rangeOut" for="range"></output></div></div><div class="control"><label for="direction">DIRECTION:</label><div class="sliderTrack"><input id="direction" type="range" min="-179.9" max="180" value="0" step="0.1"><output id="directionOut" for="direction"></output></div></div><div class="control"><label for="arc">ARC:</label><div class="sliderTrack"><input id="arc" type="range" min="0" max="90" value="24" step="0.1"><output id="arcOut" for="arc"></output></div></div><div class="telemetry"><div class="status" id="status" role="status"><span class="dot"></span><span id="statusText">BEAM OFF</span></div><div class="readouts"><div><small>OBJECT DISTANCE</small><strong id="distance"></strong></div><div><small>OBJECT BEARING</small><strong id="bearing"></strong></div><div><small>OBJECT HEADING</small><strong id="targetHeadingValue">090°</strong></div></div></div><div class="actions"><button id="reset">Reset object</button><button id="pause" aria-pressed="false">Pause</button></div><p class="hint" id="basicHint">Start with Pull to bring the object closer. Choose Hold, then sweep Direction slowly to carry it around your ship. Push moves it out to the beam boundary.</p><details id="basicNotes"><summary>Operating notes & simulation settings</summary><p>Range and arc share a fixed beam area: increasing either can reduce the other. The radar stays at 2U; 1U = 1000 game units.</p><p>Hold draws the object towards the beam axis, just inside the selected range. Sweep too quickly and it can leave the beam. The object's heading stays unchanged.</p><p>Targets use physical radii from the supplied ship models and object constructors. The host ship retains a fixed radius of 0.100U, template drag of 100 units/second and full docking-system effectiveness. Hold applies twice the drag. Maximum speeds apply away from the destination; the measured readout shows actual movement. Very small targets may oscillate around a Hold point, following the supplied game maths.</p><p>Targets are inert. No propulsion, guidance, mine detonation, collision damage, docking, energy depletion or scoring in Basic. Switching Off leaves this stationary object where it is. Reset object restores its starting position without changing your controls.</p></details><footer id="exerciseFooter">Source-based beam movement · Selectable inert targets · Academy sandbox</footer></section><section class="radar-panel" aria-label="Tactical radar"><div class="radar-top"><span>TACTICAL RADAR</span><span>RANGE 2U · SHIP HEADING 000°</span></div><canvas id="radar" role="img" aria-label="Radar showing your ship, one practice object and the tractor beam area"></canvas><div class="legend"><span>⌂ YOUR SHIP</span><span id="targetLegend">◇ PRACTICE TARGET</span><span>⌁ TRACTOR FIELD</span></div></section></main><script>
+</section></div><section class="controls" aria-label="Tractor beam controls"><div class="title">TRACTOR BEAM CONTROL</div><div class="mode"><button id="prev" aria-label="Previous beam mode">◀</button><select id="mode" aria-label="Beam mode"><option>OFF</option><option>PULL</option><option>PUSH</option><option>HOLD</option></select><button id="next" aria-label="Next beam mode">▶</button></div><div class="control"><label for="range">RANGE:</label><div class="sliderTrack"><input id="range" type="range" min="0" max="2000" value="1000" step="1"><output id="rangeOut" for="range"></output></div></div><div class="control"><label for="direction">DIRECTION:</label><div class="sliderTrack"><input id="direction" type="range" min="-179.9" max="180" value="0" step="0.1"><output id="directionOut" for="direction"></output></div></div><div class="control"><label for="arc">ARC:</label><div class="sliderTrack"><input id="arc" type="range" min="0" max="90" value="24" step="0.1"><output id="arcOut" for="arc"></output></div></div><div class="telemetry"><div class="status" id="status" role="status"><span class="dot"></span><span id="statusText">BEAM OFF</span></div><div class="readouts"><div><small>OBJECT DISTANCE</small><strong id="distance"></strong></div><div><small>OBJECT BEARING</small><strong id="bearing"></strong></div><div><small>OBJECT HEADING</small><strong id="targetHeadingValue">090°</strong></div></div></div><div class="actions"><button id="reset">Reset object</button><button id="pause" aria-pressed="false">Pause</button></div><p class="hint" id="basicHint">Start with Pull to bring the object closer. Choose Hold, then sweep Direction slowly to carry it around your ship. Push moves it out to the beam boundary.</p><details id="basicNotes"><summary>Operating notes & simulation settings</summary><p>Range and arc share a fixed beam area: increasing either can reduce the other. The radar stays at 2U; 1U = 1000 game units.</p><p>Hold draws the object towards the beam axis, just inside the selected range. Sweep too quickly and it can leave the beam. The object's heading stays unchanged.</p><p>Targets use physical radii from the supplied ship models and object constructors. The host ship retains a fixed radius of 0.100U, template drag of 100 units/second and full docking-system effectiveness. Hold applies twice the drag. Maximum speeds apply away from the destination; the measured readout shows actual movement. Very small targets may oscillate around a Hold point, following the supplied game maths.</p><p>Targets are inert. No propulsion, guidance, mine detonation, collision damage, docking, energy depletion or scoring in Basic. Switching Off leaves this stationary object where it is. Reset object restores its starting position without changing your controls.</p></details><footer id="exerciseFooter">Source-based beam movement · Selectable inert targets · Academy sandbox</footer></section><section class="radar-panel" aria-label="Tactical radar"><div class="radar-top"><span>TACTICAL RADAR</span><span>RANGE 2U · SHIP HEADING 000°</span></div><canvas id="radar" role="img" aria-label="Radar showing your ship, one practice object and the tractor beam area"></canvas><div class="legend"><span>⌂ YOUR SHIP</span><span id="targetLegend">◇ PRACTICE TARGET</span><span>⌁ TRACTOR FIELD</span></div></section></main><script>
 'use strict';
 const $=id=>document.getElementById(id),rad=Math.PI/180;
 const beam={mode:0,range:1000,direction:0,arc:24}, object={x:0,y:-750,radius:100}, shipRadius=100, maxArea=2000*2000*Math.PI*6/360;
