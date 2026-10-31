@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCN Academy — Tractor Beam Simulator v0.3.3</title><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UCN Academy — Tractor Beam Simulator v0.3.3</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap">
+<style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700;font-display:swap}
 
@@ -85,19 +88,48 @@
 @media(max-height:420px) and (max-width:800px){
   #simulator .radar-panel{position:relative}
 }
-</style></head><body><header><div><div class="brand">UCN ACADEMY / PRACTICAL TRAINING</div><h1>TRACTOR BEAM SIMULATOR</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.3</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
-  <div class="brand">TRACTOR OPERATIONS / EXERCISE SELECT</div>
+</style><style>
+/* v1.9.2 — readable Exo 2 everywhere except tractor's genuine EE console. */
+html body,html body *{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body #simulator .controls,html body #simulator .controls *,
+html body #simulator .radar-panel,html body #simulator .radar-panel *{
+  font-family:'Bebas Neue','Arial Narrow',Arial,sans-serif!important;
+  text-transform:uppercase!important;
+}
+html body #simulator .controls .hint,
+html body #simulator .controls details,
+html body #simulator .controls details *,
+html body #simulator .controls footer{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body header .brand,html body .trainingHome .brand,
+html body .courseTags,html body .targetPanelHeading span{
+  letter-spacing:.035em;
+}
+html body .trainingHome h2{font-size:clamp(32px,4vw,48px);line-height:1.13}
+html body .exerciseCard h3{font-size:30px;line-height:1.2}
+html body .homeIntro,html body .homeNote,html body .commsAdvice,
+html body .exerciseCard p,html body .targetPanel p,html body .mazePanel p{
+  font-size:14px;line-height:1.6;
+}
+html body #simulator .controls .mode select{font-size:22px}
+</style></head><body><header><div><div class="brand">UCN Academy / Practical Training</div><h1>Tractor Beam Simulator</h1></div><div class="headerActions"><button id="exerciseMenu" hidden>Training menu</button><span class="version">v0.3.3</span></div></header><section id="trainingHome" class="trainingHome" aria-labelledby="trainingHeading">
+  <div class="brand">Tractor Operations / Exercise Selection</div>
   <h2 id="trainingHeading">Control the field.</h2>
   <p class="homeIntro">Learn the controls, then put your handling to the test. Both exercises use the same Pull, Push and Hold beam mechanics.</p>
   <p class="commsAdvice"><strong>Personal communications device:</strong> If using your personal communications device for training, portrait mode is strongly encouraged.</p>
   <div class="exerciseCards">
-    <article class="exerciseCard"><div class="courseArt" aria-hidden="true"><svg viewBox="0 0 240 150"><circle cx="120" cy="79" r="58"/><path d="M120 79 91 28M120 79l29-51M105 51q15-8 30 0M111 65h18"/><path d="m120 26 8 8-8 8-8-8zM110 119h20l-4-10h-12z"/><path class="artDashed" d="M65 82h27m56 0h27"/></svg></div><div class="brand">01 / FREE PRACTICE</div><h3>Basic</h3><p>Choose ships, mines, ordnance or asteroids. Compare their tractor speeds with no obstacles or clock.</p><div class="courseTags">FREE PRACTICE · RESET & PAUSE</div><button id="launchBasic" class="primary">Open Basic</button></article>
-    <article class="exerciseCard"><div class="courseArt" aria-hidden="true"><svg viewBox="0 0 240 150"><circle cx="120" cy="75" r="61"/><circle cx="120" cy="75" r="25"/><path d="M120 14v24m0 57v41M59 75h22m60 0h40M77 32l22 22m42 42 22 22M77 118l15-15m49-49 22-22"/><path class="artDashed" d="M120 49q35-14 40 22t-36 41"/><path d="m126 105-6 8 10 3"/></svg></div><div class="brand">02 / TIMED HANDLING</div><h3>360 Maze</h3><p>Carry the object clockwise through eight staggered openings. Start at bearing 010 and finish at 350. Change its distance to negotiate each opening.</p><div class="courseTags">FIXED COURSE · TIMED RUN · PERSONAL BEST</div><button id="launchMaze" class="primary">Open Maze</button></article>
+    <article class="exerciseCard"><div class="courseArt" aria-hidden="true"><svg viewBox="0 0 240 150"><circle cx="120" cy="79" r="58"/><path d="M120 79 91 28M120 79l29-51M105 51q15-8 30 0M111 65h18"/><path d="m120 26 8 8-8 8-8-8zM110 119h20l-4-10h-12z"/><path class="artDashed" d="M65 82h27m56 0h27"/></svg></div><div class="brand">01 / Free practice</div><h3>Basic</h3><p>Choose ships, mines, ordnance or asteroids. Compare their tractor speeds with no obstacles or clock.</p><div class="courseTags">Free practice · Reset & pause</div><button id="launchBasic" class="primary">Open Basic</button></article>
+    <article class="exerciseCard"><div class="courseArt" aria-hidden="true"><svg viewBox="0 0 240 150"><circle cx="120" cy="75" r="61"/><circle cx="120" cy="75" r="25"/><path d="M120 14v24m0 57v41M59 75h22m60 0h40M77 32l22 22m42 42 22 22M77 118l15-15m49-49 22-22"/><path class="artDashed" d="M120 49q35-14 40 22t-36 41"/><path d="m126 105-6 8 10 3"/></svg></div><div class="brand">02 / Timed handling</div><h3>360 Maze</h3><p>Carry the object clockwise through eight staggered openings. Start at bearing 010 and finish at 350. Change its distance to negotiate each opening.</p><div class="courseTags">Fixed course · Timed run · Personal best</div><button id="launchMaze" class="primary">Open Maze</button></article>
   </div><p class="homeNote">Maze 01 is identical on every attempt. Scores are local to this browser; this course is not connected to the public leaderboard.</p>
 </section>
-<main id="simulator" hidden><div class="courseSetup" aria-label="Exercise selection and setup"><section id="basicTargetPanel" class="targetPanel" hidden aria-labelledby="targetHeading"><div class="targetPanelHeading"><h2 id="targetHeading">Practice target</h2><span>INERT / FREE PRACTICE</span></div><label for="basicTarget">Target</label><select id="basicTarget"><optgroup label="Ships"><option value="drone">Scout drone (0.050U)</option><option value="shuttle">UCN shuttle (0.040U)</option><option value="interceptor">UCS interceptor (0.050U)</option><option value="bomber">UCS bomber (0.060U)</option><option value="frigate">Vanguard frigate (0.150U)</option><option value="destroyer" selected>Hoplite destroyer (0.150U)</option><option value="cruiser">Sword cruiser (0.200U)</option><option value="battlecruiser">Colony battlecruiser (0.250U)</option><option value="battleship">Centurion battleship (0.300U)</option><option value="carrier">President carrier (0.300U)</option><option value="freighter-light">Goods freighter — 1 cargo section (0.150U)</option><option value="freighter-heavy">Goods freighter — 5 cargo sections (0.350U)</option></optgroup><optgroup label="Mines"><option value="mine">Mine (0.050U)</option></optgroup><optgroup label="Ordnance"><option value="torpedo">Torpedo (Homing) (0.010U)</option><option value="hvli">HVLI (0.010U)</option><option value="nuke">Nuke (0.010U)</option><option value="emp">EMP (0.010U)</option></optgroup><optgroup label="Asteroids"><option value="asteroid-110">Asteroid — small (0.110U)</option><option value="asteroid-120">Asteroid — medium (0.120U)</option><option value="asteroid-130">Asteroid — large (0.130U)</option></optgroup></select><div class="targetStats"><div><small>PHYSICAL RADIUS</small><strong id="targetRadius"></strong></div><div><small>MAX PULL / PUSH</small><strong id="targetPullSpeed"></strong></div><div><small>MAX HOLD</small><strong id="targetHoldSpeed"></strong></div><div><small>MEASURED SPEED</small><strong id="targetActualSpeed">0.000U/s</strong></div></div><p id="targetNote">Targets are inert: no propulsion, guidance or detonation. Changing target resets its position ahead; beam settings stay as they are.</p></section><section id="mazePanel" class="mazePanel" hidden aria-labelledby="mazeHeading">
-  <div class="mazePanelTop"><div><div class="brand">MAZE 01 / FIXED COURSE</div><h2 id="mazeHeading">360 Maze</h2></div><span id="runState" class="runState">READY</span></div>
-  <div class="mazeStats"><div><small>ELAPSED</small><strong id="mazeTime">00:00.00</strong></div><div><small>OPENINGS</small><strong id="mazeGates">0 / 8</strong></div><div><small>PERSONAL BEST</small><strong id="mazeBest">—</strong></div></div>
+<main id="simulator" hidden><div class="courseSetup" aria-label="Exercise selection and setup"><section id="basicTargetPanel" class="targetPanel" hidden aria-labelledby="targetHeading"><div class="targetPanelHeading"><h2 id="targetHeading">Practice target</h2><span>Inert / Free practice</span></div><label for="basicTarget">Target</label><select id="basicTarget"><optgroup label="Ships"><option value="drone">Scout drone (0.050U)</option><option value="shuttle">UCN shuttle (0.040U)</option><option value="interceptor">UCS interceptor (0.050U)</option><option value="bomber">UCS bomber (0.060U)</option><option value="frigate">Vanguard frigate (0.150U)</option><option value="destroyer" selected>Hoplite destroyer (0.150U)</option><option value="cruiser">Sword cruiser (0.200U)</option><option value="battlecruiser">Colony battlecruiser (0.250U)</option><option value="battleship">Centurion battleship (0.300U)</option><option value="carrier">President carrier (0.300U)</option><option value="freighter-light">Goods freighter — 1 cargo section (0.150U)</option><option value="freighter-heavy">Goods freighter — 5 cargo sections (0.350U)</option></optgroup><optgroup label="Mines"><option value="mine">Mine (0.050U)</option></optgroup><optgroup label="Ordnance"><option value="torpedo">Torpedo (Homing) (0.010U)</option><option value="hvli">HVLI (0.010U)</option><option value="nuke">Nuke (0.010U)</option><option value="emp">EMP (0.010U)</option></optgroup><optgroup label="Asteroids"><option value="asteroid-110">Asteroid — small (0.110U)</option><option value="asteroid-120">Asteroid — medium (0.120U)</option><option value="asteroid-130">Asteroid — large (0.130U)</option></optgroup></select><div class="targetStats"><div><small>Physical radius</small><strong id="targetRadius"></strong></div><div><small>Max pull / push</small><strong id="targetPullSpeed"></strong></div><div><small>Max hold</small><strong id="targetHoldSpeed"></strong></div><div><small>Measured speed</small><strong id="targetActualSpeed">0.000U/s</strong></div></div><p id="targetNote">Targets are inert: no propulsion, guidance or detonation. Changing target resets its position ahead; beam settings stay as they are.</p></section><section id="mazePanel" class="mazePanel" hidden aria-labelledby="mazeHeading">
+  <div class="mazePanelTop"><div><div class="brand">Maze 01 / Fixed course</div><h2 id="mazeHeading">360 Maze</h2></div><span id="runState" class="runState">READY</span></div>
+  <div class="mazeStats"><div><small>Elapsed</small><strong id="mazeTime">00:00.00</strong></div><div><small>Openings</small><strong id="mazeGates">0 / 8</strong></div><div><small>Personal best</small><strong id="mazeBest">—</strong></div></div>
   <p id="mazeMessage" role="status">Press Start run. Start at bearing 010, clear all eight openings clockwise, then cross the finish at 350.</p>
   <button id="startMaze" class="primary">Start run</button>
   <p class="mazeFine">The clock starts immediately. Walls block the object; the beam passes through them. Wall contact costs time but does not reset the run. Returning to the menu abandons the attempt.</p>
