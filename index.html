@@ -153,8 +153,28 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
   position: fixed; inset: 0; z-index: 900;
   background: #02050a;
   display: none;
-  grid-template-rows: 58px 1fr;
+  grid-template-rows: 58px minmax(0,1fr);
 }
+/* Tractor Beam only: let the Academy header retract while scrolling,
+   and use the reclaimed height for the actual training console. */
+.player.navCompact { grid-template-rows: 0 minmax(0,1fr); }
+.player.navCompact .playerbar {
+  height:0; min-height:0; padding:0; border:0; overflow:hidden;
+  visibility:hidden; pointer-events:none;
+}
+.compactAcademy {
+  display:none; position:absolute; left:8px; top:8px; z-index:5;
+  border:1px solid #5e99b7; border-radius:9px;
+  padding:7px 12px; min-height:36px;
+  background:rgba(9,26,41,.92); color:#e6f5ff;
+  font:700 13px/1.2 "Segoe UI",Arial,sans-serif;
+  box-shadow:0 5px 16px rgba(0,0,0,.42);
+  cursor:pointer;
+}
+.player.navCompact .compactAcademy { display:block; }
+.compactAcademy:focus-visible{outline:3px solid #78d8ff;outline-offset:3px;}
+@media(max-width:560px){.compactAcademy{padding:7px 9px;font-size:12px;min-height:34px}}
+
 .player.open { display: grid; }
 .playerbar {
   display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
@@ -265,7 +285,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     </div>
     <div class="statusbox">
       <div class="statusline">SUITE STATUS · <strong>READY</strong></div>
-      <div class="statusline" id="suiteVersion">Academy release 1.8</div>
+      <div class="statusline" id="suiteVersion">Academy release 1.9</div>
       <div class="statusline" id="lastModuleLabel">No module launched this session</div>
     </div>
   </header>
@@ -373,6 +393,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
     <div class="playerOfficer" id="playerOfficer"></div>
   </div>
   <iframe id="trainerFrame" title="UCN Academy training module" allow="fullscreen"></iframe>
+  <button class="compactAcademy" id="compactAcademy" type="button" aria-label="Return to Academy">← Academy</button>
 </section>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -399,7 +420,7 @@ h1 { margin: 3px 0 2px; font-size: clamp(24px, 3vw, 38px); line-height: 1.05; le
      The shell already listens for this and stores it locally.
 */
 
-const SUITE_VERSION = '1.8';
+const SUITE_VERSION = '1.9';
 const PROTOCOL = 'UCN-TRAINER/1';
 
 const TRAINERS = [
@@ -456,7 +477,7 @@ const TRAINERS = [
     description: 'Compare ships, mines, ordnance and asteroids in Basic, then navigate the fixed 360 Maze against the clock.',
     file: 'trainers/tractor-beam.html',
     accent: '#90caff',
-    tags: ['v0.3.2', 'Basic practice', 'Timed maze']
+    tags: ['v0.3.3', 'Basic practice', 'Timed maze']
   }
 ];
 
@@ -475,6 +496,7 @@ const els = {
   player: $('player'),
   frame: $('trainerFrame'),
   close: $('closeTrainer'),
+  compactAcademy: $('compactAcademy'),
   playerTitle: $('playerTitle'),
   playerSubtitle: $('playerSubtitle'),
   playerOfficer: $('playerOfficer'),
@@ -545,6 +567,7 @@ function launchTrainer(id) {
 
   const profile = saveProfile(false);
   activeTrainer = trainer;
+  els.player.classList.remove('navCompact');
   els.playerTitle.textContent = trainer.title;
   els.playerSubtitle.textContent = `${trainer.kicker} · Officer Training`;
   updatePlayerOfficer(profile);
@@ -559,7 +582,7 @@ function launchTrainer(id) {
 
 function closeTrainer(fromHistory = false) {
   if (!els.player.classList.contains('open')) return;
-  els.player.classList.remove('open');
+  els.player.classList.remove('open', 'navCompact');
   document.body.style.overflow = '';
   els.frame.src = 'about:blank';
   activeTrainer = null;
@@ -645,6 +668,13 @@ window.addEventListener('message', (event) => {
   const data = event.data;
   if (event.source !== els.frame.contentWindow || !activeTrainer || !data || data.protocol !== PROTOCOL) return;
   if (data.module && data.module !== activeTrainer.id) return;
+  if (data.type === 'ucn-nav-compact') {
+    // The request is accepted only from the active Tractor Beam iframe.
+    if (activeTrainer.id === 'tractor-beam' && typeof data.compact === 'boolean') {
+      els.player.classList.toggle('navCompact', data.compact);
+    }
+    return;
+  }
   if (data.type === 'ucn-result') {
     storeResult(data);
     showToast('Training result recorded.');
@@ -664,6 +694,7 @@ $('exportCsv').addEventListener('click',exportRecordsCsv);
 $('exportJson').addEventListener('click',exportRecordsJson);
 $('clearRecords').addEventListener('click',clearRecords);
 els.close.addEventListener('click', () => closeTrainer());
+els.compactAcademy.addEventListener('click', () => closeTrainer());
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && els.player.classList.contains('open')) closeTrainer();
 });
