@@ -210,7 +210,8 @@ let previous=0,accumulator=0;function frame(t){if(previous)accumulator+=Math.min
   let compact=false;
   function syncAcademyBar(){
     const y=Math.max(0,window.scrollY||document.documentElement.scrollTop||0);
-    const next=!simulator.hidden && y>85;
+    // Separate hide/show thresholds prevent jitter when the iframe gains height.
+    const next=!simulator.hidden && (compact ? y>28 : y>110);
     if(next===compact)return;
     compact=next;
     if(window.parent!==window)window.parent.postMessage({
