@@ -1,4 +1,7 @@
 <!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08111c"><title>UCN Academy — Hacking Trainer v1.8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap">
 <style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700 900;font-display:swap}
@@ -36,20 +39,45 @@
 .ucn-live-hints .hint-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .ucn-live-hints select{min-height:42px}
 
-/* Match the in-game typeface without changing trainer layout or scoring. */
-html body,html body *{font-family:'Bebas Neue','Arial Narrow',sans-serif!important}
+/* Keep the EmptyEpsilon lettering inside the actual hacking grid controls. */
 
 /* v1.7: always accessible navigation including after aborted drills. */
 .ucn-navigation{position:sticky;top:0;z-index:20;background:#101e2b;padding:8px 0;display:flex;gap:9px;flex-wrap:wrap}
 .ucn-navigation button{min-height:45px}
 @media(max-width:600px){.ucn-navigation{padding:7px 5px}.ucn-navigation button{flex:1 1 135px}}
+</style><style>
+/* v1.9.2 — Exo 2 for instruction, EE for simulated hacking instruments. */
+html body,html body *{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body .mainconsole .hacking-panel,
+html body .mainconsole .hacking-panel *,
+html body .mainconsole .target-panel,
+html body .mainconsole .target-panel *{
+  font-family:'Bebas Neue','Arial Narrow',Arial,sans-serif!important;
+  text-transform:uppercase!important;
+}
+html body .mainconsole .hint-coach,
+html body .mainconsole .hint-coach *,
+html body .mainconsole .hint-popup,
+html body .mainconsole .hint-popup *{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body .intro p,html body .academy,html body .results,
+html body .small-note,html body .hint-explanation{
+  line-height:1.6;
+}
+html body .eyebrow{letter-spacing:.03em}
+html body .ucn-navigation button{font-size:14px}
 </style></head><body><main>
-<header class="intro"><div class="eyebrow">UCN ACADEMY / NAVIGATION / CYBER WARFARE</div><h1>Defence Grid Trainer</h1><p>Bridge Command hacking practice. The console mirrors the in-game defence grid; choose whether to receive no hints, gentle hints when stuck, or full colour-coded assistance.</p></header>
+<header class="intro"><div class="eyebrow">UCN Academy / Navigation / Cyber Warfare</div><h1>Defence Grid Trainer</h1><p>Bridge Command hacking practice. The console mirrors the in-game defence grid; choose whether to receive no hints, gentle hints when stuck, or full colour-coded assistance.</p></header>
 <section class="toolbar"><div class="pad row"><div><strong>Cyber defence level</strong><div class="tiny" id="tierDetail">8 × 8 grid · 10 defence routines</div></div><div class="controls"><select id="tier" aria-label="Cyber defence level"><option value="0">Basic</option><option value="1" selected>Secure</option><option value="2">Hardened</option><option value="3">Fortified</option></select><button id="begin" class="primary">Start breach</button><button id="newTarget" class="secondary" type="button">Reset target</button><div class="hint-controls"><label class="tiny" for="hintMode">Training support</label><select id="hintMode" aria-label="Training support"><option value="none" selected>No hints</option><option value="guided">Hints on demand</option><option value="full">Full hints</option></select><select id="hintLevel" aria-label="Hint logic level"><option value="basic">Basic patterns</option><option value="advanced" selected>Advanced patterns</option></select></div><span class="status" id="status">STANDBY</span></div></div></section>
 <section class="mainconsole">
   <div class="hacking-panel">
     <div class="console-top"><div class="readouts"><p class="bigreadout" id="hackedHeader">HACKED BEAM WEAPONS: <span>0%</span></p><p class="subreadout"><span id="hackStatusText">HACKING IN PROGRESS:</span> <span id="displayHeader">36%</span></p></div></div>
-    <div id="hintCoach" class="hint-coach" hidden><div class="hint-coach-title"><span>ACADEMY INSTRUCTOR</span><span id="hintStepLabel">YOUR MOVE</span></div><p id="hintCoachText">Work through the grid at your own pace. When you get stuck, ask for a hint.</p><button type="button" id="hintNext" class="secondary">Give me a hint</button></div><div class="hackplay"><div class="board" id="board" role="group" aria-label="Hacking grid"></div><div class="meterwell"><div class="vertical-track" aria-hidden="true"><div class="vertical-fill" id="verticalFill"></div><div class="vertical-label" id="verticalLabel">36%</div></div></div></div>
+    <div id="hintCoach" class="hint-coach" hidden><div class="hint-coach-title"><span>Academy Instructor</span><span id="hintStepLabel">YOUR MOVE</span></div><p id="hintCoachText">Work through the grid at your own pace. When you get stuck, ask for a hint.</p><button type="button" id="hintNext" class="secondary">Give me a hint</button></div><div class="hackplay"><div class="board" id="board" role="group" aria-label="Hacking grid"></div><div class="meterwell"><div class="vertical-track" aria-hidden="true"><div class="vertical-fill" id="verticalFill"></div><div class="vertical-label" id="verticalLabel">36%</div></div></div></div>
     <div class="console-buttons"><button id="reset" class="secondary-action" disabled>Reset</button><button id="apply" class="apply" disabled>Apply</button><button id="abort" class="danger" disabled>Close</button></div><div id="hintPopup" class="hint-popup" hidden></div>
   </div>
   <div class="target-panel"><h2>Target System:</h2><div class="target-list" id="targetList"></div></div>
