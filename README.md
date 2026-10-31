@@ -24,6 +24,14 @@ The online Academy uses **MAJOR.MINOR.PATCH** numbers (for example, `1.9.0`):
 
 Current Academy release is **1.9.0**. The next small improvement should become **1.9.1**, not `1.10`. Individual trainers retain their own internal version numbers, which are separate from the Academy release number.
 
+## Release 1.9.2 — Readable typography across the Academy
+
+- **Exo 2**, in regular mixed case, is the standard typeface for Academy navigation, explanations, tutorials, descriptions, training selection screens and feedback.
+- The condensed **Bebas Neue / EmptyEpsilon-style font and uppercase presentation** are reserved for the actual scanner, signature display, icon-test, hacking-grid and tractor-beam controls and instrument readouts.
+- Normal explanatory material within the console, such as hints and operating notes, stays in Exo 2.
+- Exo 2 is served via Google Fonts on the online edition, with a local system-font fallback when unavailable. The legacy v1.4 offline download is unchanged.
+- This is a visual-only patch; exercise mechanics, local records and public leaderboard data are unchanged.
+
 ## Release 1.9.1 — Mobile welcome disclosure
 
 - On screens 650px wide or narrower, **Welcome aboard, Officer.** starts collapsed and has a small chevron button to expand and collapse the full original welcome message.
