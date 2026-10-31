@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071624">
 <title>UCN Academy | Radar Signature Trainer v1.4 — Ship Physics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap">
 <style>
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'Bebas Neue';src:url('../assets/fonts/BebasNeue-Bold.otf') format('opentype');font-weight:700 900;font-display:swap}
@@ -14,18 +17,43 @@
 @media(max-width:720px){main{padding:15px 9px 34px}.layout{grid-template-columns:1fr}.radarwrap{border-right:0;border-bottom:1px solid #32566b}.scope{max-width:420px}.prompt{padding:13px}.stat{padding:9px 5px}.pad{padding:13px}.controlgroup{gap:7px}}
 @media(max-width:395px){.directions{gap:4px}.choice{font-size:12px;padding:5px 2px}.stats{grid-template-columns:repeat(2,1fr)}}
 
-/* Match the in-game typeface without changing trainer layout or scoring. */
-html body,html body *{font-family:'Bebas Neue','Arial Narrow',sans-serif!important}
+/* EE typography is now scoped to radar readouts and interactive controls. */
 
 /* v1.7 accessibility: physical band names beside colours, legible explanation. */
 .legend{flex-wrap:wrap;gap:9px 15px;line-height:1.4}
 .signature-key,.notice,.tip,.small{font-size:max(13px,0.89rem);line-height:1.55}
 @media(max-width:650px){.legend{font-size:12px}.bandcopy strong{font-size:14px}.notice{padding:12px}}
 </style>
-</head>
+<style>
+/* v1.9.2 — mixed-case Exo 2 outside the radar control instruments. */
+html body,html body *{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+}
+html body .radarwrap .radar-meta,
+html body .radarwrap .radar-meta *,
+html body .radarwrap .cover strong,
+html body .prompt button,
+html body .prompt button *,
+html body .prompt select,
+html body .prompt .directions button,
+html body .panel .pill#stateText{
+  font-family:'Bebas Neue','Arial Narrow',Arial,sans-serif!important;
+  text-transform:uppercase!important;
+}
+html body .prompt .tip,html body .prompt .notice,
+html body .signature-key,html body .foot,html body .small{
+  font-family:'Exo 2','Segoe UI',Arial,sans-serif!important;
+  text-transform:none!important;
+  line-height:1.58;
+}
+html body .eyebrow{letter-spacing:.03em}
+html body .prompt .subhead{font-size:14px;line-height:1.4}
+html body .prompt button{font-size:15px}
+</style></head>
 <body><main>
-<header><div class="eyebrow">UNITED CONFEDERATION NAVY · RADAR ACADEMY</div><h1>Radar Signature Analysis</h1><p class="muted">Read the raw Radar squiggles: identify where a contact is, which signature bands are active, and how its behaviour changes.</p></header>
-<section class="panel"><div class="pad"><div class="tabstrip"><button id="basicTab" class="tab active" type="button" aria-pressed="true">Basic Recognition<br><span class="small">One changing band</span></button><button id="combinedTab" class="tab" type="button" aria-pressed="false">Combined Signatures<br><span class="small">Two or three changes</span></button></div><div class="row" style="margin-top:13px"><span class="pill" id="difficulty">CADET · BASIC</span><span class="pill">STANDARD RADAR SIGNATURES</span></div><p class="small" id="explainMode">Identify the bearing and the single band with significant activity.</p><div class="signature-key" id="signatureKey"><strong>STANDARD SIGNATURES:</strong> Red inward = gravitational; green inward = biological / thermal; blue irregular = electrical. <strong>Ship-state calculations:</strong> from BC C++.</div></div></section>
+<header><div class="eyebrow">United Confederation Navy · Radar Academy</div><h1>Radar Signature Analysis</h1><p class="muted">Read the raw Radar squiggles: identify where a contact is, which signature bands are active, and how its behaviour changes.</p></header>
+<section class="panel"><div class="pad"><div class="tabstrip"><button id="basicTab" class="tab active" type="button" aria-pressed="true">Basic Recognition<br><span class="small">One changing band</span></button><button id="combinedTab" class="tab" type="button" aria-pressed="false">Combined Signatures<br><span class="small">Two or three changes</span></button></div><div class="row" style="margin-top:13px"><span class="pill" id="difficulty">CADET · BASIC</span><span class="pill">Standard radar signatures</span></div><p class="small" id="explainMode">Identify the bearing and the single band with significant activity.</p><div class="signature-key" id="signatureKey"><strong>Standard signatures:</strong> Red inward = gravitational; green inward = biological / thermal; blue irregular = electrical. <strong>Ship-state calculations:</strong> from BC C++.</div></div></section>
 <section class="panel"><div class="row pad"><h2 id="exerciseTitle">Contact analysis</h2><span class="pill" id="stateText">AWAITING CONTACT</span></div><div class="layout">
 <div class="radarwrap"><div class="scope"><canvas width="600" height="600" id="scope" aria-label="Circular raw radar display with red, green and blue traces"></canvas><div class="cover" id="cover"><strong id="coverTitle">AWAITING CONTACT</strong><span id="coverSub">Press Generate Contact when ready</span></div></div><div class="legend"><span class="r">● RED · Gravity</span><span class="g">● GREEN · Biological / Thermal</span><span class="b">● BLUE · Electrical</span></div><div class="radar-meta"><span id="phase">RADAR OFFLINE</span><span id="timer">0.0s</span></div></div>
 <div class="prompt"><div id="quizControls"><h3>Contact report</h3><div class="subhead">1. Bearing sector of the return</div><div id="bearings" class="directions"></div><div class="subhead">2. Which signal bands are significantly active?</div><div class="bandbuttons"><button type="button" class="band" data-band="gravity"><span class="swatch r"></span><span class="bandcopy"><strong>Gravitational activity</strong><small class="bandhint" data-cue="gravity">Red inward</small></span></button><button type="button" class="band" data-band="thermal"><span class="swatch g"></span><span class="bandcopy"><strong>Biological / thermal activity</strong><small class="bandhint" data-cue="thermal">Green inward</small></span></button><button type="button" class="band" data-band="electrical"><span class="swatch b"></span><span class="bandcopy"><strong>Electrical activity</strong><small class="bandhint" data-cue="electrical">Blue irregular</small></span></button></div><div class="tip" id="interpretation">Red deflects for gravity, green for biological / thermal activity, and blue becomes irregular for electrical activity. Report the changes you can detect.</div></div><div class="warp-lab" id="warpLab" hidden><label for="warpFactor"><strong>Simulated warp factor</strong></label> <select id="warpFactor"><option value="0">Warp 0 — off</option><option value="0.25">Warp 0.25</option><option value="0.5">Warp 0.5</option><option value="1" selected>Warp 1</option><option value="2">Warp 2</option><option value="4">Warp 4</option></select><div class="small" id="warpReadout"></div></div><div class="btnrow"><button class="primary" id="generate" type="button">Generate Contact</button><button class="ghost" id="demo" type="button">Warp Signal Lab (unscored)</button><button class="primary" id="report" disabled hidden type="button">Submit Report</button><button class="ghost" id="replay" disabled hidden type="button">Replay Change</button><button class="ghost" id="next" hidden type="button">Next Contact</button><button class="ghost" id="compare" hidden type="button">Show quiet baseline</button></div><div class="result" id="result" hidden aria-live="polite"></div><div class="notice" id="note">Combined drills compare a quieter ship with its active emissions. Baseline traces can still be visible because normal ships have background gravity, biological / thermal and electrical signatures.</div></div>
@@ -88,7 +116,7 @@ function bearingIndex(a){return Math.floor(((a+22.5)%360)/45)}
 function setChoice(){document.querySelectorAll('[data-sector]').forEach(b=>b.classList.toggle('selected',+b.dataset.sector===chosenBearing));document.querySelectorAll('[data-band]').forEach(b=>{b.classList.toggle('on',chosenBands.has(b.dataset.band));b.setAttribute('aria-pressed',String(chosenBands.has(b.dataset.band)))});$('report').disabled=state!=='active'||chosenBearing===null||chosenBands.size===0}
 function showCover(title,subtitle){$('coverTitle').textContent=title;$('coverSub').textContent=subtitle;$('cover').hidden=false}
 function hideCover(){$('cover').hidden=true}
-function configure(m){if(state==='active')return;$('quizControls').hidden=false;if(state==='demo'){state='ready';$('warpLab').hidden=true;$('compare').hidden=true;$('demo').hidden=false;$('generate').hidden=false;showCover('AWAITING CONTACT','Press Generate Contact when ready');}mode=m;$('basicTab').classList.toggle('active',m==='basic');$('combinedTab').classList.toggle('active',m==='combined');$('basicTab').setAttribute('aria-pressed',String(m==='basic'));$('combinedTab').setAttribute('aria-pressed',String(m==='combined'));$('difficulty').textContent=m==='basic'?'CADET · BASIC':'OFFICER · COMBINED';$('explainMode').textContent=m==='basic'?'Identify the bearing and the one significantly active physical signature.':'Watch a quiet ship change its emissions. Identify the bearing and ALL physical signature bands that increase.';$('note').textContent=m==='basic'?'Basic exercises show one significant signature band; routine activity is common and rare jump events appear only occasionally.':'Combined drills compare a quieter ship with two or three changing bands. Nonzero traces can remain visible on the baseline: look for the increase.';stats()}
+function configure(m){if(state==='active')return;$('quizControls').hidden=false;if(state==='demo'){state='ready';$('warpLab').hidden=true;$('compare').hidden=true;$('demo').hidden=false;$('generate').hidden=false;showCover('AWAITING CONTACT','Press Generate Contact when ready');}mode=m;$('basicTab').classList.toggle('active',m==='basic');$('combinedTab').classList.toggle('active',m==='combined');$('basicTab').setAttribute('aria-pressed',String(m==='basic'));$('combinedTab').setAttribute('aria-pressed',String(m==='combined'));$('difficulty').textContent=m==='basic'?'Cadet · Basic':'Officer · Combined';$('explainMode').textContent=m==='basic'?'Identify the bearing and the one significantly active physical signature.':'Watch a quiet ship change its emissions. Identify the bearing and ALL physical signature bands that increase.';$('note').textContent=m==='basic'?'Basic exercises show one significant signature band; routine activity is common and rare jump events appear only occasionally.':'Combined drills compare a quieter ship with two or three changing bands. Nonzero traces can remain visible on the baseline: look for the increase.';stats()}
 function generate(){$('quizControls').hidden=false;let pool=SCENARIOS.filter(s=>mode==='basic'?s.bands.length===1:s.bands.length>=2);const weighted=pool.flatMap(s=>Array(['jump','recharge','jump_heat'].includes(s.id)?1:8).fill(s));let scenario=weighted[Math.floor(Math.random()*weighted.length)];let bearing=((Math.floor(Math.random()*8)*45)+rnd(-12,12)+360)%360;let dist=rnd(750,1250),radius=rnd(75,120);current={scenario,bearing,dist,radius,base:{...BASE},ship:makeShip(scenario.state),quietShip:quietShip()};startTime=performance.now();phaseStart=startTime;replayCount=0;reviewBaseline=false;state='active';$('compare').hidden=true;$('compare').textContent='Show quiet baseline';chosenBearing=null;chosenBands.clear();setChoice();$('basicTab').disabled=true;$('combinedTab').disabled=true;$('generate').hidden=true;$('demo').hidden=true;$('warpLab').hidden=true;$('next').hidden=true;$('report').hidden=false;$('replay').hidden=mode!=='combined';$('replay').disabled=mode!=='combined';$('stateText').textContent='CONTACT ACTIVE';$('result').hidden=true;hideCover();$('exerciseTitle').textContent=mode==='combined'?'Signature change analysis':'Basic signature recognition';}
 function replay(){if(state!=='active'||mode!=='combined')return;phaseStart=performance.now();replayCount++}
 function patternExplanation(actual){const descriptions={gravity:'GRAVITY: the red trace steps inward around the contact bearing.',thermal:'THERMAL: the green trace steps inward around the contact bearing.',electrical:'ELECTRICAL: the blue trace becomes increasingly irregular around the contact bearing.'};return actual.map(b=>`<div><strong>${descriptions[b]}</strong></div>`).join('')}
@@ -186,7 +214,7 @@ configure('basic');setChoice();function frame(t){if(state!=='ready')render(t);re
   const selection=document.createElement('section');
   selection.id='ucnSignatureSelection';
   selection.innerHTML=`
-    <div class="eyebrow">UCN ACADEMY / RADAR</div>
+    <div class="eyebrow">UCN Academy / Radar</div>
     <h1>Radar Signature Analysis</h1>
     <p class="ucn-selection-intro">Select a training exercise before entering the Radar console.</p>
     <div id="ucnSignatureOptions"></div>
